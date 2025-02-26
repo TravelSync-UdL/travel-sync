@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <style name="Theme.tSplash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/backgroundIcon</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_splash</item>
-        <item name="postSplashScreenTheme">@style/Theme.TravelSync</item>
-    </style>
-    
+
     <style name="Theme.TravelSync" parent="android:Theme.Material.Light.NoActionBar" />
     
 
