@@ -4,23 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.app.travelsync.ui.theme.TravelSyncTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         var isChecking = true
 
@@ -30,18 +26,16 @@ class MainActivity : ComponentActivity() {
         }
 
         installSplashScreen().apply {
-            setKeepOnScreenCondition{
+            setKeepOnScreenCondition {
                 isChecking
             }
         }
+        enableEdgeToEdge()
 
         setContent {
             TravelSyncTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "HOMEPAGE",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    MainScreen()
                 }
             }
         }
@@ -49,17 +43,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "$name",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TravelSyncTheme {
-        Greeting("HOMEPAGE")
-    }
+fun MainScreen() {
+    val navController = rememberNavController()
+    NavGraph(navController = navController)
 }
