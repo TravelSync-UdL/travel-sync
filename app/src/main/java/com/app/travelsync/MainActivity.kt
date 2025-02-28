@@ -13,13 +13,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.app.travelsync.ui.theme.TravelSyncTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+
+        var isChecking = true
+
+        lifecycleScope.launch {
+            delay(100L)
+            isChecking = false
+        }
+
+        installSplashScreen().apply {
+            setKeepOnScreenCondition{
+                isChecking
+            }
+        }
         enableEdgeToEdge()
         setContent {
             TravelSyncTheme {
