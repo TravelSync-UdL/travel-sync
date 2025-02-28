@@ -1,4 +1,69 @@
 <resources>
     <string name="app_name">TravelSync</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
+
+    <string name="about_screen_title">About TravelSync</string>
+    <string name="about_screen_description">TravelSync is a travel planning app designed to help you create personalized itineraries. Organize your trip, discover new destinations, and share your plans with other users.</string>
+    <string name="about_screen_additional_description">TravelSync was created by a team of developers passionate about technology and travel. Our goal is to help you organize your trips easily and efficiently.</string>
+    <string name="about_screen_development_team">Development Team: Gerard Moliner i Condomines</string>
+    <string name="about_screen_version">Version: 1.1.0</string>
+    <string name="back_button_description">Back</string>
+
+    <string name="trip_nav">Trip</string>
+    <string name="guide_nav">Guide</string>
+    <string name="home_nav">Home</string>
+    <string name="search_nav">Search</string>
+    <string name="configUser_nav">You</string>
+    <string name="about_text">About</string>
+    <string name="legal_text">Terms and Conditions</string>
+
+    <string name="legal_screen_title">Terms and Conditions - TravelSync</string>
+    <string name="legal_screen_last_update">Last updated: 28/02/2025</string>
+    <string name="legal_screen_description">
+        Welcome to TravelSync! Before using our app, please read these Terms and Conditions carefully. By using the app, you agree to these terms. If you do not agree, please do not use the app.
+    </string>
+
+    <string name="legal_section_1">1 Use of the App</string>
+    <string name="legal_section_1_content">
+        - TravelSync is a travel planning tool that helps users organize itineraries, share plans, and manage bookings.
+        - You must be at least 16 years old to use this app.
+        - You cannot use the app for illegal or fraudulent activities.
+    </string>
+
+    <string name="legal_section_2">2 Registration and Security</string>
+    <string name="legal_section_2_content">
+        - You can register via email or social accounts.
+        - The user is responsible for keeping their login credentials safe.
+        - In case of unauthorized access to your account, you must notify us immediately.
+    </string>
+
+    <string name="legal_section_3">3 User Rights and Responsibilities</string>
+    <string name="legal_section_3_content">
+        - You are responsible for the information you enter into TravelSync.
+        - You cannot share false, misleading, or offensive information.
+        - Use of bots or automated software to access the app is prohibited.
+    </string>
+
+    <string name="legal_section_4">4 Privacy and Data Protection</string>
+    <string name="legal_section_4_content">
+        - We collect information such as destinations, travel preferences, and bookings to enhance your experience.
+        - We do not share your data with third parties without your consent. Please refer to the Privacy Policy for more details.
+    </string>
+
+    <string name="legal_section_5">5 Limitation of Liability</string>
+    <string name="legal_section_5_content">
+        - TravelSync is not responsible for trip cancellations, booking errors, or issues with third-party providers.
+        - Information provided may not always be accurate or up to date.
+    </string>
+
+    <string name="legal_section_6">6 Modifications and Service Termination</string>
+    <string name="legal_section_6_content">
+        - We reserve the right to modify or suspend the app at any time.
+        - We may update these terms, and we will notify users of any changes.
+    </string>
+
+    <string name="legal_section_7">7 Contact</string>
+    <string name="legal_section_7_content">
+        For any questions or concerns, you can contact us at support@travelsync.cat.
+    </string>
 </resources>

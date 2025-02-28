@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">TravelSync</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+
+    <string name="about_screen_title">Sobre TravelSync</string>
+    <string name="about_screen_description">TravelSync és una aplicació de planificació de viatges dissenyada per a ajudar-te a crear itineraris personalitzats. Organitza el teu viatge, descobreix noves destinacions i comparteix els teus plans amb altres usuaris.</string>
+    <string name="about_screen_additional_description">TravelSync va ser creat per un equip de desenvolupadors apassionats per la tecnologia i els viatges. El nostre objectiu és ajudar-te a organitzar els teus viatges de manera fàcil i eficient.</string>
+    <string name="about_screen_development_team">Equip de Desenvolupament: Gerard Moliner i Condomines</string>
+    <string name="about_screen_version">Versió: 1.1.0</string>
+    <string name="back_button_description">Tornar</string>
+
+    <string name="trip_nav">Viatge</string>
+    <string name="guide_nav">Guia</string>
+    <string name="home_nav">Home</string>
+    <string name="search_nav">Buscador</string>
+    <string name="configUser_nav">Tu</string>
+    <string name="about_text">Sobre nosaltres</string>
+    <string name="legal_text">Legal</string>
+
+    <string name="legal_screen_title">Tèrmit i Condicions - TravelSync</string>
+    <string name="legal_screen_last_update">Última actualització: 28/02/2025</string>
+    <string name="legal_screen_description">
+Benvingut a TravelSync! Abans d’utilitzar la nostra aplicació, si us plau, llegeix atentament aquests Tèrmit i Condicions. En utilitzar l’aplicació, acceptes aquestes condicions. Si no hi estàs d’acord, si us plau, no utilitzis l’aplicació.
+</string>
+
+    <string name="legal_section_1">1 Ús de l’Aplicació</string>
+    <string name="legal_section_1_content">
+- TravelSync és una eina de planificació de viatges que ajuda els usuaris a organitzar itineraris, compartir plans i gestionar reservis.
+- Has de tenir almenys 16 anys per utilitzar aquesta aplicació.
+- No pots utilitzar l’aplicació per activitats il·*legals o fraudulentes.
+</string>
+
+    <string name="legal_section_2">2 Registri i Seguretat</string>
+    <string name="legal_section_2_content">
+- Pots registrar-et mitjançant correu electrònic o comptes socials.
+- L’usuari és responsable de mantenir destrals els seves credencials d’accés.
+- En cas d’accés no autoritzat al teu compte, has de notificar-ens immediatament.
+</string>
+
+    <string name="legal_section_3">3 Drets i Responsabilitats de</string>
+    <string name="legal_section_3_content">
+- Ets responsable de la informació que introdueixes a TravelSync.
+- No pots compartir informació falsa, enganyosa o ofensiva.
+- No està permès l’ús de bots o programari automatitzat per accedir a l’aplicació.
+</string>
+
+    <string name="legal_section_4">4 Privacitat i Protecció de Dades</string>
+    <string name="legal_section_4_content">
+- Recopilem informació com destinacions, preferències de viatge i reservis per millorar la teva experiència.
+- No compartim els teves dades amb tercers sense el teu consentiment. Consulta la Política de Privacitat per a més informació.
+</string>
+
+    <string name="legal_section_5">5 Limitació de Responsabilitat</string>
+    <string name="legal_section_5_content">
+- TravelSync no és fa responsable de cancell·lacions de viatges, errors en reservis o problemes amb proveïdors externs.
+- La informació proporcionada pot no ser sempre exacta o actualitzada.
+</string>
+
+    <string name="legal_section_6">6 Modificacions i Finalització del Servei</string>
+    <string name="legal_section_6_content">
+- Ens reservem el dret de modificar o suspendre l’aplicació en qualsevol moment.
+- Podem modificar aquests tèrmit i notificarem als usuaris sobre els canvis.
+</string>
+
+    <string name="legal_section_7">7 Contacti</string>
+    <string name="legal_section_7_content">
+Per qualsevol dubte o consulta, pots contactar amb nosaltres a support@travelsync.cat.
+</string>
+</resources>

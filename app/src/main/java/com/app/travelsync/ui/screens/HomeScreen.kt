@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -66,35 +67,35 @@ fun HomeScreen(navController: NavController){
                     icon = { Icon(Icons.Default.Star, contentDescription = "Trip") },
                     selected = selectedTravelSync == NavMode.TRIP,
                     onClick = { selectedTravelSync = NavMode.TRIP },
-                    label = { Text("Trip") }
+                    label = { Text(stringResource(id=R.string.trip_nav)) }
                 )
 
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.LocationOn, contentDescription = "Guide") },
                     selected = selectedTravelSync == NavMode.GUIDE,
                     onClick = { selectedTravelSync = NavMode.GUIDE },
-                    label = { Text("Guide") }
+                    label = { Text(stringResource(id=R.string.guide_nav)) }
                 )
 
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
                     selected = selectedTravelSync == NavMode.HOME,
                     onClick = { selectedTravelSync = NavMode.HOME },
-                    label = { Text("Home") }
+                    label = { Text(stringResource(id=R.string.home_nav)) }
                 )
 
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                     selected = selectedTravelSync == NavMode.SEARCH,
                     onClick = { selectedTravelSync = NavMode.SEARCH },
-                    label = { Text("Search") }
+                    label = { Text(stringResource(id=R.string.search_nav)) }
                 )
 
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Person, contentDescription = "You") },
                     selected = selectedTravelSync == NavMode.YOU,
                     onClick = { selectedTravelSync = NavMode.YOU },
-                    label = { Text("You") }
+                    label = { Text(stringResource(id=R.string.configUser_nav)) }
                 )
             }
         }
@@ -130,8 +131,8 @@ fun HomeScreen(navController: NavController){
 fun MainUi(navController: NavController){
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
-        MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.help_foreground),"About"),
-        MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.legalicon_foreground), "Legal")
+        MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.help_foreground), title = stringResource(id = R.string.about_text), "About"),
+        MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.legalicon_foreground), title = stringResource(id = R.string.legal_text), "Legal")
     )
     Column (horizontalAlignment = Alignment.End){
 
@@ -142,7 +143,7 @@ fun MainUi(navController: NavController){
         ) {
             LazyColumn(Modifier.padding(bottom = 8.dp)) {
                 items(items.size){
-                    ItemUi(icon = items[it].icon, title = items[it].title, navController)
+                    ItemUi(icon = items[it].icon, title = items[it].title, navController, route = items[it].route)
                     Spacer(modifier = Modifier.height(10.dp))
                 }
             }
@@ -164,7 +165,7 @@ fun MainUi(navController: NavController){
 }
 
 @Composable
-fun ItemUi(icon: ImageVector, title: String, navController: NavController){
+fun ItemUi(icon: ImageVector, title: String, navController: NavController, route: String){
     val context = LocalContext.current
     Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start){
         Spacer(modifier = Modifier.weight(1f))
@@ -175,7 +176,7 @@ fun ItemUi(icon: ImageVector, title: String, navController: NavController){
         }
         Spacer(modifier = Modifier.width(10.dp))
         FloatingActionButton(onClick = {
-            navController.navigate(title) {
+            navController.navigate(route) {
                 popUpTo("home") { inclusive = true }
             }
         }, modifier = Modifier.size(45.dp), containerColor = colorResource(id = R.color.backgroundIcon)) {
@@ -186,7 +187,8 @@ fun ItemUi(icon: ImageVector, title: String, navController: NavController){
 
 data class MiniFabItems(
     val icon: ImageVector,
-    val title: String
+    val title: String,
+    val route: String
 )
 
 

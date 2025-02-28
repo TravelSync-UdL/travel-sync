@@ -14,20 +14,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.app.travelsync.R
 
 @Composable
-fun AboutScreen(navController: NavController){
-    Box (modifier = Modifier.fillMaxSize()){
+fun AboutScreen(navController: NavController) {
+    Box(modifier = Modifier.fillMaxSize()) {
 
         IconButton(
-            onClick = {navController.navigate("home")},
+            onClick = { navController.navigate("home") },
             modifier = Modifier.align(Alignment.TopStart).padding(top = 40.dp, end = 16.dp)
         ) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back_button_description))
         }
 
         Column(
@@ -39,7 +41,7 @@ fun AboutScreen(navController: NavController){
         ) {
             // Títol de la pàgina
             Text(
-                text = "Sobre TravelSync",
+                text = stringResource(id = R.string.about_screen_title),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 32.dp),
                 textAlign = TextAlign.Center  // Centrat del títol
@@ -47,7 +49,7 @@ fun AboutScreen(navController: NavController){
 
             // Resum de l'aplicació
             Text(
-                text = "TravelSync és una aplicació de planificació de viatges dissenyada per ajudar-te a crear itineraris personalitzats. Organitza el teu viatge, descobreix noves destinacions i comparteix els teus plans amb altres usuaris.",
+                text = stringResource(id = R.string.about_screen_description),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(bottom = 16.dp),
                 textAlign = TextAlign.Justify  // Justificat
@@ -55,7 +57,7 @@ fun AboutScreen(navController: NavController){
 
             // Descripció addicional
             Text(
-                text = "TravelSync ha estat creat per un equip de desenvolupadors passió per la tecnologia i els viatges. El nostre objectiu és ajudar-te a organitzar els teus viatges de manera fàcil i eficient.",
+                text = stringResource(id = R.string.about_screen_additional_description),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(bottom = 64.dp),
                 textAlign = TextAlign.Justify  // Justificat
@@ -63,7 +65,7 @@ fun AboutScreen(navController: NavController){
 
             // Informació sobre l'equip
             Text(
-                text = "Equip de Desenvolupament: Gerard Moliner i Condomines",
+                text = stringResource(id = R.string.about_screen_development_team),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 16.dp),
                 textAlign = TextAlign.Justify
@@ -71,11 +73,11 @@ fun AboutScreen(navController: NavController){
 
             // Versió de l'aplicació
             Text(
-                text = "Versió: 1.1.0",
+                text = stringResource(id = R.string.about_screen_version),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 16.dp),
                 textAlign = TextAlign.Justify
             )
-
-        } }
+        }
+    }
 }

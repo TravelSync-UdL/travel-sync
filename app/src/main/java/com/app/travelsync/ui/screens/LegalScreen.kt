@@ -10,11 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.app.travelsync.R
 
 @Composable
 fun LegalScreen(navController: NavController) {
@@ -24,10 +26,10 @@ fun LegalScreen(navController: NavController) {
             onClick = { navController.navigate("home") },
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(top = 16.dp) // Ajustat per garantir que no estigui cobert
+                .padding(top = 16.dp)
                 .zIndex(1f)  // Asegurem que el botó estigui per sobre d'altres elements
         ) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back_button_description))
         }
 
         // Column amb desplaçament
@@ -41,7 +43,7 @@ fun LegalScreen(navController: NavController) {
 
             // Títol de l'aplicació
             Text(
-                text = "\uD83D\uDCDC Termes i Condicions - TravelSync",
+                text = stringResource(id = R.string.legal_screen_title),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold
@@ -52,7 +54,7 @@ fun LegalScreen(navController: NavController) {
 
             // Última actualització
             Text(
-                text = "Última actualització: 28/02/2025",
+                text = stringResource(id = R.string.legal_screen_last_update),
                 style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
                 modifier = Modifier.padding(bottom = 24.dp),
                 textAlign = TextAlign.Center
@@ -60,7 +62,7 @@ fun LegalScreen(navController: NavController) {
 
             // Descripció d'ús de l'aplicació
             Text(
-                text = "Benvingut a TravelSync! Abans d’utilitzar la nostra aplicació, si us plau, llegeix atentament aquests Termes i Condicions. En utilitzar l’aplicació, acceptes aquestes condicions. Si no hi estàs d’acord, si us plau, no utilitzis l’aplicació",
+                text = stringResource(id = R.string.legal_screen_description),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(bottom = 32.dp),
                 textAlign = TextAlign.Center
@@ -68,61 +70,38 @@ fun LegalScreen(navController: NavController) {
 
             // Seccions dels Termes amb estil
             TermSection(
-                title = "1\uFE0F⃣ Ús de l’Aplicació",
-                content = """
-                - TravelSync és una eina de planificació de viatges que ajuda els usuaris a organitzar itineraris, compartir plans i gestionar reserves.
-                - Has de tenir almenys 16 anys per utilitzar aquesta aplicació.
-                - No pots utilitzar l’aplicació per activitats il·legals o fraudulentes.
-                """
+                title = stringResource(id = R.string.legal_section_1),
+                content = stringResource(id = R.string.legal_section_1_content)
             )
 
             TermSection(
-                title = "2\uFE0F⃣ Registre i Seguretat",
-                content = """
-                - Pots registrar-te mitjançant correu electrònic o comptes socials.
-                - L’usuari és responsable de mantenir segures les seves credencials d’accés.
-                - En cas d’accés no autoritzat al teu compte, has de notificar-nos immediatament.
-                """
+                title = stringResource(id = R.string.legal_section_2),
+                content = stringResource(id = R.string.legal_section_2_content)
             )
 
             TermSection(
-                title = "3\uFE0F⃣ Drets i Responsabilitats de l'Usuari",
-                content = """
-                - Ets responsable de la informació que introdueixes a TravelSync.
-                - No pots compartir informació falsa, enganyosa o ofensiva.
-                - No està permès l’ús de bots o programari automatitzat per accedir a l’aplicació.
-                """
+                title = stringResource(id = R.string.legal_section_3),
+                content = stringResource(id = R.string.legal_section_3_content)
             )
 
             TermSection(
-                title = "4\uFE0F⃣ Privacitat i Protecció de Dades",
-                content = """
-                - Recopilem informació com destinacions, preferències de viatge i reserves per millorar la teva experiència.
-                - No compartim les teves dades amb tercers sense el teu consentiment. Consulta la Política de Privacitat per a més informació.
-                """
+                title = stringResource(id = R.string.legal_section_4),
+                content = stringResource(id = R.string.legal_section_4_content)
             )
 
             TermSection(
-                title = "5\uFE0F⃣ Limitació de Responsabilitat",
-                content = """
-                - TravelSync no es fa responsable de cancel·lacions de viatges, errors en reserves o problemes amb proveïdors externs.
-                - La informació proporcionada pot no ser sempre exacta o actualitzada.
-                """
+                title = stringResource(id = R.string.legal_section_5),
+                content = stringResource(id = R.string.legal_section_5_content)
             )
 
             TermSection(
-                title = "6\uFE0F⃣ Modificacions i Finalització del Servei",
-                content = """
-                - Ens reservem el dret de modificar o suspendre l’aplicació en qualsevol moment.
-                - Podem modificar aquests termes i notificarem als usuaris sobre els canvis.
-                """
+                title = stringResource(id = R.string.legal_section_6),
+                content = stringResource(id = R.string.legal_section_6_content)
             )
 
             TermSection(
-                title = "7\uFE0F⃣ Contacte",
-                content = """
-                Per qualsevol dubte o consulta, pots contactar amb nosaltres a support@travelsync.com.
-                """
+                title = stringResource(id = R.string.legal_section_7),
+                content = stringResource(id = R.string.legal_section_7_content)
             )
         }
     }
