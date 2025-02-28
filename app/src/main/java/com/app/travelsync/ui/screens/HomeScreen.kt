@@ -158,7 +158,9 @@ fun MainUi(navController: NavController){
             onClick = {expanded = !expanded},
             containerColor = colorResource(id = R.color.backgroundIcon)
         ) {
-            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.settingicon_foreground), modifier = Modifier.rotate(rotation).size(50.dp), contentDescription = "", tint = Color.Unspecified)
+            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.settingicon_foreground), modifier = Modifier
+                .rotate(rotation)
+                .size(50.dp), contentDescription = "", tint = Color.Unspecified)
         }
 
     }
@@ -191,37 +193,6 @@ data class MiniFabItems(
     val route: String
 )
 
-
-@Composable
-fun Trip() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "TRIP", style = MaterialTheme.typography.headlineMedium )
-
-
-    }
-}
-
-@Composable
-fun Guide() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "GUIDE", style = MaterialTheme.typography.headlineMedium )
-
-
-    }
-}
-
 @Composable
 fun Home() {
     Column(
@@ -237,32 +208,3 @@ fun Home() {
     }
 }
 
-@Composable
-fun Search() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "SEARCH", style = MaterialTheme.typography.headlineMedium )
-
-
-    }
-}
-
-@Composable
-fun ConfigAccount() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Config Account", style = MaterialTheme.typography.headlineMedium )
-
-
-    }
-}
