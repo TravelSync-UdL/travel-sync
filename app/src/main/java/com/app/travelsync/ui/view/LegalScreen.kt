@@ -1,4 +1,4 @@
-package com.app.travelsync.ui.screens
+package com.app.travelsync.ui.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState

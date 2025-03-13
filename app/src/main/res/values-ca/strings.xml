@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TravelSync</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
@@ -6,7 +7,7 @@
     <string name="about_screen_description">TravelSync és una aplicació de planificació de viatges dissenyada per a ajudar-te a crear itineraris personalitzats. Organitza el teu viatge, descobreix noves destinacions i comparteix els teus plans amb altres usuaris.</string>
     <string name="about_screen_additional_description">TravelSync va ser creat per un equip de desenvolupadors apassionats per la tecnologia i els viatges. El nostre objectiu és ajudar-te a organitzar els teus viatges de manera fàcil i eficient.</string>
     <string name="about_screen_development_team">Equip de Desenvolupament: Gerard Moliner i Condomines</string>
-    <string name="about_screen_version">Versió: 1.1.0</string>
+    <string name="about_screen_version">Versió: </string>
     <string name="back_button_description">Tornar</string>
 
     <string name="trip_nav">Viatge</string>
@@ -16,6 +17,7 @@
     <string name="configUser_nav">Tu</string>
     <string name="about_text">Sobre nosaltres</string>
     <string name="legal_text">Legal</string>
+    <string name="settings_text">Configuració</string>
 
     <string name="legal_screen_title">Tèrmit i Condicions - TravelSync</string>
     <string name="legal_screen_last_update">Última actualització: 28/02/2025</string>
