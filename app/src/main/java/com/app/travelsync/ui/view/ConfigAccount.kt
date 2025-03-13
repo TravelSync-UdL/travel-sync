@@ -1,4 +1,4 @@
-package com.app.travelsync.ui.screens
+package com.app.travelsync.ui.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.app.travelsync.ui.screens
+package com.app.travelsync.ui.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloat
@@ -132,7 +132,8 @@ fun MainUi(navController: NavController){
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(
         MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.help_foreground), title = stringResource(id = R.string.about_text), "About"),
-        MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.legalicon_foreground), title = stringResource(id = R.string.legal_text), "Legal")
+        MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.legalicon_foreground), title = stringResource(id = R.string.legal_text), "Legal"),
+        MiniFabItems(icon = ImageVector.vectorResource(id = R.drawable.settingicon_foreground), title = stringResource(id = R.string.settings_text), "Settings")
     )
     Column (horizontalAlignment = Alignment.End){
 

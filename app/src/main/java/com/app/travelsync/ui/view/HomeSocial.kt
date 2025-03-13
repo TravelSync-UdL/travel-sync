@@ -1,4 +1,4 @@
-package com.app.travelsync.ui.screens
+package com.app.travelsync.ui.view
 
 /**
  * Crea una publicació nova sobre un viatge. L'usuari pot escriure un text, afegir una imatge

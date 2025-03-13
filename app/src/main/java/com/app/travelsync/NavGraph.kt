@@ -4,13 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.app.travelsync.ui.screens.AboutScreen
-import com.app.travelsync.ui.screens.ConfigAccount
-import com.app.travelsync.ui.screens.GuideScreen
-import com.app.travelsync.ui.screens.HomeScreen
-import com.app.travelsync.ui.screens.LegalScreen
-import com.app.travelsync.ui.screens.SearchScreen
-import com.app.travelsync.ui.screens.TripScreen
+import com.app.travelsync.ui.view.AboutScreen
+import com.app.travelsync.ui.view.ConfigAccount
+import com.app.travelsync.ui.view.GuideScreen
+import com.app.travelsync.ui.view.HomeScreen
+import com.app.travelsync.ui.view.LegalScreen
+import com.app.travelsync.ui.view.SearchScreen
+import com.app.travelsync.ui.view.SettingsScreen
+import com.app.travelsync.ui.view.TripScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -22,5 +23,6 @@ fun NavGraph(navController: NavHostController) {
         composable("you") { ConfigAccount(navController) }
         composable("About") { AboutScreen(navController) }
         composable("Legal") { LegalScreen(navController) }
+        composable("Settings") { SettingsScreen(navController) }
     }
 }

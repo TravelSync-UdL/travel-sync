@@ -1,4 +1,4 @@
-package com.app.travelsync.ui.screens
+package com.app.travelsync.ui.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,11 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.travelsync.R
+import com.app.travelsync.data.AppInfo
 
 @Composable
 fun AboutScreen(navController: NavController) {
@@ -73,7 +73,7 @@ fun AboutScreen(navController: NavController) {
 
             // Versió de l'aplicació
             Text(
-                text = stringResource(id = R.string.about_screen_version),
+                text = stringResource(id = R.string.about_screen_version) + "${AppInfo.versionName} (${AppInfo.versionCode})",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 16.dp),
                 textAlign = TextAlign.Justify
