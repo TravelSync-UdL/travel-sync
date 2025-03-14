@@ -17,16 +17,8 @@ class SettingsViewModel @Inject constructor(
     var language by mutableStateOf(sharedPrefsManager.userLanguage ?: "es")
         private set
 
-    var isDarkTheme by mutableStateOf(sharedPrefsManager.darkTheme)
-        private set
-
     fun updateLanguage(newLanguage: String) {
         sharedPrefsManager.userLanguage = newLanguage
         language = newLanguage
-    }
-
-    fun updateDarkTheme(isDark: Boolean) {
-        sharedPrefsManager.darkTheme = isDark
-        isDarkTheme = isDark
     }
 }

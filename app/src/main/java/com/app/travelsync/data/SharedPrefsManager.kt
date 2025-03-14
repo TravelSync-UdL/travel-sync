@@ -23,8 +23,4 @@ class SharedPrefsManager @Inject constructor(
 
             languageChangeUtil.changeLanguage(context, value?:"en")
         }
-
-    var darkTheme: Boolean
-        get() = preferences.getBoolean("dark_theme", false)
-        set(value) = preferences.edit().putBoolean("dark_theme", value).apply()
 }

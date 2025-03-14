@@ -3,6 +3,8 @@ package com.app.travelsync
 import android.content.Context
 import android.content.SharedPreferences
 import com.app.travelsync.data.SharedPrefsManager
+import com.app.travelsync.domain.repository.TripRepository
+import com.app.travelsync.domain.repository.TripRepositorylmpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,4 +33,7 @@ object AppModule {
     ): SharedPrefsManager =
         SharedPrefsManager(sharedPreferences, context)
 
+    @Provides
+    @Singleton
+    fun provideTaskRepository(): TripRepository = TripRepositorylmpl()
 }
