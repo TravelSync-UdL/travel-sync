@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,12 +30,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.app.travelsync.R
+import com.app.travelsync.data.SharedPrefsManager
+import com.app.travelsync.ui.viewmodel.ConfigAccountViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfigAccount(navController: NavController) {
+fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewModel = hiltViewModel()) {
+    // Obtenir les dades des del UserViewModel
+    val userName by viewModel.userName.observeAsState("")
+    val userSurname by viewModel.userSurname.observeAsState("")
+    val userUsername by viewModel.userUsername.observeAsState("")
+
     var showSettingsMenu by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -102,7 +111,7 @@ fun ConfigAccount(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(innerPadding), // Afegeix el padding de l'innerPadding
+                .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -112,22 +121,22 @@ fun ConfigAccount(navController: NavController) {
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(120.dp)
-                    .background(Color.Gray, shape = CircleShape), // Imatge amb un fons gris en forma de cercle
-                contentScale = ContentScale.Crop // Crop per ajustar la imatge a un cercle
+                    .background(Color.Gray, shape = CircleShape),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Nom d'usuari
             Text(
-                text = "Nom Usuari", // Substitueix amb el teu nom real o dinàmic
+                text = "$userName $userSurname", // Nom complet de l'usuari
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
 
-            // Àlies
+            // Nom d'usuari (àlies)
             Text(
-                text = "@alias", // Substitueix amb el teu àlies real o dinàmic
+                text = "@$userUsername", // Nom d'usuari
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -186,7 +195,6 @@ fun ConfigAccount(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp) // Espai entre les publicacions
             ) {
                 items(2) { index ->
-                    // Aquí fem servir un conjunt fixe de dades per les publicacions
                     PostItem(
                         imageResource = R.drawable.norway, // Substitueix per la imatge de la publicació
                         title = "Publicació ${index + 1}", // Títol de la publicació
@@ -198,8 +206,6 @@ fun ConfigAccount(navController: NavController) {
     }
 }
 
-
-// Composable per les publicacions
 @Composable
 fun PostItem(imageResource: Int, title: String, description: String) {
     Column(

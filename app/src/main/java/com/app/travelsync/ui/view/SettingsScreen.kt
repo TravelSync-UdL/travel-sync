@@ -41,6 +41,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,20 +51,29 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    // Accedim a les propietats directament
     val language = viewModel.language
+
+    var tempName by remember { mutableStateOf(viewModel.name) }
+    var tempSurname by remember { mutableStateOf(viewModel.surname) }
+    var tempUsername by remember { mutableStateOf(viewModel.username) }
+    var tempEmail by remember { mutableStateOf(viewModel.email) }
+    var tempPassword by remember { mutableStateOf(viewModel.password) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Ajustos") },
+                title = { Text("Settings") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back_button_description))
                     }
                 }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         val scrollState = rememberScrollState()
 
@@ -73,108 +85,117 @@ fun SettingsScreen(
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                "Configuració de l'aplicació",
-                style = MaterialTheme.typography.headlineLarge
-            )
+            Text("Configuració de l'aplicació", style = MaterialTheme.typography.headlineLarge)
 
             // Secció "Perfil"
-            Text(
-                "Perfil",
-                style = MaterialTheme.typography.headlineMedium
+            Text("Perfil", style = MaterialTheme.typography.headlineMedium)
+            OutlinedTextField(
+                value = tempName,
+                onValueChange = { tempName = it },
+                label = { Text("Nom") },
+                modifier = Modifier.fillMaxWidth()
             )
-            ProfileSection()
+            OutlinedTextField(
+                value = tempSurname,
+                onValueChange = { tempSurname = it },
+                label = { Text("Cognom") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
             // Secció "Compte"
-            Text(
-                "Compte",
-                style = MaterialTheme.typography.headlineMedium
+            Text("Compte", style = MaterialTheme.typography.headlineMedium)
+            OutlinedTextField(
+                value = tempUsername,
+                onValueChange = { tempUsername = it },
+                label = { Text("Nom d'usuari") },
+                modifier = Modifier.fillMaxWidth()
             )
-            AccountSection()
+            OutlinedTextField(
+                value = tempEmail,
+                onValueChange = { tempEmail = it },
+                label = { Text("Correu electrònic") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = tempPassword,
+                onValueChange = { tempPassword = it },
+                label = { Text("Contrasenya") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-            // Botó per guardar la configuració
-            Button(
-                onClick = { /* Aquí pots afegir la lògica per guardar els canvis */ },
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-            ) {
-                Text("OK")
-            }
-
             // Secció "Idioma"
-            Text(
-                "Idioma",
-                style = MaterialTheme.typography.headlineMedium
-            )
+            Text("Idioma", style = MaterialTheme.typography.headlineMedium)
             LanguageDropdown(
                 selectedLanguage = language,
                 onLanguageSelected = { newLang -> viewModel.updateLanguage(newLang) },
                 availableLanguages = listOf("en", "es", "ca")
             )
+
+            // Botó per guardar la configuració
+            Button(
+                onClick = {
+                    viewModel.saveSettings(tempName, tempSurname, tempUsername, tempEmail, tempPassword)
+
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar("Dades editades correctament")
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+            ) {
+                Text("OK")
+            }
         }
     }
 }
 
+
 @Composable
-fun ProfileSection() {
+fun ProfileSection(viewModel: SettingsViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         // Nom
         OutlinedTextField(
-            value = "",  // El valor està buit, no hi ha gestió d'estat
-            onValueChange = { }, // Aquí pots gestionar el canvi més endavant
+            value = viewModel.name,  // El valor està buit, no hi ha gestió d'estat
+            onValueChange = { viewModel.updateName(it)}, // Aquí pots gestionar el canvi més endavant
             label = { Text("Nom") },
             modifier = Modifier.fillMaxWidth()
         )
         // Cognom
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = viewModel.surname,
+            onValueChange = { viewModel.updateSurname(it) },
             label = { Text("Cognom") },
             modifier = Modifier.fillMaxWidth()
-        )
-        // Ciutat
-        OutlinedTextField(
-            value = "",
-            onValueChange = { },
-            label = { Text("Ciutat") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        // Descripció com a camp multilinea
-        OutlinedTextField(
-            value = "",
-            onValueChange = { },
-            label = { Text("Descripció") },
-            modifier = Modifier.fillMaxWidth(),
-            maxLines = 5, // Permet múltiples línies
-            minLines = 3  // Permet que el camp tingui almenys 3 línies visibles
         )
     }
 }
 
 @Composable
-fun AccountSection() {
+fun AccountSection(viewModel: SettingsViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
         // Nom d'usuari
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = viewModel.username,
+            onValueChange = { viewModel.updateUsername(it) },
             label = { Text("Nom d'usuari") },
             modifier = Modifier.fillMaxWidth()
         )
         // Correu electrònic
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = viewModel.email,
+            onValueChange = {viewModel.updateEmail(it) },
             label = { Text("Correu electrònic") },
             modifier = Modifier.fillMaxWidth()
         )
         // Contrasenya
         OutlinedTextField(
-            value = "",
-            onValueChange = { },
+            value = viewModel.password,
+            onValueChange = { viewModel.updatePassword(it) },
             label = { Text("Contrasenya") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
