@@ -1,78 +1,46 @@
 package com.app.travelsync.ui.view
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun SearchScreen(navController: NavController){
-
+fun SearchScreen(navController: NavController) {
+    Search()
 }
 
 @Composable
 fun Search() {
+    var searchQuery by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Top
     ) {
-        Text(text = "SEARCH", style = MaterialTheme.typography.headlineMedium )
+        // Títol a la part superior
+        Text(
+            text = "Explorar",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
-
+        // Barra de cerca senzilla
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            label = { Text("Cerca...") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            shape = MaterialTheme.shapes.medium,
+        )
     }
-}
-
-/**
- * Cerca viatges guardats per l'usuari
- *
- * Rep els parametres: query
- */
-fun searchTrips(){
-    /*TODO*/
-}
-
-/**
- * Mostra destinacions recomanades relacionades amb la cerca
- *
- * Rep els parametres: query
- */
-fun searchDestinations(){
-    /*TODO*/
-}
-
-/**
- * Busca vols disponibles cap a la destinació desitjada
- *
- * Rep els parametres: query
- */
-fun searchFlights(){
-    /*TODO*/
-}
-
-/**
- * Mostra una llista d'hotels disponibles a la destinació seleccionada
- *
- * Rep els parametres: query
- */
-fun searchHotels(){
-    /*TODO*/
-}
-
-/**
- * Aplica filtres a la cerca
- *
- * Rep els parametres: filters
- */
-fun filterSearchResults(){
-    /*TODO*/
 }
