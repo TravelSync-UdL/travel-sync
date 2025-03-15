@@ -68,4 +68,71 @@ Benvingut a TravelSync! Abans d’utilitzar la nostra aplicació, si us plau, ll
     <string name="legal_section_7_content">
 Per qualsevol dubte o consulta, pots contactar amb nosaltres a support@travelsync.cat.
 </string>
+
+
+
+    <string name="trip_screen_title">Viatges</string>
+    <string name="add_trip">Afegir viatge</string>
+    <string name="edit_trip">Editar Viatge</string>
+    <string name="new_trip">Nou Viatge</string>
+    <string name="trip_title">Títol del Viatge</string>
+    <string name="trip_destination">Destinació</string>
+    <string name="trip_start_date">Inici: %1$s</string>
+    <string name="trip_end_date">Fi: %1$s</string>
+    <string name="select_date">Selecciona una data</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancel·lar</string>
+    <string name="delete_trip">Eliminar Viatge</string>
+
+    <string name="trip_destination_label">Destinació: %1$s</string>
+    <string name="trip_dates_label">Inici: %1$s - Fi: %2$s</string>
+
+    <string name="post_1_title">Una publicació impressionant!</string>
+    <string name="post_1_desc">Aquesta és una descripció de la publicació.</string>
+    <string name="post_2_title">Segona publicació!</string>
+    <string name="post_2_desc">Una altra descripció impressionant.</string>
+    <string name="post_3_title">Publicació divertida!</string>
+    <string name="post_3_desc">Una publicació per divertir-se.</string>
+
+    <string name="explore_title">Explorar</string>
+    <string name="search_hint">Cerca...</string>
+
+    <string name="config_account_title">Configura el teu compte</string>
+    <string name="posts_title">Les meves publicacions</string>
+    <string name="user_full_name_format">%1$s %2$s</string>
+    <string name="user_username_format">%1$s</string>
+    <string name="followers">Seguidors</string>
+    <string name="following">Seguint</string>
+
+    <string name="settings_screen_title">Configuració</string>
+    <string name="profile_section_title">Perfil</string>
+    <string name="account_section_title">Compte</string>
+    <string name="language_section_title">Idioma</string>
+    <string name="name_label">Nom</string>
+    <string name="surname_label">Cognom</string>
+    <string name="username_label">Nom usuari</string>
+    <string name="email_label">Correu electrònic</string>
+    <string name="password_label">Contrasenya</string>
+    <string name="language_label">Idioma</string>
+    <string name="show_languages">Mostrar idiomes</string>
+    <string name="language_english">Anglès</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_catalan">Català</string>
+    <string name="data_saved_successfully">Dades actualitzades correctament</string>
+
+
+    <string name="activities">Activitats</string>
+    <string name="add_activity">Afegir Activitat</string>>
+    <string name="title">Títol</string>
+    <string name="location">Ubicació</string>
+    <string name="notes">Notes</string>
+    <string name="date">Data</string>
+    <string name="time">Hora</string>
+
+    <string name="date_button">Dia </string>
+    <string name="time_button">Hora </string>
+
+    <string name="form_invalid">El formulari no està completat correctament.</string>
+    <string name="empty_field">El camp no pot estar buit.</string>
+
 </resources>

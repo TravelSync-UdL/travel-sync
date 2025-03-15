@@ -68,4 +68,68 @@ Bienvenido a TravelSync! Antes de utilizar nuestra aplicación, por favor, lee a
     <string name="legal_section_7_content">
 Por cualquier duda o consulta, puedes contactar con nosotros a support@travelsync.cat.
 </string>
+
+    <string name="trip_screen_title">Viajes</string>
+    <string name="add_trip">Añadir viaje</string>
+    <string name="edit_trip">Editar Viaje</string>
+    <string name="new_trip">Nuevo Viaje</string>
+    <string name="trip_title">Título del Viaje</string>
+    <string name="trip_destination">Destino</string>
+    <string name="trip_start_date">Inicio: %1$s</string>
+    <string name="trip_end_date">Fino: %1$s</string>
+    <string name="select_date">Selecciona una fecha</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete_trip">Eliminar Viaje</string>
+
+    <string name="trip_destination_label">Destino: %1$s</string>
+    <string name="trip_dates_label">Inicio: %1$s - Fin: %2$s</string>
+
+    <string name="post_1_title">Una publicación impresionante!</string>
+    <string name="post_1_desc">Esta es una descripción de la publicación.</string>
+    <string name="post_2_title">Segunda publicación!</string>
+    <string name="post_2_desc">Otra descripción impresionante.</string>
+    <string name="post_3_title">Publicación divertida!</string>
+    <string name="post_3_desc">Una publicación para divertirse.</string>
+
+    <string name="explore_title">Explorar</string>
+    <string name="search_hint">Búsqueda...</string>
+
+    <string name="config_account_title">Configura tu cuenta</string>
+    <string name="posts_title">Mis publicaciones</string>
+    <string name="user_full_name_format">%1$s %2$s</string>
+    <string name="user_username_format">%1$s</string>
+    <string name="followers">Seguidores</string>
+    <string name="following">Siguiendo</string>
+
+    <string name="settings_screen_title">Configuración</string>
+    <string name="profile_section_title">Perfil</string>
+    <string name="account_section_title">Cuenta</string>
+    <string name="language_section_title">Idioma</string>
+    <string name="name_label">Nombre</string>
+    <string name="surname_label">Apellido</string>
+    <string name="username_label">Nombre de usuario</string>
+    <string name="email_label">Correo electrónico</string>
+    <string name="password_label">Contraseña</string>
+    <string name="language_label">Idioma</string>
+    <string name="show_languages">Mostrar idiomas</string>
+    <string name="language_english">Anglès</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_catalan">Català</string>
+    <string name="data_saved_successfully">Datos actualizadas correctamente</string>
+
+    <string name="activities">Actividades</string>
+    <string name="add_activity">Añadir Actividad</string>>
+    <string name="title">Título</string>
+    <string name="location">Ubicación</string>
+    <string name="notes">Notas</string>
+    <string name="date">Fecha</string>
+    <string name="time">Hora</string>
+
+    <string name="date_button">Dia </string>
+    <string name="time_button">Hora </string>
+
+    <string name="form_invalid">El formulario no está completado correctamente.</string>
+    <string name="empty_field">El campo no puede estar vacío.</string>
+
 </resources>

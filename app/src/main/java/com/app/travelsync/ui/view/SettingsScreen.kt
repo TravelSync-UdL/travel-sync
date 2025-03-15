@@ -65,7 +65,7 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") },
+                title = { Text(stringResource(id = R.string.settings_screen_title)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("home") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back_button_description))
@@ -85,43 +85,43 @@ fun SettingsScreen(
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text("Configuració de l'aplicació", style = MaterialTheme.typography.headlineLarge)
+            Text(stringResource(id = R.string.settings_screen_title), style = MaterialTheme.typography.headlineLarge)
 
             // Secció "Perfil"
-            Text("Perfil", style = MaterialTheme.typography.headlineMedium)
+            Text(stringResource(id = R.string.profile_section_title), style = MaterialTheme.typography.headlineMedium)
             OutlinedTextField(
                 value = tempName,
                 onValueChange = { tempName = it },
-                label = { Text("Nom") },
+                label = { Text(stringResource(id = R.string.name_label)) },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = tempSurname,
                 onValueChange = { tempSurname = it },
-                label = { Text("Cognom") },
+                label = { Text(stringResource(id = R.string.surname_label)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
             // Secció "Compte"
-            Text("Compte", style = MaterialTheme.typography.headlineMedium)
+            Text(stringResource(id = R.string.account_section_title), style = MaterialTheme.typography.headlineMedium)
             OutlinedTextField(
                 value = tempUsername,
                 onValueChange = { tempUsername = it },
-                label = { Text("Nom d'usuari") },
+                label = { Text(stringResource(id = R.string.username_label)) },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = tempEmail,
                 onValueChange = { tempEmail = it },
-                label = { Text("Correu electrònic") },
+                label = { Text(stringResource(id = R.string.email_label)) },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = tempPassword,
                 onValueChange = { tempPassword = it },
-                label = { Text("Contrasenya") },
+                label = { Text(stringResource(id = R.string.password_label)) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -129,7 +129,7 @@ fun SettingsScreen(
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
             // Secció "Idioma"
-            Text("Idioma", style = MaterialTheme.typography.headlineMedium)
+            Text(stringResource(id = R.string.language_section_title), style = MaterialTheme.typography.headlineMedium)
             LanguageDropdown(
                 selectedLanguage = language,
                 onLanguageSelected = { newLang -> viewModel.updateLanguage(newLang) },
@@ -155,56 +155,6 @@ fun SettingsScreen(
 
 
 @Composable
-fun ProfileSection(viewModel: SettingsViewModel) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        // Nom
-        OutlinedTextField(
-            value = viewModel.name,  // El valor està buit, no hi ha gestió d'estat
-            onValueChange = { viewModel.updateName(it)}, // Aquí pots gestionar el canvi més endavant
-            label = { Text("Nom") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        // Cognom
-        OutlinedTextField(
-            value = viewModel.surname,
-            onValueChange = { viewModel.updateSurname(it) },
-            label = { Text("Cognom") },
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-fun AccountSection(viewModel: SettingsViewModel) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-
-        // Nom d'usuari
-        OutlinedTextField(
-            value = viewModel.username,
-            onValueChange = { viewModel.updateUsername(it) },
-            label = { Text("Nom d'usuari") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        // Correu electrònic
-        OutlinedTextField(
-            value = viewModel.email,
-            onValueChange = {viewModel.updateEmail(it) },
-            label = { Text("Correu electrònic") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        // Contrasenya
-        OutlinedTextField(
-            value = viewModel.password,
-            onValueChange = { viewModel.updatePassword(it) },
-            label = { Text("Contrasenya") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-
-@Composable
 fun LanguageDropdown(
     selectedLanguage: String,
     onLanguageSelected: (String) -> Unit,
@@ -212,16 +162,16 @@ fun LanguageDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val languageDisplay = when (selectedLanguage) {
-        "es" -> "Español"
-        "en" -> "English"
-        "ca" -> "Catalan"
+        "es" -> stringResource(id = R.string.language_spanish)
+        "en" -> stringResource(id = R.string.language_english)
+        "ca" -> stringResource(id = R.string.language_catalan)
         else -> selectedLanguage
     }
 
     OutlinedTextField(
         value = languageDisplay,
         onValueChange = {},
-        label = { Text("Idioma") },
+        label = { Text(stringResource(id = R.string.language_label)) },
         readOnly = true,
         trailingIcon = {
             IconButton(onClick = { expanded = true }) {
@@ -238,9 +188,9 @@ fun LanguageDropdown(
     ) {
         availableLanguages.forEach { lang ->
             val langName = when (lang) {
-                "es" -> "Español"
-                "en" -> "English"
-                "ca" -> "Catalan"
+                "es" -> stringResource(id = R.string.language_spanish)
+                "en" -> stringResource(id = R.string.language_english)
+                "ca" -> stringResource(id = R.string.language_catalan)
                 else -> lang
             }
             DropdownMenuItem(

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.DropdownMenu
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,7 +52,7 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Configura el teu compte") },
+                title = { Text(text = stringResource(id = R.string.config_account_title)) },
                 actions = {
                     Box {
                         IconButton(onClick = { showSettingsMenu = !showSettingsMenu }) {
@@ -65,11 +68,11 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
                             DropdownMenuItem(
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Filled.Settings,
+                                        imageVector = Icons.Filled.Info,
                                         contentDescription = "Version Icon"
                                     )
                                 },
-                                text = { Text("About") },
+                                text = { Text(stringResource(id = R.string.about_text)) },
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("about")
@@ -82,7 +85,7 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
                                         contentDescription = "Settings Icon"
                                     )
                                 },
-                                text = { Text("Settings") },
+                                text = { Text(stringResource(id = R.string.settings_text)) },
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("settings")
@@ -91,11 +94,11 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
                             DropdownMenuItem(
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Filled.Settings,
+                                        imageVector = Icons.Filled.Build,
                                         contentDescription = "Legal Icon"
                                     )
                                 },
-                                text = { Text("Legal") },
+                                text = { Text(stringResource(id = R.string.legal_text)) },
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("legal")
@@ -129,14 +132,14 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
 
             // Nom d'usuari
             Text(
-                text = "$userName $userSurname", // Nom complet de l'usuari
+                text = stringResource(id = R.string.user_full_name_format, "$userName", "$userSurname"), // Nom complet de l'usuari
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
 
             // Nom d'usuari (àlies)
             Text(
-                text = "@$userUsername", // Nom d'usuari
+                text = stringResource(id = R.string.user_username_format, "@$userUsername"), // Nom d'usuari
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -157,7 +160,7 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
                     Text(
-                        text = "Seguidors",
+                        text = stringResource(id = R.string.followers),
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Gray
                     )
@@ -173,7 +176,7 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
                     Text(
-                        text = "Seguint",
+                        text = stringResource(id = R.string.following),
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Gray
                     )
@@ -184,7 +187,7 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
 
             // Títol de les publicacions
             Text(
-                text = "Les meves publicacions",
+                text = stringResource(id = R.string.posts_title),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(bottom = 8.dp)
             )

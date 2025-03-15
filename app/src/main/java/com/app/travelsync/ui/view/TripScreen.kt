@@ -46,6 +46,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import com.app.travelsync.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -65,8 +66,8 @@ fun TripScreen(
     var currentTripId by remember { mutableStateOf(0) }
     var tripTitle by remember { mutableStateOf("") }
     var tripDestination by remember { mutableStateOf("") }
-    var tripStartDate by remember { mutableStateOf("Selecciona una data") }
-    var tripEndDate by remember { mutableStateOf("Selecciona una data") }
+    var tripStartDate by remember { mutableStateOf("") }
+    var tripEndDate by remember { mutableStateOf("") }
 
     val calendar = Calendar.getInstance()
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -99,14 +100,14 @@ fun TripScreen(
     fun isFormValid(): Boolean {
         return tripTitle.isNotEmpty() &&
                 tripDestination.isNotEmpty() &&
-                tripStartDate != "Selecciona una data" &&
-                tripEndDate != "Selecciona una data"
+                tripStartDate != "" &&
+                tripEndDate != ""
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Viatges") },
+                title = {Text(stringResource(id = R.string.trip_screen_title)) },
             )
         },
         content = { innerPadding ->
@@ -143,8 +144,8 @@ fun TripScreen(
                         isEditingTrip = false
                         tripTitle = ""
                         tripDestination = ""
-                        tripStartDate = "Selecciona una data"
-                        tripEndDate = "Selecciona una data"
+                        tripStartDate = ""
+                        tripEndDate = ""
                         showTripDialog = true
                     },
                     modifier = Modifier
@@ -155,7 +156,7 @@ fun TripScreen(
                         contentColor = Color.White
                     )
                 ) {
-                    Text("Afegir viatge")
+                    Text(stringResource(id = R.string.add_trip))
                 }
             }
         }
@@ -167,7 +168,8 @@ fun TripScreen(
             onDismissRequest = { showTripDialog = false },
             title = {
                 Text(
-                    text = if (isEditingTrip) "Editar Viatge" else "Nou Viatge",
+                    text = if (isEditingTrip) stringResource(id = R.string.edit_trip)
+                    else stringResource(id = R.string.new_trip),
                     style = MaterialTheme.typography.titleLarge
                 )
             },
@@ -177,7 +179,7 @@ fun TripScreen(
                     OutlinedTextField(
                         value = tripTitle,
                         onValueChange = { tripTitle = it },
-                        label = { Text("Títol del Viatge") },
+                        label = { Text(stringResource(id = R.string.trip_title))},
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp)
@@ -187,7 +189,7 @@ fun TripScreen(
                     OutlinedTextField(
                         value = tripDestination,
                         onValueChange = { tripDestination = it },
-                        label = { Text("Destinació") },
+                        label = { Text(stringResource(id = R.string.trip_destination)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp)
@@ -205,7 +207,11 @@ fun TripScreen(
                         )
                     ) {
                         Icon(Icons.Filled.Edit, contentDescription = "Calendari")
-                        Text(text = "Inici: $tripStartDate", modifier = Modifier.padding(start = 8.dp))
+                        Text(
+                            text = stringResource(id = R.string.trip_start_date, tripStartDate),
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+
                     }
 
                     // Data de finalització
@@ -220,7 +226,11 @@ fun TripScreen(
                         )
                     ) {
                         Icon(Icons.Filled.Edit, contentDescription = "Calendari")
-                        Text(text = "Fi: $tripEndDate", modifier = Modifier.padding(start = 8.dp))
+                        Text(
+                            text = stringResource(id = R.string.trip_end_date, tripEndDate),
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+
                     }
                 }
             },
@@ -255,7 +265,7 @@ fun TripScreen(
                         contentColor = Color.White
                     ),
                 ) {
-                    Text("Guardar")
+                    Text(stringResource(id = R.string.save))
                 }
             },
             dismissButton = {
@@ -266,7 +276,7 @@ fun TripScreen(
                         contentColor = Color.White
                     )
                 ) {
-                    Text("Cancel·lar")
+                    Text(stringResource(id = R.string.cancel))
                 }
             }
         )
@@ -305,7 +315,7 @@ fun TripItem(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "Destinació: ${trip.destination}",
+                text = stringResource(id = R.string.trip_destination_label, trip.destination),
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -318,7 +328,7 @@ fun TripItem(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "Inici: ${trip.startDate} - Fi: ${trip.endDate}",
+                text = stringResource(id = R.string.trip_dates_label, trip.startDate, trip.endDate),
                 style = MaterialTheme.typography.bodyLarge
             )
         }
