@@ -67,4 +67,69 @@
     <string name="legal_section_7_content">
         For any questions or concerns, you can contact us at support@travelsync.cat.
     </string>
+
+
+    <string name="trip_screen_title">Trips</string>
+    <string name="add_trip">Add trip</string>
+    <string name="edit_trip">Edit Journey</string>
+    <string name="new_trip">New Journey</string>
+    <string name="trip_title">Travel Title</string>
+    <string name="trip_destination">Destination</string>
+    <string name="trip_start_date">Start: %1$s</string>
+    <string name="trip_end_date">End: %1$s</string>
+    <string name="select_date">Select Date</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_trip">Remove Trip</string>
+
+    <string name="trip_destination_label">Destination: %1$s</string>
+    <string name="trip_dates_label">Start: %1$s - End: %2$s</string>
+
+    <string name="post_1_title">An impressive post!</string>
+    <string name="post_1_desc">This is a description of the publication.</string>
+    <string name="post_2_title">Second publication!</string>
+    <string name="post_2_desc">Another impressive description.</string>
+    <string name="post_3_title">Fun post!</string>
+    <string name="post_3_desc">A publication for fun.</string>
+
+    <string name="explore_title">Explore</string>
+    <string name="search_hint">Search...</string>
+
+    <string name="config_account_title">Configure your account</string>
+    <string name="posts_title">My Publications</string>
+    <string name="user_full_name_format">%1$s %2$s</string>
+    <string name="user_username_format">%1$s</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+
+    <string name="settings_screen_title">Settings</string>
+    <string name="profile_section_title">Profile</string>
+    <string name="account_section_title">Account</string>
+    <string name="language_section_title">Language</string>
+    <string name="name_label">Name</string>
+    <string name="surname_label">Surname</string>
+    <string name="username_label">Username</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="language_label">Language</string>
+    <string name="show_languages">Show languages</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="language_catalan">Catalan</string>
+    <string name="data_saved_successfully">Successfully updated data</string>
+
+    <string name="activities">Activities</string>
+    <string name="add_activity">Add Activity</string>
+    <string name="title">Title</string>
+    <string name="location">Location</string>
+    <string name="notes">Notes</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+
+    <string name="date_button">Day </string>
+    <string name="time_button">Hour </string>
+
+    <string name="form_invalid">Form is not completed successfully.</string>
+    <string name="empty_field">Field cannot be empty.</string>
+
 </resources>
