@@ -76,7 +76,7 @@ Por cualquier duda o consulta, puedes contactar con nosotros a support@travelsyn
     <string name="trip_title">Título del Viaje</string>
     <string name="trip_destination">Destino</string>
     <string name="trip_start_date">Inicio: %1$s</string>
-    <string name="trip_end_date">Fino: %1$s</string>
+    <string name="trip_end_date">Fin: %1$s</string>
     <string name="select_date">Selecciona una fecha</string>
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
