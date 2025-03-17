@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -116,7 +117,7 @@ fun ItineraryScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Activitats") },
+                title = { Text(stringResource(id = R.string.activities)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("trip") }) {
                         Icon(
@@ -174,7 +175,7 @@ fun ItineraryScreen(
                         contentColor = Color.White // Color del text
                     )
                 ) {
-                    Text("Afegir Activitat") // El text dins del botó
+                    Text(stringResource(id = R.string.add_activity)) // El text dins del botó
                 }
             }
         }
@@ -184,13 +185,13 @@ fun ItineraryScreen(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(if (isEditing) "Editar Subtarea" else "Nova Subtarea") },
+            title = { Text(if (isEditing) "Editar Activitat" else "Nova Activitat") },
             text = {
                 Column {
                     OutlinedTextField(
                         value = itineraryTitle,
                         onValueChange = { itineraryTitle = it },
-                        label = { Text("Título") },
+                        label = { Text(stringResource(id = R.string.title)) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     Button(
@@ -204,7 +205,10 @@ fun ItineraryScreen(
                         )
                     ) {
                         Icon(Icons.Filled.Edit, contentDescription = "Calendari")
-                        Text(text = "Date $itineraryDate", modifier = Modifier.padding(start = 8.dp))
+                        Text(
+                            text = "${stringResource(id = R.string.date)} $itineraryDate",
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
                     }
 
                     Button(
@@ -218,19 +222,22 @@ fun ItineraryScreen(
                         )
                     ) {
                         Icon(Icons.Filled.Edit, contentDescription = "Time")
-                        Text(text = "Time $itineraryTime", modifier = Modifier.padding(start = 8.dp))
+                        Text(
+                            text = "${stringResource(id = R.string.time)} $itineraryTime",
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
                     }
 
                     OutlinedTextField(
                         value = itineraryLocation,
                         onValueChange = { itineraryLocation = it },
-                        label = { Text("Location") },
+                        label = { Text(stringResource(id = R.string.location)) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = itineraryNotes,
                         onValueChange = { itineraryNotes = it },
-                        label = { Text("Notes") },
+                        label = { Text(stringResource(id = R.string.notes)) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -271,7 +278,7 @@ fun ItineraryScreen(
                         contentColor = Color.White
                     ),
                 ) {
-                    Text("Guardar")
+                    Text(stringResource(id = R.string.save))
                 }
             },
             dismissButton = {
@@ -282,7 +289,7 @@ fun ItineraryScreen(
                         contentColor = Color.White
                     )
                 ) {
-                    Text("Cancel·lar")
+                    Text(stringResource(id = R.string.cancel))
                 }
             }
         )
@@ -319,7 +326,7 @@ fun ItineraryItem(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "Fecha: ${itinerary.date} - Hora: ${itinerary.time}",
+                text = "${stringResource(id = R.string.date_button)}: ${itinerary.date} - ${stringResource(id = R.string.time_button)}: ${itinerary.time}",
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -332,7 +339,7 @@ fun ItineraryItem(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "Ubicación: ${itinerary.location}",
+                text = "${stringResource(id = R.string.location)}: ${itinerary.location}",
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -345,7 +352,7 @@ fun ItineraryItem(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "Notas: ${itinerary.notes}",
+                text = "${stringResource(id = R.string.notes)}: ${itinerary.notes}",
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -362,7 +369,7 @@ fun ItineraryItem(
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
-                    contentDescription = "Eliminar Subtarea",
+                    contentDescription = "Eliminar Activitat",
                     tint = colorResource(id = R.color.backgroundIcon)
                 )
             }
@@ -371,7 +378,7 @@ fun ItineraryItem(
             IconButton(onClick = onEdit) {
                 Icon(
                     imageVector = Icons.Filled.Edit,
-                    contentDescription = "Editar Subtarea",
+                    contentDescription = "Editar Activitat",
                     tint = colorResource(id = R.color.backgroundIcon)
                 )
             }

@@ -7,9 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.app.travelsync.R
 
 @Composable
 fun SearchScreen(navController: NavController) {
@@ -28,7 +30,7 @@ fun Search() {
     ) {
         // Títol a la part superior
         Text(
-            text = "Explorar",
+            text = stringResource(id = R.string.explore_title),
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -37,7 +39,7 @@ fun Search() {
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
-            label = { Text("Cerca...") },
+            label = { stringResource(id = R.string.search_hint) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             shape = MaterialTheme.shapes.medium,

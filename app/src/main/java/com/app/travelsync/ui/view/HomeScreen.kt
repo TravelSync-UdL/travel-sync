@@ -5,7 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Settings
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,10 +31,13 @@ import com.app.travelsync.R // Importa el teu package
 fun HomeScreen(navController: NavController) {
     var showSettingsMenu by remember { mutableStateOf(false) }
 
+    // Ensure that rememberPosts() is called inside the composable context
+    val posts = rememberPosts()
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "HOME") },
+                title = { Text(text = stringResource(id = R.string.app_name)) },
                 actions = {
                     Box {
                         IconButton(onClick = { showSettingsMenu = !showSettingsMenu }) {
@@ -47,11 +53,11 @@ fun HomeScreen(navController: NavController) {
                             DropdownMenuItem(
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Filled.Settings,
+                                        imageVector = Icons.Filled.Build,
                                         contentDescription = "Version Icon"
                                     )
                                 },
-                                text = { Text("About") },
+                                text = { Text(stringResource(id = R.string.about_text)) },
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("about")
@@ -64,7 +70,7 @@ fun HomeScreen(navController: NavController) {
                                         contentDescription = "Settings Icon"
                                     )
                                 },
-                                text = { Text("Settings") },
+                                text = { Text(stringResource(id = R.string.settings_text)) },
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("settings")
@@ -73,11 +79,11 @@ fun HomeScreen(navController: NavController) {
                             DropdownMenuItem(
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Filled.Settings,
+                                        imageVector = Icons.Filled.Info,
                                         contentDescription = "Legal Icon"
                                     )
                                 },
-                                text = { Text("Legal") },
+                                text = { Text(stringResource(id = R.string.legal_text)) },
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("legal")
@@ -99,13 +105,6 @@ fun HomeScreen(navController: NavController) {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp) // Espai entre cada publicació
             ) {
-                // Utilitzem una llista de publicacions amb el seu propi estat "liked" i una imatge diferent per a cada publicació
-                val posts = listOf(
-                    PostData("Una publicació impressionant!", "Aquesta és una descripció de la publicació.", R.drawable.boat), // Exemple de imatge 1
-                    PostData("Segona publicació!", "Una altra descripció impressionant.", R.drawable.castle), // Exemple de imatge 2
-                    PostData("Publicació divertida!", "Una publicació per divertir-se.", R.drawable.norway) // Exemple de imatge 3
-                )
-
                 items(posts.size) { index ->
                     var liked by remember { mutableStateOf(false) }
 
@@ -124,6 +123,27 @@ fun HomeScreen(navController: NavController) {
 }
 
 data class PostData(val title: String, val description: String, val imageResource: Int) // Afegim la propietat imageResource
+
+@Composable
+fun rememberPosts(): List<PostData> {
+    return listOf(
+        PostData(
+            title = stringResource(id = R.string.post_1_title),
+            description = stringResource(id = R.string.post_1_desc),
+            imageResource = R.drawable.boat
+        ),
+        PostData(
+            title = stringResource(id = R.string.post_2_title),
+            description = stringResource(id = R.string.post_2_desc),
+            imageResource = R.drawable.castle
+        ),
+        PostData(
+            title = stringResource(id = R.string.post_3_title),
+            description = stringResource(id = R.string.post_3_desc),
+            imageResource = R.drawable.norway
+        )
+    )
+}
 
 @Composable
 fun PostItem(
