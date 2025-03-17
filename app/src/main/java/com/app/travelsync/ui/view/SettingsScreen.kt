@@ -42,6 +42,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 
@@ -51,6 +52,7 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    // Accedim a les propietats directament
     val language = viewModel.language
 
     var tempName by remember { mutableStateOf(viewModel.name) }
@@ -61,6 +63,7 @@ fun SettingsScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -142,7 +145,70 @@ fun SettingsScreen(
                     viewModel.saveSettings(tempName, tempSurname, tempUsername, tempEmail, tempPassword)
 
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar("Dades editades correctament")
+                        snackbarHostState.showSnackbar(context.getString(R.string.info_ok))
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+            ) {
+                Text("OK")
+            }
+        }
+            Text(stringResource(id = R.string.profile_section_title), style = MaterialTheme.typography.headlineMedium)
+            OutlinedTextField(
+                value = tempName,
+                onValueChange = { tempName = it },
+                label = { Text(stringResource(id = R.string.name_label)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = tempSurname,
+                onValueChange = { tempSurname = it },
+                label = { Text(stringResource(id = R.string.surname_label)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Divider(modifier = Modifier.padding(vertical = 12.dp))
+
+            // Secció "Compte"
+            Text(stringResource(id = R.string.account_section_title), style = MaterialTheme.typography.headlineMedium)
+            OutlinedTextField(
+                value = tempUsername,
+                onValueChange = { tempUsername = it },
+                label = { Text(stringResource(id = R.string.username_label)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = tempEmail,
+                onValueChange = { tempEmail = it },
+                label = { Text(stringResource(id = R.string.email_label)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = tempPassword,
+                onValueChange = { tempPassword = it },
+                label = { Text(stringResource(id = R.string.password_label)) },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Divider(modifier = Modifier.padding(vertical = 12.dp))
+
+            // Secció "Idioma"
+            Text(stringResource(id = R.string.language_section_title), style = MaterialTheme.typography.headlineMedium)
+            LanguageDropdown(
+                selectedLanguage = language,
+                onLanguageSelected = { newLang -> viewModel.updateLanguage(newLang) },
+                availableLanguages = listOf("en", "es", "ca")
+            )
+
+            // Botó per guardar la configuració
+            Button(
+                onClick = {
+                    viewModel.saveSettings(tempName, tempSurname, tempUsername, tempEmail, tempPassword)
+
+
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(context.getString(R.string.info_ok))
                     }
                 },
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
@@ -151,7 +217,6 @@ fun SettingsScreen(
             }
         }
     }
-}
 
 
 @Composable

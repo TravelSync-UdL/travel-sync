@@ -76,6 +76,9 @@ fun TripScreen(
         // Establecemos la fecha mínima para el DatePicker
         val today = Calendar.getInstance()
 
+        // Si es la fecha de inicio, no hay límite de fecha mínima
+        val minDate = if (isStartDate) today.timeInMillis else calendar.timeInMillis
+
         DatePickerDialog(
             navController.context,
             { _, year, month, dayOfMonth ->
@@ -91,8 +94,8 @@ fun TripScreen(
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).apply {
-            // Establecemos la fecha mínima que es la fecha actual
-            datePicker.minDate = today.timeInMillis
+            // Establecer la fecha mínima dependiendo si es fecha de inicio o final
+            datePicker.minDate = minDate
         }.show()
     }
 
@@ -211,27 +214,29 @@ fun TripScreen(
                             text = stringResource(id = R.string.trip_start_date, tripStartDate),
                             modifier = Modifier.padding(start = 8.dp)
                         )
-
                     }
 
-                    // Data de finalització
-                    Button(
-                        onClick = { openDatePicker(false) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.backgroundIcon),
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Icon(Icons.Filled.Edit, contentDescription = "Calendari")
-                        Text(
-                            text = stringResource(id = R.string.trip_end_date, tripEndDate),
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-
+                    // Data de finalització - només es mostra si la data d'inici està seleccionada
+                    if (tripStartDate != "") {
+                        Button(
+                            onClick = { openDatePicker(false) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.backgroundIcon),
+                                contentColor = Color.White
+                            ),
+                            enabled = tripStartDate != "" // Deshabilitem fins que hi hagi una data d'inici
+                        ) {
+                            Icon(Icons.Filled.Edit, contentDescription = "Calendari")
+                            Text(
+                                text = stringResource(id = R.string.trip_end_date, tripEndDate),
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
                     }
+
                 }
             },
             confirmButton = {
@@ -282,6 +287,7 @@ fun TripScreen(
         )
     }
 }
+
 
 
 @Composable
@@ -370,4 +376,3 @@ fun TripItem(
         }
     }
 }
-
