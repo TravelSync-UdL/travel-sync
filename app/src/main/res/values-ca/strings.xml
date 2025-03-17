@@ -134,5 +134,6 @@ Per qualsevol dubte o consulta, pots contactar amb nosaltres a support@travelsyn
 
     <string name="form_invalid">El formulari no està completat correctament.</string>
     <string name="empty_field">El camp no pot estar buit.</string>
+    <string name="info_ok">Dades editades correctament</string>
 
 </resources>

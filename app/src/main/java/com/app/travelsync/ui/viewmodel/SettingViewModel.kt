@@ -13,6 +13,7 @@ class SettingsViewModel @Inject constructor(
     private val sharedPrefsManager: SharedPrefsManager
 ) : ViewModel() {
 
+    // Variables de estado inicializadas con los valores guardados.
     var language by mutableStateOf(sharedPrefsManager.userLanguage ?: "es")
         private set
 
@@ -69,5 +70,4 @@ class SettingsViewModel @Inject constructor(
         updatePassword(newPassword)
     }
 }
-
 

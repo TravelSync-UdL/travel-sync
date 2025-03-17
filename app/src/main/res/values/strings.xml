@@ -132,4 +132,6 @@
     <string name="form_invalid">Form is not completed successfully.</string>
     <string name="empty_field">Field cannot be empty.</string>
 
+    <string name="info_ok">Successfully edited data</string>
+
 </resources>

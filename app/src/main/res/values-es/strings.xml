@@ -132,4 +132,6 @@ Por cualquier duda o consulta, puedes contactar con nosotros a support@travelsyn
     <string name="form_invalid">El formulario no está completado correctamente.</string>
     <string name="empty_field">El campo no puede estar vacío.</string>
 
+    <string name="info_ok">Datos editados correctamente</string>
+
 </resources>
