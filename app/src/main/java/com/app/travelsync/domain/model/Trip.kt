@@ -6,5 +6,5 @@ data class Trip (
     val destination: String,
     val startDate: String,
     val endDate: String,
-    val subTasks: List<Itinerary> = emptyList()
+    val itinerary: List<Itinerary> = emptyList()
 )
