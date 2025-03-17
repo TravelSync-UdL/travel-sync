@@ -38,7 +38,6 @@ fun NavGraph(navController: NavHostController) {
     val currentBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentDestination = currentBackStackEntry?.destination?.route
 
-    // Definim quines pantalles no han de mostrar la barra de navegació
     val hideBottomBar = currentDestination?.let {
         it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings")
     } == true
@@ -96,7 +95,7 @@ fun NavGraph(navController: NavHostController) {
                 composable("legal") { LegalScreen(navController) }
                 composable("settings") { SettingsScreen(navController) }
 
-                // Ruta on la barra de navegació NO es mostrarà
+
                 composable(
                     route = "itinerarys/{taskId}",
                     arguments = listOf(navArgument("taskId") { type = NavType.IntType })

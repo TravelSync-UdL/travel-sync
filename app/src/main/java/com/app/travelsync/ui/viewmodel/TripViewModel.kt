@@ -9,7 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+/**
+ * Per poder gestionar la lògica de negoci i el seu estat de l'interfície d'usuari a la pantalla "Trip"
+ */
 @HiltViewModel
 class TripViewModel @Inject constructor(
     private val repository: TripRepository

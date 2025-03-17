@@ -6,6 +6,9 @@ import com.app.travelsync.data.SharedPrefsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+/**
+ * Per poder gestionar la lògica de negoci i el seu estat de l'interfície d'usuari a la pantalla "Configuracio de usuari"
+ */
 @HiltViewModel
 class ConfigAccountViewModel @Inject constructor(private val sharedPrefsManager: SharedPrefsManager) : ViewModel() {
 

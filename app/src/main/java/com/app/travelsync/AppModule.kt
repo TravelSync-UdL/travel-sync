@@ -23,7 +23,6 @@ object AppModule {
     ): SharedPreferences =
         context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
 
-    // context.getSharedPreferences("my_preferences", Context.MODE_PRIVATE) //bad implementation
 
     @Provides
     @Singleton

@@ -41,13 +41,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
 
+/**
+ * És la pantalla de configuració, on permet a l'usuari poder modificar les seves dades personals, i seleccionar l'idioma de l'app.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    // Accedim a les propietats directament
+
     val language = viewModel.language
 
     var tempName by remember { mutableStateOf(viewModel.name) }
@@ -85,7 +88,7 @@ fun SettingsScreen(
         ) {
             Text(stringResource(id = R.string.settings_screen_title), style = MaterialTheme.typography.headlineLarge)
 
-            // Secció "Perfil"
+
             Text(stringResource(id = R.string.profile_section_title), style = MaterialTheme.typography.headlineMedium)
             OutlinedTextField(
                 value = tempName,
@@ -102,7 +105,7 @@ fun SettingsScreen(
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-            // Secció "Compte"
+
             Text(stringResource(id = R.string.account_section_title), style = MaterialTheme.typography.headlineMedium)
             OutlinedTextField(
                 value = tempUsername,
@@ -126,7 +129,7 @@ fun SettingsScreen(
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-            // Secció "Idioma"
+
             Text(stringResource(id = R.string.language_section_title), style = MaterialTheme.typography.headlineMedium)
             LanguageDropdown(
                 selectedLanguage = language,
@@ -134,7 +137,7 @@ fun SettingsScreen(
                 availableLanguages = listOf("en", "es", "ca")
             )
 
-            // Botó per guardar la configuració
+
             Button(
                 onClick = {
                     viewModel.saveSettings(tempName, tempSurname, tempUsername, tempEmail, tempPassword)
@@ -164,7 +167,7 @@ fun SettingsScreen(
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-            // Secció "Compte"
+
             Text(stringResource(id = R.string.account_section_title), style = MaterialTheme.typography.headlineMedium)
             OutlinedTextField(
                 value = tempUsername,
@@ -188,7 +191,7 @@ fun SettingsScreen(
 
             Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-            // Secció "Idioma"
+
             Text(stringResource(id = R.string.language_section_title), style = MaterialTheme.typography.headlineMedium)
             LanguageDropdown(
                 selectedLanguage = language,
@@ -196,7 +199,7 @@ fun SettingsScreen(
                 availableLanguages = listOf("en", "es", "ca")
             )
 
-            // Botó per guardar la configuració
+
             Button(
                 onClick = {
                     viewModel.saveSettings(tempName, tempSurname, tempUsername, tempEmail, tempPassword)
@@ -213,7 +216,7 @@ fun SettingsScreen(
         }
     }
 
-
+//Per poder triar l'idioma
 @Composable
 fun LanguageDropdown(
     selectedLanguage: String,

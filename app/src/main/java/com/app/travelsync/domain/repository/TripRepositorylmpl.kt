@@ -11,12 +11,15 @@ fun safeLog(tag: String, message: String) {
     val isJUnitTest = System.getProperty("java.class.path")?.contains("junit") == true
 
     if (isJUnitTest) {
-        println("$tag: $message") // En tests unitàries, imprimeix en consola
+        println("$tag: $message")
     } else {
-        Log.d(tag, message) // En Android, mostra a Logcat
+        Log.d(tag, message)
     }
 }
 
+/**
+ * Implementació, per poder guardar els trips i itineraris, sempre que tinguem l'aplicació oberta.
+ */
 @Singleton
 class TripRepositorylmpl @Inject constructor() : TripRepository {
 
@@ -56,6 +59,7 @@ class TripRepositorylmpl @Inject constructor() : TripRepository {
             safeLog("TripRepository", "Error: No es pot editar un viatge inexistent (ID: ${trip.tripId})")
         }
     }
+
 
     // Itinerary
     override fun addActivity(itinerary: Itinerary) {

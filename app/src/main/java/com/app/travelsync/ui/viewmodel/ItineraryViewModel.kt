@@ -11,6 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+    /**
+     * Per poder gestionar la lògica de negoci i el seu estat de l'interfície d'usuari a la pantalla "Activites"
+     */
 @HiltViewModel
 class ItineraryViewModel @Inject constructor(
     private val repository: TripRepository,

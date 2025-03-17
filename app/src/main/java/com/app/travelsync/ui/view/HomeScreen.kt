@@ -24,14 +24,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.app.travelsync.R // Importa el teu package
+import com.app.travelsync.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
     var showSettingsMenu by remember { mutableStateOf(false) }
 
-    // Ensure that rememberPosts() is called inside the composable context
     val posts = rememberPosts()
 
     Scaffold(
@@ -110,7 +109,7 @@ fun HomeScreen(navController: NavController) {
 
                     // Cada publicació té el seu propi estat de "liked" i la seva pròpia imatge
                     PostItem(
-                        imageResource = posts[index].imageResource, // Usar la imatge associada amb cada publicació
+                        imageResource = posts[index].imageResource,
                         title = posts[index].title,
                         description = posts[index].description,
                         liked = liked,

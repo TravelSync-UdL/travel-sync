@@ -53,6 +53,9 @@ import java.util.Calendar
 import java.util.Locale
 
 
+/**
+ * Classe per poder controlar i que es mostri la UI de la pantalla Trip
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripScreen(
@@ -72,11 +75,10 @@ fun TripScreen(
     val calendar = Calendar.getInstance()
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+    //Que es mostri el calendari a partir d'avui
     val openDatePicker: (Boolean) -> Unit = { isStartDate ->
-        // Establecemos la fecha mínima para el DatePicker
         val today = Calendar.getInstance()
 
-        // Si es la fecha de inicio, no hay límite de fecha mínima
         val minDate = if (isStartDate) today.timeInMillis else calendar.timeInMillis
 
         DatePickerDialog(
@@ -94,12 +96,10 @@ fun TripScreen(
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).apply {
-            // Establecer la fecha mínima dependiendo si es fecha de inicio o final
             datePicker.minDate = minDate
         }.show()
     }
 
-    // Funció per comprovar si tots els camps estan complets
     fun isFormValid(): Boolean {
         return tripTitle.isNotEmpty() &&
                 tripDestination.isNotEmpty() &&
@@ -165,7 +165,6 @@ fun TripScreen(
         }
     )
 
-    // Diàleg de creació/edició del viatge
     if (showTripDialog) {
         AlertDialog(
             onDismissRequest = { showTripDialog = false },
@@ -178,7 +177,7 @@ fun TripScreen(
             },
             text = {
                 Column(modifier = Modifier.padding(8.dp)) {
-                    // Títol del viatge
+
                     OutlinedTextField(
                         value = tripTitle,
                         onValueChange = { tripTitle = it },
@@ -188,7 +187,7 @@ fun TripScreen(
                             .padding(bottom = 8.dp)
                     )
 
-                    // Destinació
+
                     OutlinedTextField(
                         value = tripDestination,
                         onValueChange = { tripDestination = it },
@@ -198,7 +197,7 @@ fun TripScreen(
                             .padding(bottom = 8.dp)
                     )
 
-                    // Data d'inici
+
                     Button(
                         onClick = { openDatePicker(true) },
                         modifier = Modifier
@@ -216,7 +215,7 @@ fun TripScreen(
                         )
                     }
 
-                    // Data de finalització - només es mostra si la data d'inici està seleccionada
+                    //L'opció de triar el dia per acabar el viatge, només es podrà fer si ja s'ha triat el dia d'inici.
                     if (tripStartDate != "") {
                         Button(
                             onClick = { openDatePicker(false) },
@@ -227,7 +226,7 @@ fun TripScreen(
                                 containerColor = colorResource(id = R.color.backgroundIcon),
                                 contentColor = Color.White
                             ),
-                            enabled = tripStartDate != "" // Deshabilitem fins que hi hagi una data d'inici
+                            enabled = tripStartDate != ""
                         ) {
                             Icon(Icons.Filled.Edit, contentDescription = "Calendari")
                             Text(
@@ -264,7 +263,7 @@ fun TripScreen(
                         }
                         showTripDialog = false
                     },
-                    enabled = isFormValid(), // Aquí validem si el formulari és complet
+                    enabled = isFormValid(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.backgroundIcon),
                         contentColor = Color.White
@@ -297,7 +296,7 @@ fun TripItem(
     onOpen: () -> Unit,
     onDelete: () -> Unit
 ) {
-    // Contenedor principal
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -306,14 +305,14 @@ fun TripItem(
             .clip(MaterialTheme.shapes.medium)
             .padding(16.dp)
     ) {
-        // Títol del viatge
+
         Text(
             text = trip.title,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // Destinació
+
         Row(modifier = Modifier.padding(bottom = 8.dp)) {
             Icon(
                 imageVector = Icons.Filled.LocationOn,
@@ -326,7 +325,7 @@ fun TripItem(
             )
         }
 
-        // Dates del viatge (inici i fi)
+
         Row(modifier = Modifier.padding(bottom = 8.dp)) {
             Icon(
                 imageVector = Icons.Filled.DateRange,
@@ -339,16 +338,16 @@ fun TripItem(
             )
         }
 
-        // Separador per millorar la llegibilitat
+
         Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-        // Icones d'editar i d'obrir les subtareas
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
 
-            // Botó per editar el viatge
+
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
@@ -357,7 +356,7 @@ fun TripItem(
                 )
             }
 
-            // Botó per editar el viatge
+
             IconButton(onClick = onEdit) {
                 Icon(
                     imageVector = Icons.Filled.Edit,
@@ -365,7 +364,7 @@ fun TripItem(
                     tint = colorResource(id = R.color.backgroundIcon)
                 )
             }
-            // Botó per obrir les subtareas del viatge
+
             IconButton(onClick = onOpen) {
                 Icon(
                     imageVector = Icons.Filled.ArrowForward,

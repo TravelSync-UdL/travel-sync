@@ -32,7 +32,7 @@ fun LegalScreen(navController: NavController) {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back_button_description))
         }
 
-        // Column amb desplaçament
+        // Columna amb desplaçament
         Column(
             modifier = Modifier
                 .fillMaxSize()

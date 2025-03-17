@@ -8,6 +8,9 @@ import com.app.travelsync.data.SharedPrefsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+/**
+ * Per poder gestionar la lògica de negoci i el seu estat de la interfície d'usuari a la pantalla "Settings", i les SharedPreferences (que ens mantindran una memòria de forma local).
+ */
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val sharedPrefsManager: SharedPrefsManager

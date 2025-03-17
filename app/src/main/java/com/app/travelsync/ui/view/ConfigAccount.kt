@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.app.travelsync.R
-import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.ui.viewmodel.ConfigAccountViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -7,6 +7,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Per poder desar i recuperar configuracions de manera persistent, fins i tot després de tancar l'app.
+ */
 @Singleton
 class SharedPrefsManager @Inject constructor(
     private val preferences: SharedPreferences,
