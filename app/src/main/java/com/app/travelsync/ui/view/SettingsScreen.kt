@@ -42,6 +42,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 
@@ -61,6 +62,7 @@ fun SettingsScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -141,8 +143,9 @@ fun SettingsScreen(
                 onClick = {
                     viewModel.saveSettings(tempName, tempSurname, tempUsername, tempEmail, tempPassword)
 
+
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar("Dades editades correctament")
+                        snackbarHostState.showSnackbar(context.getString(R.string.info_ok))
                     }
                 },
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
