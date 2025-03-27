@@ -17,7 +17,7 @@ class ItineraryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ):ViewModel(){
 
-    val tripId: Int = savedStateHandle["tripId"] ?: 0
+    val tripId: Int = savedStateHandle["taskId"] ?: 0
 
     private val _itinerarys = mutableStateListOf<Itinerary>()
     val itinerarys: List<Itinerary> get() = _itinerarys
@@ -28,7 +28,9 @@ class ItineraryViewModel @Inject constructor(
 
     private fun loadItinerary() {
         _itinerarys.clear()
-        _itinerarys.addAll(repository.getActivity(tripId))
+        viewModelScope.launch {
+            _itinerarys.addAll(repository.getActivity(tripId))
+        }
     }
 
     fun addItinerary(itinerary: Itinerary) {

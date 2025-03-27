@@ -4,13 +4,13 @@ import com.app.travelsync.domain.model.Itinerary
 import com.app.travelsync.domain.model.Trip
 
 interface TripRepository {
-    fun getTrip(): List<Trip>
-    fun addTrip(trip: Trip)
-    fun deleteTrip(trip_Id: Int)
-    fun editTrip(trip: Trip)
+    suspend fun getTrip(): List<Trip>
+    suspend fun addTrip(trip: Trip)
+    suspend fun deleteTrip(trip_Id: Int)
+    suspend fun editTrip(trip: Trip)
 
-    fun getActivity(trip_Id: Int): List<Itinerary>
-    fun addActivity(itinerary: Itinerary)
-    fun deleteActivity(itinerary_id: Int)
-    fun editActivity(itinerary: Itinerary)
+    suspend fun getActivity(trip_Id: Int): List<Itinerary>
+    suspend fun addActivity(itinerary: Itinerary)
+    suspend fun deleteActivity(itinerary_id: Int)
+    suspend fun editActivity(itinerary: Itinerary)
 }
