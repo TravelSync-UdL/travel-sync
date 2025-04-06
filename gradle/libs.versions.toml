@@ -12,6 +12,9 @@ navigationRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.7"
 appcompat = "1.6.1"
 runtimeLivedata = "1.7.8"
+junitKtx = "1.2.1"
+compiler = "3.2.0-alpha11"
+runner = "1.5.2"
 
 
 [libraries]
@@ -34,6 +37,9 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+androidx-compiler = { group = "androidx.databinding", name = "compiler", version.ref = "compiler" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
