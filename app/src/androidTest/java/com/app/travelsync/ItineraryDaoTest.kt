@@ -39,7 +39,7 @@ class ItineraryDaoTest {
 
     @Test
     fun insertItineraryAndGetByTripId() = runBlocking {
-        // First insert a trip
+
         val trip = TripEntity(
             id = 1,
             title = "Test Trip",
@@ -49,7 +49,7 @@ class ItineraryDaoTest {
         )
         tripDao.addTrip(trip)
 
-        // Then insert itinerary for that trip
+
         val itinerary = ItineraryEntity(
             id = 1,
             trip_Id = 1,
@@ -68,7 +68,7 @@ class ItineraryDaoTest {
 
     @Test
     fun deleteItinerary() = runBlocking {
-        // First insert a trip
+
         val trip = TripEntity(
             id = 1,
             title = "Test Trip",
@@ -78,7 +78,7 @@ class ItineraryDaoTest {
         )
         tripDao.addTrip(trip)
 
-        // Then insert itinerary
+
         val itinerary = ItineraryEntity(
             id = 1,
             trip_Id = 1,
@@ -97,7 +97,7 @@ class ItineraryDaoTest {
 
     @Test
     fun updateItinerary() = runBlocking {
-        // First insert a trip
+
         val trip = TripEntity(
             id = 1,
             title = "Test Trip",
@@ -107,7 +107,7 @@ class ItineraryDaoTest {
         )
         tripDao.addTrip(trip)
 
-        // Then insert itinerary
+
         val itinerary = ItineraryEntity(
             id = 1,
             trip_Id = 1,
@@ -119,7 +119,7 @@ class ItineraryDaoTest {
         )
         itineraryDao.addItinerary(itinerary)
 
-        // Update itinerary
+
         val updatedItinerary = itinerary.copy(title = "Updated Day 1")
         itineraryDao.editItinerary(updatedItinerary)
 

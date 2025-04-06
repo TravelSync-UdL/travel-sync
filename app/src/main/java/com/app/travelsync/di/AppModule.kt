@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.app.travelsync.BuildConfig
 import com.app.travelsync.data.SharedPrefsManager
+import com.app.travelsync.data.TripRepositorylmpl
 import com.app.travelsync.domain.repository.TripRepository
 import com.app.travelsync.data.local.AppDatabase
 import com.app.travelsync.data.local.dao.ItineraryDao
