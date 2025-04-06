@@ -19,4 +19,7 @@ interface TripDao {
 
     @Update
     suspend fun editTrip(trip: TripEntity)
+
+    @Query("SELECT * FROM trip WHERE title = :tripName LIMIT 1")
+    suspend fun checkTripName(tripName: String): TripEntity?
 }

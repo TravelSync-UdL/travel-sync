@@ -1,5 +1,8 @@
 package com.app.travelsync
-
+/**
+ *
+ * NO SON NECESSARIS PERQUE ARA FEM SERVIR UNA BASE DE DADES
+ *
 import com.app.travelsync.domain.model.Itinerary
 import com.app.travelsync.domain.model.Trip
 import com.app.travelsync.data.TripRepositorylmpl
@@ -170,4 +173,4 @@ class CRUDTest {
         val activities = tripRepository.getActivity(1)
         assertEquals(0, activities.size)
     }
-}
+}**/
