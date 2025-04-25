@@ -15,6 +15,11 @@ runtimeLivedata = "1.7.8"
 junitKtx = "1.2.1"
 compiler = "3.2.0-alpha11"
 runner = "1.5.2"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.2.0"
+credentials = "1.5.0"
+credentialsPlayServicesAuth = "1.5.0"
+googleid = "1.1.1"
 
 
 [libraries]
@@ -40,8 +45,13 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-compiler = { group = "androidx.databinding", name = "compiler", version.ref = "compiler" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

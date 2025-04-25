@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -22,13 +23,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.app.travelsync.R // Importa el teu package
+import com.app.travelsync.ui.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, authViewModel: AuthViewModel = hiltViewModel()) {
     var showSettingsMenu by remember { mutableStateOf(false) }
 
     // Ensure that rememberPosts() is called inside the composable context
@@ -87,6 +90,20 @@ fun HomeScreen(navController: NavController) {
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("legal")
+                                }
+                            )
+                            DropdownMenuItem(
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Close,
+                                        contentDescription = "Logout Icon"
+                                    )
+                                },
+                                text = { Text("LogOut") },
+                                onClick = {
+                                    showSettingsMenu = false
+                                    authViewModel.signout()
+                                    navController.navigate("login")
                                 }
                             )
                         }

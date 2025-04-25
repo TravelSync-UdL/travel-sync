@@ -10,6 +10,9 @@ import com.app.travelsync.data.TripRepositorylmpl
 import com.app.travelsync.data.local.AppDatabase
 import com.app.travelsync.data.local.dao.ItineraryDao
 import com.app.travelsync.data.local.dao.TripDao
+import com.app.travelsync.domain.repository.AuthRepository
+import com.app.travelsync.domain.repository.AuthRepositoryImpl
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,5 +64,15 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTripRepository(tripDao: TripDao, itineraryDao: ItineraryDao): TripRepository = TripRepositorylmpl(tripDao, itineraryDao)
+
+    @Provides
+    fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
+        return AuthRepositoryImpl(firebaseAuth)
+    }
+
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
 
 }

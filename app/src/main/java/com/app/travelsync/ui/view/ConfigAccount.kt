@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Settings
@@ -37,11 +38,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.app.travelsync.R
 import com.app.travelsync.data.SharedPrefsManager
+import com.app.travelsync.ui.viewmodel.AuthViewModel
 import com.app.travelsync.ui.viewmodel.ConfigAccountViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewModel = hiltViewModel()) {
+fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewModel = hiltViewModel(), authViewModel: AuthViewModel = hiltViewModel()) {
     // Obtenir les dades des del UserViewModel
     val userName by viewModel.userName.observeAsState("")
     val userSurname by viewModel.userSurname.observeAsState("")
@@ -102,6 +104,20 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
                                 onClick = {
                                     showSettingsMenu = false
                                     navController.navigate("legal")
+                                }
+                            )
+                            DropdownMenuItem(
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Filled.Close,
+                                        contentDescription = "Logout Icon"
+                                    )
+                                },
+                                text = { Text("LogOut") },
+                                onClick = {
+                                    showSettingsMenu = false
+                                    authViewModel.signout()
+                                    navController.navigate("login")
                                 }
                             )
                         }

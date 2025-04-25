@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590735632400",
+    "project_id": "travelsync-bf55c",
+    "storage_bucket": "travelsync-bf55c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590735632400:android:96deef4d28cead2ba2c295",
+        "android_client_info": {
+          "package_name": "com.app.travelsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMj7sOqIu8y4aZA1UQyA7qQ9WCsybhiHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
