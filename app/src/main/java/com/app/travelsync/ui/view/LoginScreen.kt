@@ -107,6 +107,12 @@ fun LoginScreen(
             Text(text = "Don't have an account, Signup")
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextButton(onClick = { navController.navigate("recover") }) {
+            Text("Forgot password?")
+        }
+
     }
 
 }
