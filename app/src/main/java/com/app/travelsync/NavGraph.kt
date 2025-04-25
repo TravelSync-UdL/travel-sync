@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.app.travelsync.ui.view.LoginScreen
+import com.app.travelsync.ui.view.RecoverPasswordScreen
+import com.app.travelsync.ui.view.SignupScreen
 
 
 @Composable
@@ -41,7 +43,7 @@ fun NavGraph(navController: NavHostController) {
 
     // Definim quines pantalles no han de mostrar la barra de navegació
     val hideBottomBar = currentDestination?.let {
-        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login")
+        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login", "recover")
     } == true
 
     Scaffold(
@@ -97,6 +99,8 @@ fun NavGraph(navController: NavHostController) {
                 composable("legal") { LegalScreen(navController) }
                 composable("settings") { SettingsScreen(navController) }
                 composable("login") { LoginScreen(navController) }
+                composable("recover") { RecoverPasswordScreen(navController) }
+                composable("signup") { SignupScreen(navController) }
 
                 // Ruta on la barra de navegació NO es mostrarà
                 composable(

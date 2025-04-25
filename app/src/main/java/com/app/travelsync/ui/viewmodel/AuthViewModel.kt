@@ -70,20 +70,20 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    // Funció de registre amb coroutines i gestió de l'estat
-    /*fun signup(email: String, password: String) {
+    fun signup(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
             _authState.value = AuthState.Error("Email or password can't be empty")
             return
         }
 
         _authState.value = AuthState.Loading
+
         viewModelScope.launch {
             try {
                 val user = authRepository.signup(email, password)
                 if (user != null) {
+                    sendEmailVerification(user)
                     _authState.value = AuthState.Authenticated
-                    sendEmailVerification() // Enviem un correu de verificació
                 } else {
                     _authState.value = AuthState.Error("Registration failed")
                 }
@@ -91,7 +91,32 @@ class AuthViewModel @Inject constructor(
                 _authState.value = AuthState.Error("Error: ${e.message}")
             }
         }
-    }*/
+    }
+
+    private fun sendEmailVerification(user: FirebaseUser) {
+        user.sendEmailVerification()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("AuthViewModel", "Verification email sent.")
+                } else {
+                    Log.e("AuthViewModel", "Failed to send verification email.")
+                }
+            }
+    }
+
+
+    private fun sendEmailVerification() {
+        val user = auth.currentUser
+        user?.sendEmailVerification()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("AuthViewModel", "Verification email sent.")
+                } else {
+                    Log.e("AuthViewModel", "Failed to send verification email.")
+                }
+            }
+    }
+
 
     fun signout() {
         Log.d(TAG, "Signing out user: ${auth.currentUser?.email}")
@@ -99,17 +124,17 @@ class AuthViewModel @Inject constructor(
         _authState.value = AuthState.Unauthenticated
     }
 
-    private fun sendEmailVerification() {
-        val user = auth.currentUser
-        user?.sendEmailVerification()
-            ?.addOnCompleteListener { task ->
+    fun sendPasswordResetEmail(email: String) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "Email verification sent to ${user.email}")
+                    Log.d("AuthViewModel", "Password reset email sent to $email")
                 } else {
-                    Log.e(TAG, "Failed to send verification email")
+                    Log.e("AuthViewModel", "Failed to send password reset email to $email")
                 }
             }
     }
+
 }
 
 // Estat d'autenticació
