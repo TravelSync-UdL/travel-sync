@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.app.travelsync.ui.view.LoginScreen
 
 
 @Composable
@@ -39,7 +40,7 @@ fun NavGraph(navController: NavHostController) {
     val currentDestination = currentBackStackEntry?.destination?.route
 
     val hideBottomBar = currentDestination?.let {
-        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings")
+        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login")
     } == true
 
     Scaffold(
@@ -94,6 +95,7 @@ fun NavGraph(navController: NavHostController) {
                 composable("about") { AboutScreen(navController) }
                 composable("legal") { LegalScreen(navController) }
                 composable("settings") { SettingsScreen(navController) }
+                composable("login") { LoginScreen(navController) }
 
 
                 composable(
