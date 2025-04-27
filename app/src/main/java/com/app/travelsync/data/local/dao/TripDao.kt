@@ -11,6 +11,7 @@ interface TripDao {
     @Query("SELECT * FROM trip")
     suspend fun getTrip(): List<TripEntity>
 
+
     @Insert
     suspend fun addTrip(trip: TripEntity): Long
 
@@ -22,4 +23,8 @@ interface TripDao {
 
     @Query("SELECT * FROM trip WHERE title = :tripName LIMIT 1")
     suspend fun checkTripName(tripName: String): TripEntity?
+
+    @Query("SELECT * FROM trip WHERE ownerLogin = :login")
+    suspend fun getTripsForUser(login: String): List<TripEntity>
+
 }

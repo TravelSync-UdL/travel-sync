@@ -28,21 +28,32 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.app.travelsync.ui.view.LoginScreen
 import com.app.travelsync.ui.view.RecoverPasswordScreen
 import com.app.travelsync.ui.view.SignupScreen
+import com.app.travelsync.ui.viewmodel.AuthState
+import com.app.travelsync.ui.viewmodel.AuthViewModel
 
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hiltViewModel()) {
+
+    val authState by authViewModel.authState.observeAsState(AuthState.Unauthenticated)
+
+    // Determinem quin ha de ser el startDestination
+    val startDestination = if (authState is AuthState.Authenticated) "home" else "login"
+
     val currentBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentDestination = currentBackStackEntry?.destination?.route
 
     val hideBottomBar = currentDestination?.let {
-        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login", "recover")
+        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login", "recover", "signup")
     } == true
 
     Scaffold(
@@ -90,7 +101,7 @@ fun NavGraph(navController: NavHostController) {
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController = navController, startDestination = "home") {
                 composable("home") { HomeScreen(navController) }
-                composable("trip") { TripScreen(navController) }
+                composable("trip") { TripScreen(navController, authViewModel = authViewModel) }
                 composable("guide") { GuideScreen(navController) }
                 composable("search") { SearchScreen(navController) }
                 composable("you") { ConfigAccount(navController) }

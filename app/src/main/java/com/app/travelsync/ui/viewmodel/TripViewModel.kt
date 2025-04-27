@@ -22,46 +22,42 @@ class TripViewModel @Inject constructor(
     private val _trips = mutableStateListOf<Trip>()
     val trips: List<Trip> get() = _trips
 
-    init {
-        loadTripOld()
-    }
 
-    private fun loadTripOld() {
-        _trips.clear()
+    fun loadTripsForUser(login: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _trips.addAll(repository.getTrip())
+            val userTrips = repository.getTripsForUser(login)
+            withContext(Dispatchers.Main) {
+                _trips.clear()
+                _trips.addAll(userTrips)
+            }
         }
     }
 
-    private fun loadTrip() {
+    fun addTrip(trip: Trip, login: String, onError: (String) -> Unit) {
         viewModelScope.launch {
-            // Fetch the tasks on IO thread
-            val tripFromDb = withContext(Dispatchers.IO) { repository.getTrip() }
-            // Update state on main thread
-            _trips.clear()
-            _trips.addAll(tripFromDb)
+            try {
+                repository.addTrip(trip)
+                loadTripsForUser(login)
+            } catch (e: IllegalArgumentException) {
+                onError(e.message ?: "Error desconegut")
+            }
         }
     }
 
-    fun addTrip(trip: Trip) {
-        viewModelScope.launch {
-            repository.addTrip(trip)
-            loadTrip()
-        }
-    }
 
-    fun deleteTrip(tripId: Int) {
+    fun deleteTrip(tripId: Int, login: String) {
         viewModelScope.launch {
             repository.deleteTrip(tripId)
-            loadTrip()
+            loadTripsForUser(login)
         }
     }
 
-    fun editTrip(trip: Trip) {
+    fun editTrip(trip: Trip, login: String) {
         viewModelScope.launch {
             repository.editTrip(trip)
-            loadTrip()
+            loadTripsForUser(login)
         }
     }
+
 
 }

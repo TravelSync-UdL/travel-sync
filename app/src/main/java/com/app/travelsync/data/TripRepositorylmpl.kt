@@ -86,4 +86,16 @@ class TripRepositorylmpl @Inject constructor(
         itineraryDao.deleteItinerary(itinerary_id)
         Log.d("Database", "Itinerary deleted successfully")
     }
+
+    override suspend fun getTripsForUser(userId: String): List<Trip> {
+        Log.d("Database", "Fetching trips for user with ID: $userId")
+        val tripEntities = tripDao.getTripsForUser(userId) // Assegura't que el dao té aquest mètode
+        Log.d("Database", "Fetched ${tripEntities.size} trips for user")
+
+        return tripEntities.map { tripEntity ->
+            Log.d("Database", "Processing trip ID: ${tripEntity.id}")
+            val subs = itineraryDao.getItinerary(tripEntity.id).map { it.toDomain() }
+            tripEntity.toDomain(subs)
+        }
+    }
 }

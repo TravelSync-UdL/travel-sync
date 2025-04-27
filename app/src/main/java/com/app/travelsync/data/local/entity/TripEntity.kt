@@ -10,5 +10,6 @@ data class TripEntity(
     val title: String,
     val destination: String,
     val startDate: String,
-    val endDate: String
+    val endDate: String,
+    val ownerLogin: String
 )
