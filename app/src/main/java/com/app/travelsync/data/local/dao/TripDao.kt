@@ -27,4 +27,7 @@ interface TripDao {
     @Query("SELECT * FROM trip WHERE ownerLogin = :login")
     suspend fun getTripsForUser(login: String): List<TripEntity>
 
+    @Query("SELECT * FROM trip WHERE id = :tripId")
+    suspend fun getTripId(tripId: Int): TripEntity?
+
 }

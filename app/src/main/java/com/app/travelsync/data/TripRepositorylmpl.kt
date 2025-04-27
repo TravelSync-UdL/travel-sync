@@ -34,7 +34,20 @@ class TripRepositorylmpl @Inject constructor(
         }
     }
 
+    override suspend fun getTripId(trip_Id: Int): Trip {
+        Log.d("Database", "Fetching trip with ID: $trip_Id")
+        val tripEntity = tripDao.getTripId(trip_Id)
 
+        // Comprovem si el tripEntity és null
+        if (tripEntity != null) {
+            Log.d("Database", "Fetched trip: ${tripEntity.title}")
+            val subs = itineraryDao.getItinerary(tripEntity.id).map { it.toDomain() }
+            return tripEntity.toDomain(subs)
+        } else {
+            Log.e("Database", "Trip not found with ID: $trip_Id")
+            throw IllegalArgumentException("Trip not found!")
+        }
+    }
 
     override suspend fun addTrip(trip: Trip) {
         Log.d("Database", "Trying to add trip: ${trip.title}")

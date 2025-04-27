@@ -2,6 +2,7 @@ package com.app.travelsync.ui.view
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.util.Log
 import android.widget.TimePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -59,11 +60,24 @@ import java.util.Locale
 fun ItineraryScreen(
     navController: NavController,
     viewModel: ItineraryViewModel = hiltViewModel()
-){
-
+) {
     val itinerarys = viewModel.itinerarys
+    val tripDates = viewModel.tripDates
 
-    // Estados para el diálogo de edición/creación
+    fun isDateInRange(date: String, startDate: String, endDate: String): Boolean {
+        return try {
+            val parsedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date)
+            val parsedStartDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(startDate)
+            val parsedEndDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(endDate)
+
+            parsedDate != null && parsedDate >= parsedStartDate && parsedDate <= parsedEndDate
+        } catch (e: Exception) {
+            // En cas d'error de parse, retorna false
+            false
+        }
+    }
+
+    // Estats per al diàleg d'edició/creació
     var showDialog by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
     var currentItineraryId by remember { mutableStateOf(0) }
@@ -78,28 +92,49 @@ fun ItineraryScreen(
     val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     val openDatePicker: (Boolean) -> Unit = { isStartDate ->
+        val startDate = tripDates.first
+        Log.d("ItineraryScreen", "Primer data ${startDate}")
+        val endDate = tripDates.second
+        Log.d("ItineraryScreen", "Segona data ${endDate}")
+
+        // Comprovar si la data de l'inici i finalització del viatge són vàlides
+        val startCalendar = if (startDate.isNotEmpty()) dateFormatter.parse(startDate) else calendar.time
+        val endCalendar = if (endDate.isNotEmpty()) dateFormatter.parse(endDate) else calendar.time
+        Log.d("ItineraryScreen", "Calendari ${startCalendar}")
+        Log.d("ItineraryScreen", "Calendari ${endCalendar}")
+
         DatePickerDialog(
             navController.context,
             { _, year, month, dayOfMonth ->
                 calendar.set(year, month, dayOfMonth)
                 val formattedDate = dateFormatter.format(calendar.time)
-                itineraryDate = formattedDate
+                if (isDateInRange(formattedDate, tripDates.first, tripDates.second)) {
+                    itineraryDate = formattedDate
+                } else {
+                    // Mostrar missatge d'error si la data no està dins del rang
+                }
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        ).apply {
+            // Establir límits al DatePicker
+            datePicker.minDate = (startCalendar?.time ?: calendar.time) as Long
+            datePicker.maxDate = (endCalendar?.time ?: calendar.time) as Long
+        }.show()
     }
 
     val openTimePicker: (Boolean) -> Unit = { isStartTime ->
         TimePickerDialog(
             navController.context,
-            { _: TimePicker, hourOfDay: Int, minute: Int ->
+            { _, hourOfDay, minute ->
                 val formattedTime = timeFormatter.format(calendar.apply {
                     set(Calendar.HOUR_OF_DAY, hourOfDay)
                     set(Calendar.MINUTE, minute)
                 }.time)
-                itineraryTime = formattedTime
+                if (isStartTime) {
+                    itineraryTime = formattedTime
+                }
             },
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
@@ -109,8 +144,8 @@ fun ItineraryScreen(
 
     fun isFormValid(): Boolean {
         return itineraryTitle.isNotEmpty() &&
-                itineraryDate != "" &&
-                itineraryTime != "" &&
+                itineraryDate.isNotEmpty() &&
+                itineraryTime.isNotEmpty() &&
                 itineraryLocation.isNotEmpty()
     }
 
