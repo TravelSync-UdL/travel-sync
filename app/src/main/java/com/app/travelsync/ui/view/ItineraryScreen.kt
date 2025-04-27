@@ -2,6 +2,7 @@ package com.app.travelsync.ui.view
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.util.Log
 import android.widget.TimePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
@@ -24,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -51,19 +55,29 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-/**
- * Classe per poder controlar i que es mostri la UI de la pantalla Trip
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItineraryScreen(
     navController: NavController,
     viewModel: ItineraryViewModel = hiltViewModel()
-){
-
+) {
     val itinerarys = viewModel.itinerarys
+    val tripDates = viewModel.tripDates
 
+    fun isDateInRange(date: String, startDate: String, endDate: String): Boolean {
+        return try {
+            val parsedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(date)
+            val parsedStartDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(startDate)
+            val parsedEndDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(endDate)
 
+            parsedDate != null && parsedDate >= parsedStartDate && parsedDate <= parsedEndDate
+        } catch (e: Exception) {
+            // En cas d'error de parse, retorna false
+            false
+        }
+    }
+
+    // Estats per al diàleg d'edició/creació
     var showDialog by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
     var currentItineraryId by remember { mutableStateOf(0) }
@@ -78,28 +92,49 @@ fun ItineraryScreen(
     val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     val openDatePicker: (Boolean) -> Unit = { isStartDate ->
+        val startDate = tripDates.first
+        Log.d("ItineraryScreen", "Primer data ${startDate}")
+        val endDate = tripDates.second
+        Log.d("ItineraryScreen", "Segona data ${endDate}")
+
+        // Comprovar si la data de l'inici i finalització del viatge són vàlides
+        val startCalendar = if (startDate.isNotEmpty()) dateFormatter.parse(startDate) else calendar.time
+        val endCalendar = if (endDate.isNotEmpty()) dateFormatter.parse(endDate) else calendar.time
+        Log.d("ItineraryScreen", "Calendari ${startCalendar}")
+        Log.d("ItineraryScreen", "Calendari ${endCalendar}")
+
         DatePickerDialog(
             navController.context,
             { _, year, month, dayOfMonth ->
                 calendar.set(year, month, dayOfMonth)
                 val formattedDate = dateFormatter.format(calendar.time)
-                itineraryDate = formattedDate
+                if (isDateInRange(formattedDate, tripDates.first, tripDates.second)) {
+                    itineraryDate = formattedDate
+                } else {
+                    // Mostrar missatge d'error si la data no està dins del rang
+                }
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        ).apply {
+            // Establir límits al DatePicker
+            datePicker.minDate = (startCalendar?.time ?: calendar.time) as Long
+            datePicker.maxDate = (endCalendar?.time ?: calendar.time) as Long
+        }.show()
     }
 
     val openTimePicker: (Boolean) -> Unit = { isStartTime ->
         TimePickerDialog(
             navController.context,
-            { _: TimePicker, hourOfDay: Int, minute: Int ->
+            { _, hourOfDay, minute ->
                 val formattedTime = timeFormatter.format(calendar.apply {
                     set(Calendar.HOUR_OF_DAY, hourOfDay)
                     set(Calendar.MINUTE, minute)
                 }.time)
-                itineraryTime = formattedTime
+                if (isStartTime) {
+                    itineraryTime = formattedTime
+                }
             },
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
@@ -109,8 +144,8 @@ fun ItineraryScreen(
 
     fun isFormValid(): Boolean {
         return itineraryTitle.isNotEmpty() &&
-                itineraryDate != "" &&
-                itineraryTime != "" &&
+                itineraryDate.isNotEmpty() &&
+                itineraryTime.isNotEmpty() &&
                 itineraryLocation.isNotEmpty()
     }
 
@@ -155,8 +190,10 @@ fun ItineraryScreen(
                     }
                 }
 
+                // Botó substituït del FloatingActionButton
                 Button(
                     onClick = {
+                        // Configurar per afegir una nova subtarea
                         isEditing = false
                         itineraryTitle = ""
                         itineraryDate = ""
@@ -169,17 +206,17 @@ fun ItineraryScreen(
                         .fillMaxWidth()
                         .padding(top = 16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.backgroundIcon),
-                        contentColor = Color.White
+                        containerColor = colorResource(id = R.color.backgroundIcon), // Color de fons
+                        contentColor = Color.White // Color del text
                     )
                 ) {
-                    Text(stringResource(id = R.string.add_activity))
+                    Text(stringResource(id = R.string.add_activity)) // El text dins del botó
                 }
             }
         }
     )
 
-
+    // Diàleg de creació/edició d'activitat
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -198,8 +235,8 @@ fun ItineraryScreen(
                             .fillMaxWidth()
                             .padding(top = 8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.backgroundIcon),
-                            contentColor = Color.White
+                            containerColor = colorResource(id = R.color.backgroundIcon), // Color de fons
+                            contentColor = Color.White // Color del text
                         )
                     ) {
                         Icon(Icons.Filled.Edit, contentDescription = "Calendari")
@@ -215,8 +252,8 @@ fun ItineraryScreen(
                             .fillMaxWidth()
                             .padding(top = 8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.backgroundIcon),
-                            contentColor = Color.White
+                            containerColor = colorResource(id = R.color.backgroundIcon), // Color de fons
+                            contentColor = Color.White // Color del text
                         )
                     ) {
                         Icon(Icons.Filled.Edit, contentDescription = "Time")
@@ -300,7 +337,7 @@ fun ItineraryItem(
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
-
+    // Contenedor principal con fondo y borde redondeado
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -309,14 +346,14 @@ fun ItineraryItem(
             .clip(MaterialTheme.shapes.medium)
             .padding(16.dp)
     ) {
-
+        // Títol de la subtarea
         Text(
             text = itinerary.title,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-
+        // Fecha y hora de la subtarea
         Row(modifier = Modifier.padding(bottom = 8.dp)) {
             Icon(
                 imageVector = Icons.Filled.DateRange,
@@ -329,7 +366,7 @@ fun ItineraryItem(
             )
         }
 
-
+        // Ubicación de la subtarea
         Row(modifier = Modifier.padding(bottom = 8.dp)) {
             Icon(
                 imageVector = Icons.Filled.LocationOn,
@@ -342,7 +379,7 @@ fun ItineraryItem(
             )
         }
 
-
+        // Notas de la subtarea
         Row(modifier = Modifier.padding(bottom = 8.dp)) {
             Icon(
                 imageVector = Icons.Filled.Warning,
@@ -355,15 +392,15 @@ fun ItineraryItem(
             )
         }
 
-
+        // Separador para mejorar la legibilidad
         Divider(modifier = Modifier.padding(vertical = 8.dp))
 
-
+        // Iconos de editar y eliminar
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-
+            // Botón para eliminar la subtarea
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
@@ -372,6 +409,7 @@ fun ItineraryItem(
                 )
             }
 
+            // Botón para editar la subtarea
             IconButton(onClick = onEdit) {
                 Icon(
                     imageVector = Icons.Filled.Edit,

@@ -1,6 +1,7 @@
 package com.app.travelsync.ui.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,11 +23,15 @@ class ItineraryViewModel @Inject constructor(
 
     val tripId: Int = savedStateHandle["taskId"] ?: 0
 
+    private val _tripDates = mutableStateOf(Pair("", ""))
+    val tripDates: Pair<String, String> get() = _tripDates.value
+
     private val _itinerarys = mutableStateListOf<Itinerary>()
     val itinerarys: List<Itinerary> get() = _itinerarys
 
     init {
         loadItinerary()
+        loadTripDates()
     }
 
     private fun loadItinerary() {
@@ -54,6 +59,14 @@ class ItineraryViewModel @Inject constructor(
         viewModelScope.launch {
             repository.editActivity(editItinerary)
             loadItinerary()
+        }
+    }
+
+    private fun loadTripDates() {
+        viewModelScope.launch {
+            // Aquí recuperem el "trip" per obtenir les dates.
+            val trip = repository.getTripId(tripId)
+            _tripDates.value = Pair(trip.startDate, trip.endDate)
         }
     }
 
