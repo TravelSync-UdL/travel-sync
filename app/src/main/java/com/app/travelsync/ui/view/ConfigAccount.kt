@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.app.travelsync.R
-import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.ui.viewmodel.AuthViewModel
 import com.app.travelsync.ui.viewmodel.ConfigAccountViewModel
 
@@ -116,7 +115,7 @@ fun ConfigAccount(navController: NavController, viewModel: ConfigAccountViewMode
                                 text = { Text("LogOut") },
                                 onClick = {
                                     showSettingsMenu = false
-                                    authViewModel.signout()
+                                    authViewModel.signout(navController)
                                     navController.navigate("login")
                                 }
                             )

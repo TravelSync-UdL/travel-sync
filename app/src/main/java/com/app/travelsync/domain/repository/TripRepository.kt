@@ -13,4 +13,6 @@ interface TripRepository {
     suspend fun addActivity(itinerary: Itinerary)
     suspend fun deleteActivity(itinerary_id: Int)
     suspend fun editActivity(itinerary: Itinerary)
+
+    suspend fun getTripsForUser(login: String): List<Trip>
 }

@@ -5,6 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.app.travelsync.data.local.dao.SessionLogDao
+import com.app.travelsync.data.local.dao.UserDao
+import com.app.travelsync.data.local.entity.SessionLogEntity
+import com.app.travelsync.data.local.entity.UserEntity
 import com.app.travelsync.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -15,7 +20,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository, // Injectem el repositori d'autenticació
-    private val auth: FirebaseAuth // Injectem FirebaseAuth per gestionar l'autenticació
+    private val auth: FirebaseAuth, // Injectem FirebaseAuth per gestionar l'autenticació
+    private val sessionLogDao: SessionLogDao,
+    private val userDao: UserDao
 ) : ViewModel() {
 
     private val TAG = "AuthViewModel"
@@ -70,7 +77,7 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    fun signup(email: String, password: String) {
+    fun signup(email: String, password: String, userEntity: UserEntity) {
         if (email.isEmpty() || password.isEmpty()) {
             _authState.value = AuthState.Error("Email or password can't be empty")
             return
@@ -80,9 +87,23 @@ class AuthViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
+                // Comprovem si el nom d'usuari ja existeix a la base de dades local
+                val usernameTaken = userDao.isUsernameTaken(userEntity.username)
+                if (usernameTaken) {
+                    _authState.value = AuthState.Error("Username is already taken")
+                    return@launch
+                }
+
+                // Registre a Firebase
                 val user = authRepository.signup(email, password)
                 if (user != null) {
+                    // Enviar l'email de verificació
                     sendEmailVerification(user)
+
+                    // Desar l'usuari a la base de dades local
+                    userEntity.login = email  // Asegura que el login sigui l'email
+                    userDao.insertUser(userEntity)
+
                     _authState.value = AuthState.Authenticated
                 } else {
                     _authState.value = AuthState.Error("Registration failed")
@@ -92,6 +113,8 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+
 
     private fun sendEmailVerification(user: FirebaseUser) {
         user.sendEmailVerification()
@@ -104,6 +127,9 @@ class AuthViewModel @Inject constructor(
             }
     }
 
+    fun getAuthenticatedUserEmail(): String? {
+        return auth.currentUser?.email
+    }
 
     private fun sendEmailVerification() {
         val user = auth.currentUser
@@ -118,11 +144,21 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    fun signout() {
+    fun signout(navController: NavController) {
         Log.d(TAG, "Signing out user: ${auth.currentUser?.email}")
-        auth.signOut()
-        _authState.value = AuthState.Unauthenticated
+        auth.signOut() // Desconnecta l'usuari
+
+        // Comprovar l'estat d'usuari després de fer logout
+        Log.d(TAG, "Current user after sign out: ${auth.currentUser?.email}") // Ha de ser null
+
+        _authState.value = AuthState.Unauthenticated // Actualitza l'estat d'autenticació
+
+        // Forçar la navegació a LoginScreen després de fer logout
+        navController.navigate("login")
     }
+
+
+
 
     fun sendPasswordResetEmail(email: String) {
         auth.sendPasswordResetEmail(email)
@@ -133,6 +169,30 @@ class AuthViewModel @Inject constructor(
                     Log.e("AuthViewModel", "Failed to send password reset email to $email")
                 }
             }
+    }
+
+    private fun registerLogin(userId: String) {
+        viewModelScope.launch {
+            sessionLogDao.insertSessionLog(
+                SessionLogEntity(
+                    userId = userId,
+                    timestamp = System.currentTimeMillis(),
+                    action = "login"
+                )
+            )
+        }
+    }
+
+    private fun registerLogout(userId: String) {
+        viewModelScope.launch {
+            sessionLogDao.insertSessionLog(
+                SessionLogEntity(
+                    userId = userId,
+                    timestamp = System.currentTimeMillis(),
+                    action = "logout"
+                )
+            )
+        }
     }
 
 }

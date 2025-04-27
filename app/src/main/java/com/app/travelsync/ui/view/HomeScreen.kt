@@ -102,7 +102,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel = hilt
                                 text = { Text("LogOut") },
                                 onClick = {
                                     showSettingsMenu = false
-                                    authViewModel.signout()
+                                    authViewModel.signout(navController) // Comprova que el signout estigui fet correctament
                                     navController.navigate("login")
                                 }
                             )

@@ -42,12 +42,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import com.app.travelsync.R
+import com.app.travelsync.ui.viewmodel.AuthViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -57,26 +59,25 @@ import java.util.Locale
 @Composable
 fun TripScreen(
     navController: NavController,
-    viewModel: TripViewModel = hiltViewModel()
+    viewModel: TripViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val trips = viewModel.trips
     var showTripDialog by remember { mutableStateOf(false) }
     var isEditingTrip by remember { mutableStateOf(false) }
-    var isDeletingTrip by remember { mutableStateOf(false) }
     var currentTripId by remember { mutableStateOf(0) }
     var tripTitle by remember { mutableStateOf("") }
     var tripDestination by remember { mutableStateOf("") }
     var tripStartDate by remember { mutableStateOf("") }
     var tripEndDate by remember { mutableStateOf("") }
 
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
     val calendar = Calendar.getInstance()
     val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     val openDatePicker: (Boolean) -> Unit = { isStartDate ->
-        // Establecemos la fecha mínima para el DatePicker
         val today = Calendar.getInstance()
-
-        // Si es la fecha de inicio, no hay límite de fecha mínima
         val minDate = if (isStartDate) today.timeInMillis else calendar.timeInMillis
 
         DatePickerDialog(
@@ -94,199 +95,224 @@ fun TripScreen(
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).apply {
-            // Establecer la fecha mínima dependiendo si es fecha de inicio o final
             datePicker.minDate = minDate
         }.show()
     }
 
-    // Funció per comprovar si tots els camps estan complets
-    fun isFormValid(): Boolean {
-        return tripTitle.isNotEmpty() &&
-                tripDestination.isNotEmpty() &&
-                tripStartDate != "" &&
-                tripEndDate != ""
-    }
+    val login = authViewModel.getAuthenticatedUserEmail()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {Text(stringResource(id = R.string.trip_screen_title)) },
-            )
-        },
-        content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                LazyColumn {
-                    items(trips) { trip ->
-                        TripItem(
-                            trip = trip,
-                            onEdit = {
-                                isEditingTrip = true
-                                isDeletingTrip = false
-                                currentTripId = trip.tripId
-                                tripTitle = trip.title
-                                tripDestination = trip.destination
-                                tripStartDate = trip.startDate
-                                tripEndDate = trip.endDate
-                                showTripDialog = true
-                            },
-                            onOpen = {
-                                navController.navigate("itinerarys/${trip.tripId}")
-                            },
-                            onDelete = { viewModel.deleteTrip(trip.tripId) }
-                        )
-                    }
-                }
-                Button(
-                    onClick = {
-                        isEditingTrip = false
-                        tripTitle = ""
-                        tripDestination = ""
-                        tripStartDate = ""
-                        tripEndDate = ""
-                        showTripDialog = true
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.backgroundIcon),
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(stringResource(id = R.string.add_trip))
-                }
-            }
+    if (login == null){
+        LaunchedEffect(Unit) {
+            navController.navigate("login")
         }
-    )
+    }else{
 
-    // Diàleg de creació/edició del viatge
-    if (showTripDialog) {
-        AlertDialog(
-            onDismissRequest = { showTripDialog = false },
-            title = {
-                Text(
-                    text = if (isEditingTrip) stringResource(id = R.string.edit_trip)
-                    else stringResource(id = R.string.new_trip),
-                    style = MaterialTheme.typography.titleLarge
+        LaunchedEffect(login) {
+            viewModel.loadTripsForUser(login)
+        }
+
+        fun isFormValid(): Boolean {
+            return tripTitle.isNotEmpty() &&
+                    tripDestination.isNotEmpty() &&
+                    tripStartDate.isNotEmpty() &&
+                    tripEndDate.isNotEmpty()
+        }
+
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(id = R.string.trip_screen_title)) }
                 )
             },
-            text = {
-                Column(modifier = Modifier.padding(8.dp)) {
-                    // Títol del viatge
-                    OutlinedTextField(
-                        value = tripTitle,
-                        onValueChange = { tripTitle = it },
-                        label = { Text(stringResource(id = R.string.trip_title))},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    )
+            content = { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    LazyColumn {
+                        items(trips) { trip ->
+                            TripItem(
+                                trip = trip,
+                                onEdit = {
+                                    isEditingTrip = true
+                                    currentTripId = trip.tripId
+                                    tripTitle = trip.title
+                                    tripDestination = trip.destination
+                                    tripStartDate = trip.startDate
+                                    tripEndDate = trip.endDate
+                                    showTripDialog = true
+                                },
+                                onOpen = {
+                                    navController.navigate("itinerarys/${trip.tripId}")
+                                },
+                                onDelete = { viewModel.deleteTrip(trip.tripId, login) }
+                            )
+                        }
+                    }
 
-                    // Destinació
-                    OutlinedTextField(
-                        value = tripDestination,
-                        onValueChange = { tripDestination = it },
-                        label = { Text(stringResource(id = R.string.trip_destination)) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    )
-
-                    // Data d'inici
                     Button(
-                        onClick = { openDatePicker(true) },
+                        onClick = {
+                            isEditingTrip = false
+                            tripTitle = ""
+                            tripDestination = ""
+                            tripStartDate = ""
+                            tripEndDate = ""
+                            showTripDialog = true
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 8.dp),
+                            .padding(top = 16.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.backgroundIcon),
                             contentColor = Color.White
                         )
                     ) {
-                        Icon(Icons.Filled.Edit, contentDescription = "Calendari")
-                        Text(
-                            text = stringResource(id = R.string.trip_start_date, tripStartDate),
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
+                        Text(stringResource(id = R.string.add_trip))
                     }
+                }
+            }
+        )
 
-                    // Data de finalització - només es mostra si la data d'inici està seleccionada
-                    if (tripStartDate != "") {
+        if (showTripDialog) {
+            AlertDialog(
+                onDismissRequest = { showTripDialog = false },
+                title = {
+                    Text(
+                        text = if (isEditingTrip) stringResource(id = R.string.edit_trip)
+                        else stringResource(id = R.string.new_trip),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                text = {
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        OutlinedTextField(
+                            value = tripTitle,
+                            onValueChange = { tripTitle = it },
+                            label = { Text(stringResource(id = R.string.trip_title)) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        )
+
+                        OutlinedTextField(
+                            value = tripDestination,
+                            onValueChange = { tripDestination = it },
+                            label = { Text(stringResource(id = R.string.trip_destination)) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        )
+
                         Button(
-                            onClick = { openDatePicker(false) },
+                            onClick = { openDatePicker(true) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 8.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = colorResource(id = R.color.backgroundIcon),
                                 contentColor = Color.White
-                            ),
-                            enabled = tripStartDate != "" // Deshabilitem fins que hi hagi una data d'inici
+                            )
                         ) {
                             Icon(Icons.Filled.Edit, contentDescription = "Calendari")
                             Text(
-                                text = stringResource(id = R.string.trip_end_date, tripEndDate),
+                                text = stringResource(id = R.string.trip_start_date, tripStartDate),
                                 modifier = Modifier.padding(start = 8.dp)
                             )
                         }
-                    }
 
-                }
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        if (isEditingTrip) {
-                            viewModel.editTrip(
-                                Trip(
-                                    tripId = currentTripId,
-                                    title = tripTitle,
-                                    destination = tripDestination,
-                                    startDate = tripStartDate,
-                                    endDate = tripEndDate
+                        if (tripStartDate.isNotEmpty()) {
+                            Button(
+                                onClick = { openDatePicker(false) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = colorResource(id = R.color.backgroundIcon),
+                                    contentColor = Color.White
                                 )
-                            )
-                        } else {
-                            viewModel.addTrip(
-                                Trip(
-                                    title = tripTitle,
-                                    destination = tripDestination,
-                                    startDate = tripStartDate,
-                                    endDate = tripEndDate
+                            ) {
+                                Icon(Icons.Filled.Edit, contentDescription = "Calendari")
+                                Text(
+                                    text = stringResource(id = R.string.trip_end_date, tripEndDate),
+                                    modifier = Modifier.padding(start = 8.dp)
                                 )
-                            )
+                            }
                         }
-                        showTripDialog = false
-                    },
-                    enabled = isFormValid(), // Aquí validem si el formulari és complet
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.backgroundIcon),
-                        contentColor = Color.White
-                    ),
-                ) {
-                    Text(stringResource(id = R.string.save))
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            if (isEditingTrip) {
+                                viewModel.editTrip(
+                                    Trip(
+                                        tripId = currentTripId,
+                                        title = tripTitle,
+                                        destination = tripDestination,
+                                        startDate = tripStartDate,
+                                        endDate = tripEndDate,
+                                        ownerLogin = login
+                                    ),
+                                    login
+                                )
+                            } else {
+                                viewModel.addTrip(
+                                    Trip(
+                                        title = tripTitle,
+                                        destination = tripDestination,
+                                        startDate = tripStartDate,
+                                        endDate = tripEndDate,
+                                        ownerLogin = login
+                                    ),
+                                    login = login,
+                                    onError = { error ->
+                                        errorMessage = error
+                                    }
+                                )
+                            }
+                            showTripDialog = false
+                        },
+                        enabled = isFormValid(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.backgroundIcon),
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text(stringResource(id = R.string.save))
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { showTripDialog = false },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.backgroundIcon),
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text(stringResource(id = R.string.cancel))
+                    }
                 }
-            },
-            dismissButton = {
-                Button(
-                    onClick = { showTripDialog = false },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.backgroundIcon),
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(stringResource(id = R.string.cancel))
+            )
+        }
+    }
+    errorMessage?.let { message ->
+        AlertDialog(
+            onDismissRequest = { errorMessage = null },
+            title = { Text(text = "Error") },
+            text = { Text(text = message) },
+            confirmButton = {
+                Button(onClick = { errorMessage = null }) {
+                    Text(text = "OK")
                 }
             }
         )
     }
+
 }
+
 
 
 

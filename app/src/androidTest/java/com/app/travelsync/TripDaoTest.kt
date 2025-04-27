@@ -39,7 +39,8 @@ class TripDaoTest {
             title = "Test Trip",
             destination = "Barcelona",
             startDate = "05/06/2025",
-            endDate = "15/06/2025"
+            endDate = "15/06/2025",
+            ownerLogin = "gmoli"
         )
         tripDao.addTrip(trip)
 
@@ -54,7 +55,8 @@ class TripDaoTest {
             title = "Test Trip",
             destination = "Barcelona",
             startDate = "05/06/2025",
-            endDate = "15/06/2025"
+            endDate = "15/06/2025",
+            ownerLogin = "gmoli"
         )
         tripDao.addTrip(trip)
         tripDao.deleteTrip(1)
@@ -70,7 +72,8 @@ class TripDaoTest {
             title = "Test Trip",
             destination = "Barcelona",
             startDate = "05/06/2025",
-            endDate = "15/06/2025"
+            endDate = "15/06/2025",
+            ownerLogin = "gmoli"
         )
         tripDao.addTrip(trip)
 
@@ -88,7 +91,8 @@ class TripDaoTest {
             title = "Test Trip",
             destination = "Barcelona",
             startDate = "05/06/2025",
-            endDate = "15/06/2025"
+            endDate = "15/06/2025",
+            ownerLogin = "gmoli"
         )
         tripDao.addTrip(trip)
 

@@ -3,6 +3,8 @@ package com.app.travelsync.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.app.travelsync.BuildConfig
 import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.domain.repository.TripRepository
@@ -12,6 +14,8 @@ import com.app.travelsync.data.local.dao.ItineraryDao
 import com.app.travelsync.data.local.dao.TripDao
 import com.app.travelsync.domain.repository.AuthRepository
 import com.app.travelsync.data.AuthRepositoryImpl
+import com.app.travelsync.data.local.dao.SessionLogDao
+import com.app.travelsync.data.local.dao.UserDao
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -23,6 +27,34 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            // Aquí afegeixes la nova columna a la taula
+            database.execSQL("ALTER TABLE trip ADD COLUMN ownerLogin TEXT NOT NULL DEFAULT ''")
+            database.execSQL("""
+            CREATE TABLE IF NOT EXISTS `users` (
+                `login` TEXT NOT NULL,
+                `username` TEXT NOT NULL,
+                `country` TEXT NOT NULL DEFAULT 'undefined',
+                `birthdate` TEXT NOT NULL DEFAULT 'undefined',
+                `address` TEXT NOT NULL DEFAULT 'undefined',
+                `phone` TEXT NOT NULL DEFAULT 'undefined',
+                `acceptReceiveEmails` INTEGER NOT NULL DEFAULT 1,
+                PRIMARY KEY(`login`)
+            )
+        """)
+            database.execSQL("""
+            CREATE TABLE IF NOT EXISTS `session_log` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `action` TEXT NOT NULL DEFAULT 'undefined',
+                `userId` TEXT NOT NULL DEFAULT 'undefined',
+                `timestamp` INTEGER NOT NULL DEFAULT 0
+            )
+        """)
+        }
+    }
+
 
     @Provides
     @Singleton
@@ -52,7 +84,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "my_database_name"
-        ).build()
+        ).addMigrations(MIGRATION_1_2).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -60,6 +92,12 @@ object AppModule {
 
     @Provides
     fun provideSItineraryDao(db: AppDatabase): ItineraryDao = db.itineraryDao()
+
+    @Provides
+    fun provideUserDao(db: AppDatabase): UserDao = db.userDao()
+
+    @Provides
+    fun provideSessionLog(db: AppDatabase): SessionLogDao = db.sessionLogDao()
 
     @Provides
     @Singleton

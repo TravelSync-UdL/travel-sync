@@ -45,7 +45,8 @@ class ItineraryDaoTest {
             title = "Test Trip",
             destination = "Barcelona",
             startDate = "25/06/2025",
-            endDate = "30/06/2025"
+            endDate = "30/06/2025",
+            ownerLogin = "gmoli"
         )
         tripDao.addTrip(trip)
 
@@ -74,7 +75,8 @@ class ItineraryDaoTest {
             title = "Test Trip",
             destination = "Barcelona",
             startDate = "25/06/2025",
-            endDate = "30/06/2025"
+            endDate = "30/06/2025",
+            ownerLogin = "gmoli"
         )
         tripDao.addTrip(trip)
 
@@ -103,7 +105,8 @@ class ItineraryDaoTest {
             title = "Test Trip",
             destination = "Barcelona",
             startDate = "25/06/2025",
-            endDate = "30/06/2025"
+            endDate = "30/06/2025",
+            ownerLogin = "gmoli"
         )
         tripDao.addTrip(trip)
 
