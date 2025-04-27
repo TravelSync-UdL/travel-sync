@@ -134,4 +134,23 @@
 
     <string name="info_ok">Successfully edited data</string>
 
+    <string name="login_page">Login Page</string>
+    <string name="login">Login</string>
+    <string name="signup">Don’t have an account, Signup</string>
+    <string name="forgot_pass">Forgot password?</string>
+
+    <string name="recov_pass">Recover Password</string>
+    <string name="email_exist">Email sent if account exists</string>
+    <string name="send_email">Send Reset Email</string>
+
+    <string name="account_ok">Account successfully created</string>
+    <string name="creat_account">Create an account</string>
+    <string name="bithdate">Birthdate:</string>
+    <string name="no_birthdate">Select Birthdate</string>
+    <string name="country">Country</string>
+    <string name="phone">Phone</string>
+    <string name="accept_email">I accept to receive promotional emails</string>
+    <string name="fill_fields">Fill in all fields</string>
+    <string name="register">Register</string>
+    <string name="login_log">Already have an account? Login</string>
 </resources>

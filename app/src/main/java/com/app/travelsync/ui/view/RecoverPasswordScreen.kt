@@ -15,10 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.app.travelsync.R
 import com.app.travelsync.ui.viewmodel.AuthViewModel
 
 @Composable
@@ -34,13 +36,16 @@ fun RecoverPasswordScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Recover Password", fontSize = 24.sp)
+        Text(
+            text = stringResource(id = R.string.recov_pass),
+            fontSize = 24.sp
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = email.value,
             onValueChange = { email.value = it },
-            label = { Text("Email") }
+            label = { Text(stringResource(id = R.string.email_label)) }
         )
 
 
@@ -48,10 +53,10 @@ fun RecoverPasswordScreen(
 
         Button(onClick = {
             authViewModel.sendPasswordResetEmail(email.toString())
-            Toast.makeText(context, "Email sent if account exists", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.email_exist), Toast.LENGTH_LONG).show()
             navController.navigate("login")
         }) {
-            Text("Send Reset Email")
+            Text(text = stringResource(id = R.string.send_email))
         }
     }
 }

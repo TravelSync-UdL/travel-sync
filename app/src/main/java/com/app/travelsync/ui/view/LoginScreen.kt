@@ -22,11 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.app.travelsync.R
 import com.app.travelsync.ui.viewmodel.AuthState
 import com.app.travelsync.ui.viewmodel.AuthViewModel
 
@@ -62,7 +64,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Login Page", fontSize = 32.sp)
+        Text(text = stringResource(id = R.string.login_page), fontSize = 32.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -71,9 +73,7 @@ fun LoginScreen(
             onValueChange = {
                 email = it
             },
-            label = {
-                Text(text = "Email")
-            }
+            label = { Text(text = stringResource(id = R.string.email_label)) }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -83,9 +83,7 @@ fun LoginScreen(
             onValueChange = {
                 password = it
             },
-            label = {
-                Text(text = "Password")
-            },
+            label = { Text(text = stringResource(id = R.string.password_label)) },
             visualTransformation = PasswordVisualTransformation(),
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -95,7 +93,7 @@ fun LoginScreen(
         },
             enabled = authState.value != AuthState.Loading
         ) {
-            Text(text = "Login")
+            Text(text = stringResource(id = R.string.login))
         }
 
 
@@ -104,13 +102,13 @@ fun LoginScreen(
         TextButton(onClick = {
             navController.navigate("signup")
         }) {
-            Text(text = "Don't have an account, Signup")
+            Text(text = stringResource(id = R.string.signup))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(onClick = { navController.navigate("recover") }) {
-            Text("Forgot password?")
+            Text(text = stringResource(id = R.string.forgot_pass))
         }
 
     }

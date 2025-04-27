@@ -136,4 +136,25 @@ Per qualsevol dubte o consulta, pots contactar amb nosaltres a support@travelsyn
     <string name="empty_field">El camp no pot estar buit.</string>
     <string name="info_ok">Dades editades correctament</string>
 
+
+    <string name="login_page">Pàgina d’inici de sessió</string>
+    <string name="login">Iniciar sessió</string>
+    <string name="signup">No tens compte, Registra’t</string>
+    <string name="forgot_pass">Has oblidat la contrasenya? </string>
+
+    <string name="recov_pass">Recuperar contrasenya</string>
+    <string name="email_exist">Enviar correu electrònic si el compte existeix</string>
+    <string name="send_email">Enviar correu electrònic de restabliment</string>
+
+    <string name="account_ok">Compte creat correctament</string>
+    <string name="creat_account">Crear una compta</string>
+    <string name="bithdate">Data de naixement: </string>
+    <string name="no_birthdate">Seleccionar data de naixement</string>
+    <string name="country">País</string>
+    <string name="phone">Telèfon</string>
+    <string name="accept_email">Accepto rebre rebre correus electrònics promocionals</string>
+    <string name="fill_fields">Farcida tots els camps</string>
+    <string name="register">Registra’t</string>
+    <string name="login_log">Ja tens un compte? Iniciar sessió</string>
+
 </resources>

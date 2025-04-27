@@ -9,11 +9,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.app.travelsync.R
 import com.app.travelsync.data.local.entity.UserEntity
 import com.app.travelsync.ui.viewmodel.AuthState
 import com.app.travelsync.ui.viewmodel.AuthViewModel
@@ -34,14 +36,12 @@ fun SignupScreen(
     var birthdate by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
-    var acceptReceiveEmails by remember { mutableStateOf(true) }  // Valor inicial para el Checkbox
+    var acceptReceiveEmails by remember { mutableStateOf(true) }
 
-    // Variable para manejar el DatePicker
     val calendar = Calendar.getInstance()
     val context = LocalContext.current
 
     val authState = authViewModel.authState.observeAsState()
-
 
     val openDatePicker: () -> Unit = {
         val datePickerDialog = DatePickerDialog(
@@ -60,7 +60,7 @@ fun SignupScreen(
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Authenticated -> {
-                Toast.makeText(context, "Compte creat correctament", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(R.string.account_ok), Toast.LENGTH_LONG).show()
                 navController.navigate("login")
             }
             is AuthState.Error -> {
@@ -78,14 +78,14 @@ fun SignupScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Create an account", fontSize = 28.sp)
+        Text(stringResource(R.string.creat_account), fontSize = 28.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("First Name") },
+            label = { Text(stringResource(R.string.name_label)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -94,7 +94,7 @@ fun SignupScreen(
         OutlinedTextField(
             value = surname,
             onValueChange = { surname = it },
-            label = { Text("Last Name") },
+            label = { Text(stringResource(R.string.surname_label)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -103,7 +103,7 @@ fun SignupScreen(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
+            label = { Text(stringResource(R.string.username_label)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -112,7 +112,7 @@ fun SignupScreen(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email_label)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -121,19 +121,23 @@ fun SignupScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password_label)) },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Campo de Birthdate con DatePicker
         Button(
             onClick = { openDatePicker() },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = if (birthdate.isNotEmpty()) "Birthdate: $birthdate" else "Select Birthdate")
+            Text(
+                text = if (birthdate.isNotEmpty())
+                    "${stringResource(R.string.bithdate)} $birthdate"
+                else
+                    stringResource(R.string.no_birthdate)
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -141,7 +145,7 @@ fun SignupScreen(
         OutlinedTextField(
             value = country,
             onValueChange = { country = it },
-            label = { Text("Country") },
+            label = { Text(stringResource(R.string.country)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -150,13 +154,12 @@ fun SignupScreen(
         OutlinedTextField(
             value = phone,
             onValueChange = { phone = it },
-            label = { Text("Phone") },
+            label = { Text(stringResource(R.string.phone)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Checkbox para aceptar recibir correos electrónicos
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -165,7 +168,7 @@ fun SignupScreen(
                 checked = acceptReceiveEmails,
                 onCheckedChange = { acceptReceiveEmails = it }
             )
-            Text("I accept to receive promotional emails")
+            Text(stringResource(R.string.accept_email))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -173,33 +176,30 @@ fun SignupScreen(
         Button(
             onClick = {
                 if (name.isNotBlank() && surname.isNotBlank() && username.isNotBlank()) {
-                    // Crear el UserEntity abans de cridar signup
                     val userEntity = UserEntity(
                         login = email,
                         username = username,
                         country = country,
                         birthdate = birthdate,
-                        address = "undefined", // Per defecte
+                        address = "undefined",
                         phone = phone,
-                        acceptReceiveEmails = acceptReceiveEmails // Valor del checkbox
+                        acceptReceiveEmails = acceptReceiveEmails
                     )
-                    // Cridar signup amb el userEntity creat
                     authViewModel.signup(email, password, userEntity)
                 } else {
-                    Toast.makeText(context, "Fill in all fields", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.fill_fields), Toast.LENGTH_LONG).show()
                 }
             },
             enabled = authState.value != AuthState.Loading,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Register")
+            Text(stringResource(R.string.register))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(onClick = { navController.navigate("login") }) {
-            Text("Already have an account? Login")
+            Text(stringResource(R.string.login_log))
         }
     }
 }
-
