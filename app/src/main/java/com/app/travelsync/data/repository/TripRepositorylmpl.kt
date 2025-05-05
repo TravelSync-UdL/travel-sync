@@ -1,4 +1,4 @@
-package com.app.travelsync.data
+package com.app.travelsync.data.repository
 
 import android.util.Log
 import com.app.travelsync.data.local.mapper.toEntity

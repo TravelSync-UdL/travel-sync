@@ -8,12 +8,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.app.travelsync.BuildConfig
 import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.domain.repository.TripRepository
-import com.app.travelsync.data.TripRepositorylmpl
+import com.app.travelsync.data.repository.TripRepositorylmpl
 import com.app.travelsync.data.local.AppDatabase
 import com.app.travelsync.data.local.dao.ItineraryDao
 import com.app.travelsync.data.local.dao.TripDao
 import com.app.travelsync.domain.repository.AuthRepository
-import com.app.travelsync.data.AuthRepositoryImpl
+import com.app.travelsync.data.repository.AuthRepositoryImpl
 import com.app.travelsync.data.local.dao.SessionLogDao
 import com.app.travelsync.data.local.dao.UserDao
 import com.google.firebase.auth.FirebaseAuth

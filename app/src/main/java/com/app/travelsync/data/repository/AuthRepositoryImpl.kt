@@ -1,4 +1,4 @@
-package com.app.travelsync.data
+package com.app.travelsync.data.repository
 
 import com.app.travelsync.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
