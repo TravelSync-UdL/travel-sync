@@ -1,5 +1,9 @@
 package com.app.travelsync.di
 
+import com.app.travelsync.data.SharedPrefsManager
+import com.app.travelsync.data.local.AppDatabase
+import com.app.travelsync.data.local.dao.ReservationDao
+import com.app.travelsync.data.local.dao.UserDao
 import com.app.travelsync.data.remote.api.HotelApiService
 import com.app.travelsync.data.repository.HotelRepositoryImpl
 import com.app.travelsync.domain.repository.HotelRepository
@@ -35,8 +39,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBookRepository(api: HotelApiService): HotelRepository =
-        HotelRepositoryImpl(api)
+    fun provideReservationDao(database: AppDatabase): ReservationDao {
+        return database.reservationDao() // Ens assegurem que el dao està disponible
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookRepository(api: HotelApiService, sharedPrefsManager: SharedPrefsManager, reservationDao: ReservationDao): HotelRepository =
+        HotelRepositoryImpl(api, reservationDao, sharedPrefsManager)
 
     @Provides
     @Singleton

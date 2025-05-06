@@ -17,4 +17,8 @@ interface UserDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM users WHERE username = :username)")
     suspend fun isUsernameTaken(username: String): Boolean
+
+    @Query("SELECT * FROM users WHERE login = :email LIMIT 1")
+    suspend fun getUserByEmail(email: String): UserEntity?
+
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.data.local.dao.SessionLogDao
 import com.app.travelsync.data.local.dao.UserDao
 import com.app.travelsync.data.local.entity.SessionLogEntity
@@ -22,7 +23,8 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository, // Injectem el repositori d'autenticació
     private val auth: FirebaseAuth, // Injectem FirebaseAuth per gestionar l'autenticació
     private val sessionLogDao: SessionLogDao,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val sharedPrefsManager: SharedPrefsManager
 ) : ViewModel() {
 
     private val TAG = "AuthViewModel"
@@ -42,6 +44,7 @@ class AuthViewModel @Inject constructor(
             _authState.value = AuthState.Unauthenticated
         } else {
             Log.d(TAG, "User is authenticated: ${currentUser.email}")
+            Log.d(TAG, "User is authenticated: ${currentUser.displayName}")
             _authState.value = AuthState.Authenticated
         }
     }
@@ -62,6 +65,13 @@ class AuthViewModel @Inject constructor(
                 val user = authRepository.login(email, password)
                 if (user != null) {
                     Log.d(TAG, "Login successful: ${user.email}")
+
+                    val userEntity = userDao.getUserByEmail(email)
+                    userEntity?.let {
+                        sharedPrefsManager.userEmail = it.login
+                        sharedPrefsManager.userUsername = it.username
+                    }
+
                     _authState.value = AuthState.Authenticated
                 } else {
                     val error = "Incorrect credentials"

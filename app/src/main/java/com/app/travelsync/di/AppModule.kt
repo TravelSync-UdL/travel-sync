@@ -28,9 +28,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    val MIGRATION_1_2 = object : Migration(1, 2) {
+    val MIGRATION_3_4 = object : Migration(3, 4) {
         override fun migrate(database: SupportSQLiteDatabase) {
             // Aquí afegeixes la nova columna a la taula
+            /*
             database.execSQL("ALTER TABLE trip ADD COLUMN ownerLogin TEXT NOT NULL DEFAULT ''")
             database.execSQL("""
             CREATE TABLE IF NOT EXISTS `users` (
@@ -52,6 +53,21 @@ object AppModule {
                 `timestamp` INTEGER NOT NULL DEFAULT 0
             )
         """)
+
+            database.execSQL("""
+            CREATE TABLE IF NOT EXISTS `reservation` (
+                `id` TEXT NOT NULL,
+                `hotelName` TEXT NOT NULL,
+                `roomType` TEXT NOT NULL,
+                `price` INTEGER NOT NULL,
+                `startDate` TEXT NOT NULL,
+                `endDate` TEXT NOT NULL,
+                `userEmail` TEXT NOT NULL,
+                PRIMARY KEY(`id`)
+            )
+        """)*/
+
+            database.execSQL("ALTER TABLE reservation ADD COLUMN reservationId TEXT NOT NULL DEFAULT 'undefined'")
         }
     }
 
@@ -84,7 +100,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "my_database_name"
-        ).addMigrations(MIGRATION_1_2).fallbackToDestructiveMigration().build()
+        ).addMigrations(MIGRATION_3_4).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -112,5 +128,7 @@ object AppModule {
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
+
+
 
 }

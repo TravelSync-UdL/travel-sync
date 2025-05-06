@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.travelsync.domain.model.Hotel
+import com.app.travelsync.domain.model.Room
 import com.app.travelsync.domain.repository.HotelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -42,4 +43,40 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
+
+    fun searchHotels(city: String, startDate: String, endDate: String) {
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
+            try {
+                val response = repository.searchHotels("G12",startDate, endDate, city)
+                hotelList = response
+            } catch (e: Exception) {
+                println(e.message)
+                errorMessage = e.message
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+
+    fun bookRoom(hotel: Hotel, room: Room, startDate: String, endDate: String) {
+        viewModelScope.launch {
+            try {
+                // Mostrar la informació de la reserva que s'envia
+                println("Reserva: Room ID: ${room.id}, Start Date: $startDate, End Date: $endDate")
+
+                val reservation = repository.reserveRoom("G12", hotel.id ,room.id, startDate, endDate)
+                // Mostrar la resposta de la reserva
+                println("Reserva creat amb ID: ${reservation.reservation_id}")
+            } catch (e: Exception) {
+                // Capturar i mostrar l'error
+                println("Error reservant: ${e.message}")
+            }
+        }
+    }
+
+
+
 }
