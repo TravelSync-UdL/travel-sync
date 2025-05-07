@@ -1,5 +1,6 @@
 package com.app.travelsync.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -49,7 +50,7 @@ class SearchViewModel @Inject constructor(
             isLoading = true
             errorMessage = null
             try {
-                val response = repository.searchHotels("G12",startDate, endDate, city)
+                val response = repository.searchHotels("G12", startDate, endDate, city)
                 hotelList = response
             } catch (e: Exception) {
                 println(e.message)
@@ -67,9 +68,10 @@ class SearchViewModel @Inject constructor(
                 // Mostrar la informació de la reserva que s'envia
                 println("Reserva: Room ID: ${room.id}, Start Date: $startDate, End Date: $endDate")
 
-                val reservation = repository.reserveRoom("G12", hotel.id ,room.id, startDate, endDate)
+                val reservation =
+                    repository.reserveRoom("G12", hotel.id, room.id, startDate, endDate)
                 // Mostrar la resposta de la reserva
-                println("Reserva creat amb ID: ${reservation.reservation_id}")
+                println("Reserva creat amb ID: ${reservation.reservation.id}")
             } catch (e: Exception) {
                 // Capturar i mostrar l'error
                 println("Error reservant: ${e.message}")
@@ -77,6 +79,20 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun carregarReserves() {
+        viewModelScope.launch {
+            try {
+                val reserves = repository.getLocalReservations()
+                reserves.forEach {
+                    Log.d(
+                        "Reserva",
+                        "Hotel: ${it.hotelName}, Room: ${it.roomType}, Dates: ${it.startDate} - ${it.endDate}, Email: ${it.userEmail}"
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("Reserva", "Error llegint reserves: ${e.message}")
+            }
 
-
+        }
+    }
 }

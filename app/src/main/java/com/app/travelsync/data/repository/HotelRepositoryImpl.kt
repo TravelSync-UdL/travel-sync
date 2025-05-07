@@ -1,5 +1,6 @@
 package com.app.travelsync.data.repository
 
+import android.util.Log
 import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.data.local.dao.ReservationDao
 import com.app.travelsync.data.local.dao.UserDao
@@ -50,9 +51,11 @@ class HotelRepositoryImpl @Inject constructor(
         val hotel = api.getHotels(groupId).find { it.id == hotelId }
         val room = hotel?.rooms?.find { it.id == roomId }
 
+        val reservation_id = response.reservation.id
+
         reservationDao.insertReservation(
             ReservationEntity(
-                reservationId = response.reservation_id,
+                reservationId = reservation_id,
                 hotelName = hotel?.name ?: "Unknown Hotel",
                 roomType = room?.room_type ?: "Unknown Room",
                 price = room?.price ?: 0,
@@ -61,9 +64,13 @@ class HotelRepositoryImpl @Inject constructor(
                 userEmail = sharedPrefsManager.userEmail ?: ""
             )
         )
-
+        Log.d("Reserva", "Reserva afegida a la base de dades: ${reservation_id}")
         return response
     }
 
+
+    override suspend fun getLocalReservations(): List<ReservationEntity> {
+        return reservationDao.getAllReservations()
+    }
 
 }

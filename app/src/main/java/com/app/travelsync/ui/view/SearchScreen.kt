@@ -34,6 +34,11 @@ fun SearchScreen(navController: NavController, viewModel: SearchViewModel = hilt
     var startDateDialogOpen by remember { mutableStateOf(false) }
     var endDateDialogOpen by remember { mutableStateOf(false) }
 
+    // Crida a carregar reserves per veure-les al Logcat
+    LaunchedEffect(Unit) {
+        viewModel.carregarReserves()
+    }
+
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Search Hotels", style = MaterialTheme.typography.headlineMedium)
 
