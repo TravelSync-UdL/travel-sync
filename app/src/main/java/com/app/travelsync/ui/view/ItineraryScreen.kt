@@ -108,10 +108,14 @@ fun ItineraryScreen(
             { _, year, month, dayOfMonth ->
                 calendar.set(year, month, dayOfMonth)
                 val formattedDate = dateFormatter.format(calendar.time)
+
+                // Validar si la data seleccionada està dins del rang abans de modificar itineraryDate
                 if (isDateInRange(formattedDate, tripDates.first, tripDates.second)) {
                     itineraryDate = formattedDate
                 } else {
                     // Mostrar missatge d'error si la data no està dins del rang
+                    // Pots afegir una alerta o un missatge a l'usuari aquí
+                    Log.e("ItineraryScreen", "La data seleccionada no està dins del rang!")
                 }
             },
             calendar.get(Calendar.YEAR),

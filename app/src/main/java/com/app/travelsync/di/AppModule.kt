@@ -28,7 +28,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    val MIGRATION_3_4 = object : Migration(3, 4) {
+    val MIGRATION_4_5 = object : Migration(4, 5) {
         override fun migrate(database: SupportSQLiteDatabase) {
             // Aquí afegeixes la nova columna a la taula
             /*
@@ -67,7 +67,7 @@ object AppModule {
             )
         """)*/
 
-            database.execSQL("ALTER TABLE reservation ADD COLUMN reservationId TEXT NOT NULL DEFAULT 'undefined'")
+            database.execSQL("ALTER TABLE reservation ADD COLUMN tripId INTEGER NOT NULL DEFAULT 'undefined'")
         }
     }
 
@@ -100,7 +100,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "my_database_name"
-        ).addMigrations(MIGRATION_3_4).fallbackToDestructiveMigration().build()
+        ).addMigrations(MIGRATION_4_5).fallbackToDestructiveMigration().build()
     }
 
     @Provides

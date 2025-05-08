@@ -4,6 +4,7 @@ import com.app.travelsync.data.remote.dto.HotelAvailabilityResponseDto
 import retrofit2.http.Query
 import com.app.travelsync.data.remote.dto.HotelDto
 import com.app.travelsync.data.remote.dto.ReservationDto
+import com.app.travelsync.data.remote.dto.ReservationFullDto
 import com.app.travelsync.domain.model.Reservation
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -29,7 +30,13 @@ interface HotelApiService{
         @Body request: Reservation
     ): ReservationDto
 
+    @GET("reservations/{res_id}")
+    suspend fun getReservationFull(@Path("res_id") reservationId: String): ReservationFullDto
+
 }
+
+
+
 
 data class ResponseBodyDto(
     val ok: Boolean,

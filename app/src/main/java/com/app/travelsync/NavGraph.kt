@@ -36,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.app.travelsync.ui.view.LoginScreen
 import com.app.travelsync.ui.view.RecoverPasswordScreen
+import com.app.travelsync.ui.view.ReservationDetailScreen
 import com.app.travelsync.ui.view.SignupScreen
 import com.app.travelsync.ui.viewmodel.AuthState
 import com.app.travelsync.ui.viewmodel.AuthViewModel
@@ -120,6 +121,14 @@ fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hi
                 ) {
                     ItineraryScreen(navController = navController)
                 }
+
+                composable("reservation_detail/{resId}") { backStackEntry ->
+                    val resId = backStackEntry.arguments?.getString("resId")?.toIntOrNull()
+                    resId?.let {
+                        ReservationDetailScreen(reservationId = it, navController = navController)
+                    }
+                }
+
             }
         }
     }

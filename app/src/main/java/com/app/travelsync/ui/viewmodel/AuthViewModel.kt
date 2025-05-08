@@ -45,6 +45,11 @@ class AuthViewModel @Inject constructor(
         } else {
             Log.d(TAG, "User is authenticated: ${currentUser.email}")
             Log.d(TAG, "User is authenticated: ${currentUser.displayName}")
+
+            sharedPrefsManager.userEmail = currentUser.email
+            sharedPrefsManager.userUsername = currentUser.displayName
+
+            Log.d("Login", "User is authenticated: ${sharedPrefsManager.userEmail}")
             _authState.value = AuthState.Authenticated
         }
     }

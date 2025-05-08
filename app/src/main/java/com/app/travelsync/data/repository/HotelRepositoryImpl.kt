@@ -36,7 +36,7 @@ class HotelRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun reserveRoom(groupId: String, hotelId: String, roomId: String, startDate: String, endDate: String): ReservationDto {
+    override suspend fun reserveRoom(groupId: String, hotelId: String, roomId: String, startDate: String, endDate: String, tripId: Int): ReservationDto {
 
         val reservation = Reservation(
             hotel_id = hotelId,
@@ -61,7 +61,8 @@ class HotelRepositoryImpl @Inject constructor(
                 price = room?.price ?: 0,
                 startDate = startDate,
                 endDate = endDate,
-                userEmail = sharedPrefsManager.userEmail ?: ""
+                userEmail = sharedPrefsManager.userEmail ?: "",
+                tripId = tripId
             )
         )
         Log.d("Reserva", "Reserva afegida a la base de dades: ${reservation_id}")
@@ -72,5 +73,25 @@ class HotelRepositoryImpl @Inject constructor(
     override suspend fun getLocalReservations(): List<ReservationEntity> {
         return reservationDao.getAllReservations()
     }
+
+    override suspend fun getReservationById(resId: Int): ReservationEntity? {
+        return reservationDao.getReservationById(resId)
+    }
+
+    override suspend fun getRoomImageUrl(reservationId: String): String? {
+        return try {
+            val response = api.getReservationFull(reservationId)
+            Log.d("IMATGE", "Resposta de l'API: $response")
+            response.room.images.firstOrNull() // Retorna la primera imatge
+        } catch (e: Exception) {
+            Log.e("IMATGE", "Error obtenint la imatge: ${e.localizedMessage}")
+            Log.d("IMATGE", "ID de la reserva: $reservationId")
+
+            null
+        }
+    }
+
+
+
 
 }

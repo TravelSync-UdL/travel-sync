@@ -15,7 +15,7 @@ import com.app.travelsync.data.local.entity.UserEntity
 
 @Database(
     entities = [ItineraryEntity::class, ReservationEntity::class, TripEntity::class, UserEntity::class, SessionLogEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

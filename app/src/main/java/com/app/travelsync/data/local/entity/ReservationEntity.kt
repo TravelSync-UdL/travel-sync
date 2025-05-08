@@ -13,5 +13,7 @@ data class ReservationEntity(
     val price: Int,
     val startDate: String,
     val endDate: String,
-    val userEmail: String
+    val userEmail: String,
+    val tripId: Int
 )
+
