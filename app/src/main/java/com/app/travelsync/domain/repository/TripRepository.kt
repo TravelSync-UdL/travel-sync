@@ -16,4 +16,5 @@ interface TripRepository {
 
     suspend fun getTripsForUser(login: String): List<Trip>
     suspend fun getTripId(trip_Id: Int): Trip
+
 }

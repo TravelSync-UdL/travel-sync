@@ -7,7 +7,7 @@ import com.app.travelsync.domain.model.Trip
 
 // De dominio a entidad
 fun Trip.toEntity(): TripEntity =
-    TripEntity(id = tripId, title = title, destination = destination, startDate = startDate, endDate = endDate, ownerLogin = ownerLogin)
+    TripEntity(id = tripId, title = title, destination = destination, startDate = startDate, endDate = endDate, ownerLogin = ownerLogin, images = images.toString())
 
 fun Itinerary.toEntity(): ItineraryEntity =
     ItineraryEntity(id = itineraryId, trip_Id = trip_Id, title = title, date = date, time = time, location = location, notes = notes)

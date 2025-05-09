@@ -1,7 +1,6 @@
 package com.app.travelsync.ui.viewmodel
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.travelsync.data.local.entity.ReservationEntity
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReservationViewModel @Inject constructor(
-    private val repository: HotelRepository
+    private val hotelRepository: HotelRepository
 ) : ViewModel() {
 
     // Canviar de mutableStateOf a StateFlow per a poder fer collectAsState()
@@ -31,7 +30,7 @@ class ReservationViewModel @Inject constructor(
     fun loadReservation(resId: Int) {
         viewModelScope.launch {
             try {
-                val result = repository.getReservationById(resId)
+                val result = hotelRepository.getReservationById(resId)
                 if (result != null) {
                     _reservation.value = result
                 } else {
@@ -45,8 +44,7 @@ class ReservationViewModel @Inject constructor(
 
     fun loadRoomImageUrl(reservationId: String) {
         viewModelScope.launch {
-            _roomImageUrl.value = repository.getRoomImageUrl(reservationId)
+            _roomImageUrl.value = hotelRepository.getRoomImageUrl(reservationId)
         }
     }
 }
-

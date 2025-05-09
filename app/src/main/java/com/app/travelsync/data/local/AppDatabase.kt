@@ -7,6 +7,7 @@ import com.app.travelsync.data.local.dao.ReservationDao
 import com.app.travelsync.data.local.dao.SessionLogDao
 import com.app.travelsync.data.local.dao.TripDao
 import com.app.travelsync.data.local.dao.UserDao
+import com.app.travelsync.data.local.entity.ImageEntity
 import com.app.travelsync.data.local.entity.ItineraryEntity
 import com.app.travelsync.data.local.entity.ReservationEntity
 import com.app.travelsync.data.local.entity.SessionLogEntity
@@ -14,8 +15,8 @@ import com.app.travelsync.data.local.entity.TripEntity
 import com.app.travelsync.data.local.entity.UserEntity
 
 @Database(
-    entities = [ItineraryEntity::class, ReservationEntity::class, TripEntity::class, UserEntity::class, SessionLogEntity::class],
-    version = 5,
+    entities = [ItineraryEntity::class, ReservationEntity::class, TripEntity::class, UserEntity::class, SessionLogEntity::class, ImageEntity::class],
+    version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -24,7 +25,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun sessionLogDao(): SessionLogDao
     abstract fun reservationDao(): ReservationDao
-
 
 
 }

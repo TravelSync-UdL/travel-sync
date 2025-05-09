@@ -28,7 +28,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    val MIGRATION_4_5 = object : Migration(4, 5) {
+    val MIGRATION_8_9 = object : Migration(8, 9) {
         override fun migrate(database: SupportSQLiteDatabase) {
             // Aquí afegeixes la nova columna a la taula
             /*
@@ -67,7 +67,21 @@ object AppModule {
             )
         """)*/
 
-            database.execSQL("ALTER TABLE reservation ADD COLUMN tripId INTEGER NOT NULL DEFAULT 'undefined'")
+            //database.execSQL("ALTER TABLE reservation ADD COLUMN tripId INTEGER NOT NULL DEFAULT 'undefined'")
+
+            database.execSQL("ALTER TABLE trip ADD COLUMN images TEXT NOT NULL DEFAULT 'undefined'")
+
+            database.execSQL("""
+            CREATE TABLE IF NOT EXISTS `image` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `tripId` INTEGER NOT NULL,
+                `uri` TEXT NOT NULL,
+                FOREIGN KEY(`tripId`) REFERENCES `trip`(`id`) ON DELETE CASCADE
+            )
+        """)
+
+
+
         }
     }
 
@@ -100,7 +114,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "my_database_name"
-        ).addMigrations(MIGRATION_4_5).fallbackToDestructiveMigration().build()
+        ).addMigrations(MIGRATION_8_9).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -128,7 +142,4 @@ object AppModule {
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
-
-
-
 }

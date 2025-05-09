@@ -1,5 +1,6 @@
 package com.app.travelsync.data.local.entity
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,5 +12,6 @@ data class TripEntity(
     val destination: String,
     val startDate: String,
     val endDate: String,
-    val ownerLogin: String
+    val ownerLogin: String,
+    val images: String
 )
