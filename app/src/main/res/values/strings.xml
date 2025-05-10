@@ -10,7 +10,7 @@
     <string name="back_button_description">Back</string>
 
     <string name="trip_nav">Trip</string>
-    <string name="guide_nav">Guide</string>
+    <string name="reservation_nav">Reservations</string>
     <string name="home_nav">Home</string>
     <string name="search_nav">Search</string>
     <string name="configUser_nav">You</string>

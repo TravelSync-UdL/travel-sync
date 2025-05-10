@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.android.tools.build.jetifier.core.utils.Log
 import com.app.travelsync.ui.viewmodel.ReservationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,12 +43,12 @@ fun ReservationDetailScreen(
     val roomImageUrl by viewModel.roomImageUrl.collectAsState()
 
     LaunchedEffect(reservationId) {
-        viewModel.loadReservation(reservationId)
+       // viewModel.loadReservation(reservationId)
     }
 
     reservation?.let { res ->
-        LaunchedEffect(res.reservationId) {
-            viewModel.loadRoomImageUrl(res.reservationId)
+        LaunchedEffect(res.id) {
+            //viewModel.loadRoomImageUrl(res.id)
         }
     }
 
@@ -71,11 +72,24 @@ fun ReservationDetailScreen(
 
             // Missatge d'error si n'hi ha
             errorMessage?.let {
+                Log.e("Error:Database", errorMessage!!)
                 Text(
                     text = "Aquest viatge no té cap reserva creada",
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        navController.navigate("gallery/$reservationId")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Galeria")
+                }
+
                 return@Column
             }
 
@@ -94,18 +108,14 @@ fun ReservationDetailScreen(
                     )
                 }
 
-                // Detalls textuals
-                Text(
-                    text = res.hotelName,
-                    style = MaterialTheme.typography.headlineSmall
-                )
+
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Divider()
 
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("🏨 Tipus d'habitació: ${res.roomType}", style = MaterialTheme.typography.bodyLarge)
-                Text("💰 Preu: ${res.price} €", style = MaterialTheme.typography.bodyLarge)
+                Text("🏨 Tipus d'habitació: ${res.room}", style = MaterialTheme.typography.bodyLarge)
+                Text("💰 Preu: ${res.room} €", style = MaterialTheme.typography.bodyLarge)
                 Text("📅 Inici: ${res.startDate}", style = MaterialTheme.typography.bodyLarge)
                 Text("📅 Final: ${res.endDate}", style = MaterialTheme.typography.bodyLarge)
 
@@ -114,7 +124,7 @@ fun ReservationDetailScreen(
                 // Botó d'acció futur (placeholder)
                 Button(
                     onClick = {
-                        navController.navigate("gallery/${res.tripId}") // Assegura’t de tenir el tripId disponible
+                        navController.navigate("gallery/${res.id}") // Assegura’t de tenir el tripId disponible
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {

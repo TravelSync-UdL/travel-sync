@@ -1,23 +1,35 @@
 package com.app.travelsync.domain.repository
 
-import com.app.travelsync.data.local.entity.ReservationEntity
-import com.app.travelsync.data.remote.dto.ReservationDto
 import com.app.travelsync.domain.model.Hotel
+import com.app.travelsync.domain.model.Reservation
+import com.app.travelsync.domain.model.ReserveRequest
 
 
 interface HotelRepository {
 
-    suspend fun list(groupId: String): List<Hotel>
+    /* ---------- Hotels & Availability ---------- */
+    suspend fun getHotels(groupId: String): List<Hotel>
+    suspend fun getAvailability(
+        groupId: String,
+        start: String,
+        end: String,
+        hotelId: String? = null,
+        city: String? = null
+    ): List<Hotel>
 
-    suspend fun searchHotels(groupId: String, startDate: String, endDate: String, city: String): List<Hotel>
+    /* ---------- Make & cancel reservation (by group) ---------- */
+    suspend fun reserve(groupId: String, request: ReserveRequest): Reservation
+    suspend fun cancel(groupId: String, request: ReserveRequest): String   // returns message
 
-    suspend fun reserveRoom(groupId: String, hotelId: String ,roomId: String, startDate: String, endDate: String, tripId: Int): ReservationDto
+    /* ---------- Reservations queries ---------- */
+    suspend fun getGroupReservations(
+        groupId: String,
+        guestEmail: String? = null
+    ): List<Reservation>
 
-    suspend fun getLocalReservations(): List<ReservationEntity>
+    suspend fun getAllReservations(): Map<String, List<Reservation>>
 
-    suspend fun getReservationById(resId: Int): ReservationEntity?
-
-    suspend fun getRoomImageUrl(reservationId: String): String?
-
-
+    /* ---------- Operations by reservation-id ---------- */
+    suspend fun getReservationById(resId: String): Reservation
+    suspend fun cancelById(resId: String): Reservation
 }

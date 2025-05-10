@@ -1,137 +1,94 @@
 package com.app.travelsync.ui.viewmodel
 
+import android.os.Build
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresExtension
+import java.time.LocalDate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.travelsync.data.SharedPrefsManager
-import com.app.travelsync.data.local.entity.ReservationEntity
 import com.app.travelsync.domain.model.Hotel
-import com.app.travelsync.domain.model.Room
-import com.app.travelsync.domain.model.Trip
 import com.app.travelsync.domain.repository.HotelRepository
-import com.app.travelsync.domain.repository.TripRepository
+import com.app.travelsync.utils.ErrorUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import retrofit2.HttpException
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val hotelRepository: HotelRepository,
-    private val tripRepository: TripRepository,
-    private val sharedPrefsManager: SharedPrefsManager
+    private val repo: HotelRepository
 ) : ViewModel() {
 
-    var hotelList by mutableStateOf<List<Hotel>>(emptyList())
-        private set
+    val groupId = "G12"
 
-    var isLoading by mutableStateOf(false)
-        private set
+    private val _uiState = MutableStateFlow(BookUiState())
+    val uiState: StateFlow<BookUiState> = _uiState
 
-    var errorMessage by mutableStateOf<String?>(null)
-        private set
+    /* ---------- city picker ---------- */
+    fun toggleCityMenu() = _uiState.update { it.copy(cityMenu = !it.cityMenu) }
+    fun selectCity(c: String) = _uiState.update { it.copy(city = c, cityMenu = false) }
 
-    init {
-        loadHotels("G12")
-    }
+    /* ---------- date pickers ---------- */
+    fun pickStart(d: java.time.LocalDate) = _uiState.update { it.copy(startDate = d) }
+    fun pickEnd(d: java.time.LocalDate)   = _uiState.update { it.copy(endDate = d) }
 
-    fun loadHotels(groupId: String) {
-        viewModelScope.launch {
-            isLoading = true
-            errorMessage = null
-            try {
-                hotelList = hotelRepository.list(groupId)
-            } catch (e: Exception) {
-                errorMessage = e.message
-            } finally {
-                isLoading = false
-            }
-        }
-    }
+    /* ---------- search ---------- */
+    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    fun search() = viewModelScope.launch {
+        val s = _uiState.value.startDate ?: return@launch
+        val e = _uiState.value.endDate   ?: return@launch
+        val fmt = DateTimeFormatter.ISO_DATE
+        val city = _uiState.value.city
 
-    fun searchHotels(city: String, startDate: String, endDate: String) {
-        viewModelScope.launch {
-            isLoading = true
-            errorMessage = null
-            try {
-                val response = hotelRepository.searchHotels("G12", startDate, endDate, city)
-                hotelList = response
-            } catch (e: Exception) {
-                println(e.message)
-                errorMessage = e.message
-            } finally {
-                isLoading = false
-            }
-        }
-    }
+        _uiState.update { it.copy(loading = true, message = null) }
 
+        try {
+            val hotels = repo.getAvailability(groupId, s.format(fmt), e.format(fmt), city = city)
+            _uiState.update { it.copy(loading = false, hotels = hotels) }
+        } catch (e: HttpException) {
 
-    fun bookRoom(
-        hotel: Hotel,
-        room: Room,
-        startDate: String,
-        endDate: String
-    ) {
-        viewModelScope.launch {
-            try {
+            val decodedError = ErrorUtils.extractErrorMessage(e)
 
-                val userEmail = sharedPrefsManager.userEmail
-                    ?: throw Exception("No s'ha pogut obtenir l'email de l'usuari.")
+            Log.e("BookViewModel", "HTTP error: ${decodedError}  $e")
+            _uiState.update { it.copy(loading = false, hotels = emptyList(), message = decodedError) }
 
-                Log.d("Login", "User is authenticated: ${userEmail}")
-
-                // 1. Crear el Trip
-                val trip = Trip(
-                    title = "Viatge a ${hotel.address}",
-                    destination = hotel.address,
-                    startDate = startDate,
-                    endDate = endDate,
-                    ownerLogin = userEmail,
-                    itinerary = emptyList()
+            _uiState.update {
+                it.copy(
+                    loading = false,
+                    hotels = emptyList(),
+                    message = "Error: ${decodedError}}"
                 )
-                tripRepository.addTrip(trip)
+            }
 
-                // 2. Obtenir l'últim trip creat per aquest usuari
-                val trips = tripRepository.getTripsForUser(userEmail)
-                val createdTrip = trips.maxByOrNull { it.tripId }
-                    ?: throw Exception("No s'ha pogut obtenir el viatge recent creat.")
-
-                // 3. Fer la reserva (la lògica del guardat local ja és dins del repositori)
-                hotelRepository.reserveRoom(
-                    groupId = "G12",
-                    hotelId = hotel.id,
-                    roomId = room.id,
-                    startDate = startDate,
-                    endDate = endDate,
-                    tripId = createdTrip.tripId // Pas del tripId al repo
+        } catch (e: Exception) {
+            Log.e("BookViewModel", "Error: ${e.localizedMessage}")
+//            _uiState.update { it.copy(loading = false, hotels = emptyList()) }
+            _uiState.update {
+                it.copy(
+                    loading = false,
+                    hotels = emptyList(),
+                    message = "Error: ${e.message}}"
                 )
-
-                println("Reserva feta i viatge creat amb ID: ${createdTrip.tripId}")
-
-            } catch (e: Exception) {
-                println("Error reservant i creant viatge: ${e.message}")
-                errorMessage = e.message
             }
         }
     }
 
-
-
-    fun carregarReserves() {
-        viewModelScope.launch {
-            try {
-                val reserves = hotelRepository.getLocalReservations()
-                reserves.forEach {
-                    Log.d(
-                        "Reserva",
-                        "Hotel: ${it.hotelName}, Room: ${it.roomType}, Dates: ${it.startDate} - ${it.endDate}, Email: ${it.userEmail}"
-                    )
-                }
-            } catch (e: Exception) {
-                Log.e("Reserva", "Error llegint reserves: ${e.message}")
-            }
-        }
-    }
 }
+
+
+data class BookUiState(
+    val loading: Boolean = false,
+    val cityMenu: Boolean = false,
+    val city: String = "Barcelona",
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
+    val hotels: List<Hotel> = emptyList(),
+    val message: String? = null
+)

@@ -45,11 +45,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideBookRepository(api: HotelApiService, sharedPrefsManager: SharedPrefsManager, reservationDao: ReservationDao): HotelRepository =
-        HotelRepositoryImpl(api, reservationDao, sharedPrefsManager)
+    fun provideHotelApiService(retrofit: Retrofit): HotelApiService {
+        return retrofit.create(HotelApiService::class.java)
+    }
 
-    @Provides
-    @Singleton
-    fun provideBookApi(retrofit: Retrofit): HotelApiService =
-        retrofit.create(HotelApiService::class.java)
 }

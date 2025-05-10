@@ -4,7 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.travelsync.data.local.entity.ReservationEntity
+import com.app.travelsync.domain.model.Reservation
 import com.app.travelsync.domain.repository.HotelRepository
+import com.app.travelsync.domain.repository.ReservationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,12 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReservationViewModel @Inject constructor(
-    private val hotelRepository: HotelRepository
+    private val reservationRepository: ReservationRepository
 ) : ViewModel() {
 
     // Canviar de mutableStateOf a StateFlow per a poder fer collectAsState()
-    private val _reservation = MutableStateFlow<ReservationEntity?>(null)
-    val reservation: StateFlow<ReservationEntity?> = _reservation
+    private val _reservation = MutableStateFlow<Reservation?>(null)
+    val reservation: StateFlow<Reservation?> = _reservation
+
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
@@ -27,10 +30,11 @@ class ReservationViewModel @Inject constructor(
     val roomImageUrl: StateFlow<String?> = _roomImageUrl
 
     // Funció per carregar la reserva
+    /*
     fun loadReservation(resId: Int) {
         viewModelScope.launch {
             try {
-                val result = hotelRepository.getReservationById(resId)
+                val result = reservationRepository.getReservationsByTrip(resId)
                 if (result != null) {
                     _reservation.value = result
                 } else {
@@ -46,5 +50,5 @@ class ReservationViewModel @Inject constructor(
         viewModelScope.launch {
             _roomImageUrl.value = hotelRepository.getRoomImageUrl(reservationId)
         }
-    }
+    }*/
 }

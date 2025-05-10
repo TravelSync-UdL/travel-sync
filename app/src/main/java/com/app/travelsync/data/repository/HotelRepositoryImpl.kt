@@ -12,86 +12,56 @@ import com.app.travelsync.domain.repository.HotelRepository
 import com.app.travelsync.data.remote.mapper.toDomain
 import com.app.travelsync.data.remote.mapper.toDto
 import com.app.travelsync.domain.model.Reservation
+import com.app.travelsync.domain.model.ReserveRequest
 import java.security.PrivateKey
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class HotelRepositoryImpl @Inject constructor(
-    private val api: HotelApiService,
-    private val reservationDao: ReservationDao,
-    private val sharedPrefsManager: SharedPrefsManager
+    private val api: HotelApiService
 ) : HotelRepository {
 
-    private val gid = "G12"
+    /* ---------- Hotels ---------- */
+    override suspend fun getHotels(groupId: String): List<Hotel> =
+        api.getHotels(groupId).map { it.toDomain() }
 
-    override suspend fun list(groupId: String): List<Hotel> =
-        api.getHotels(gid).map { it.toDomain() }
+    /* ---------- Availability ---------- */
+    override suspend fun getAvailability(
+        groupId: String,
+        start: String,
+        end: String,
+        hotelId: String?,
+        city: String?
+    ): List<Hotel> =
+        api.getAvailability(groupId, start, end, hotelId, city)
+            .available_hotels
+            .map { it.toDomain() }
 
+    /* ---------- Reserve & Cancel (within group) ---------- */
+    override suspend fun reserve(groupId: String, request: ReserveRequest): Reservation =
+        api.reserveRoom(groupId, request.toDto()).reservation.toDomain()
 
-    override suspend fun searchHotels(groupId: String, city: String, startDate: String, endDate: String): List<Hotel> {
-        val response = api.getAvailability(groupId, city, startDate, endDate)
-        // Assuming response is an object with the key 'available_hotels'
-        return response.available_hotels.map { it.toDomain() }
-    }
+    override suspend fun cancel(groupId: String, request: ReserveRequest): String =
+        api.cancelReservation(groupId, request.toDto()).message
 
+    /* ---------- Reservations for a group ---------- */
+    override suspend fun getGroupReservations(
+        groupId: String,
+        guestEmail: String?
+    ): List<Reservation> =
+        api.getGroupReservations(groupId, guestEmail).reservations.map { it.toDomain() }
 
-    override suspend fun reserveRoom(groupId: String, hotelId: String, roomId: String, startDate: String, endDate: String, tripId: Int): ReservationDto {
+    /* ---------- All reservations (admin) ---------- */
+    override suspend fun getAllReservations(): Map<String, List<Reservation>> =
+        api.getAllReservations()
+            .groups
+            .mapValues { entry -> entry.value.map { it.toDomain() } }
 
-        val reservation = Reservation(
-            hotel_id = hotelId,
-            room_id = roomId,
-            start_date = startDate,
-            end_date = endDate,
-            guest_name = sharedPrefsManager.userUsername ?: "",
-            guest_email = sharedPrefsManager.userEmail ?: ""
-        )
-        val response = api.reserveRoom(groupId, reservation)
+    /* ---------- Single-ID operations ---------- */
+    override suspend fun getReservationById(resId: String): Reservation =
+        api.getReservationById(resId).toDomain()
 
-        val hotel = api.getHotels(groupId).find { it.id == hotelId }
-        val room = hotel?.rooms?.find { it.id == roomId }
-
-        val reservation_id = response.reservation.id
-
-        reservationDao.insertReservation(
-            ReservationEntity(
-                reservationId = reservation_id,
-                hotelName = hotel?.name ?: "Unknown Hotel",
-                roomType = room?.room_type ?: "Unknown Room",
-                price = room?.price ?: 0,
-                startDate = startDate,
-                endDate = endDate,
-                userEmail = sharedPrefsManager.userEmail ?: "",
-                tripId = tripId
-            )
-        )
-        Log.d("Reserva", "Reserva afegida a la base de dades: ${reservation_id}")
-        return response
-    }
-
-
-    override suspend fun getLocalReservations(): List<ReservationEntity> {
-        return reservationDao.getAllReservations()
-    }
-
-    override suspend fun getReservationById(resId: Int): ReservationEntity? {
-        return reservationDao.getReservationById(resId)
-    }
-
-    override suspend fun getRoomImageUrl(reservationId: String): String? {
-        return try {
-            val response = api.getReservationFull(reservationId)
-            Log.d("IMATGE", "Resposta de l'API: $response")
-            response.room.images.firstOrNull() // Retorna la primera imatge
-        } catch (e: Exception) {
-            Log.e("IMATGE", "Error obtenint la imatge: ${e.localizedMessage}")
-            Log.d("IMATGE", "ID de la reserva: $reservationId")
-
-            null
-        }
-    }
-
-
-
-
+    override suspend fun cancelById(resId: String): Reservation =
+        api.deleteReservationById(resId).toDomain()
 }

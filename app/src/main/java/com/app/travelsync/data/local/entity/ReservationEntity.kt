@@ -1,19 +1,26 @@
 package com.app.travelsync.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "reservation")
+@Entity(
+    tableName = "reservations",
+    foreignKeys = [ForeignKey(
+        entity = TripEntity::class,
+        parentColumns = ["id"],
+        childColumns = ["tripId"],
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class ReservationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val reservationId: String,
+    val tripId: Int,
+    val hotelId: String,
     val hotelName: String,
+    val roomId: String,
     val roomType: String,
-    val price: Int,
-    val startDate: String,
-    val endDate: String,
-    val userEmail: String,
-    val tripId: Int
+    val pricePerNight: Float,
+    val totalPrice: Float
 )
-

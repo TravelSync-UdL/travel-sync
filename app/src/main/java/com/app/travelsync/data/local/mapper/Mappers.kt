@@ -1,8 +1,12 @@
 package com.app.travelsync.data.local.mapper
 
 import com.app.travelsync.data.local.entity.ItineraryEntity
+import com.app.travelsync.data.local.entity.ReservationEntity
 import com.app.travelsync.data.local.entity.TripEntity
+import com.app.travelsync.domain.model.Hotel
 import com.app.travelsync.domain.model.Itinerary
+import com.app.travelsync.domain.model.Reservation
+import com.app.travelsync.domain.model.Room
 import com.app.travelsync.domain.model.Trip
 
 // De dominio a entidad

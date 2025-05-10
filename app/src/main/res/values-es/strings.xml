@@ -11,7 +11,7 @@
     <string name="back_button_description">Volver</string>
 
     <string name="trip_nav">Viaje</string>
-    <string name="guide_nav">Guía</string>
+    <string name="reservation_nav">Reservas</string>
     <string name="home_nav">Home</string>
     <string name="search_nav">Buscador</string>
     <string name="configUser_nav">Tú</string>

@@ -2,21 +2,18 @@ package com.app.travelsync.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.app.travelsync.data.local.entity.ReservationEntity
+import com.app.travelsync.data.remote.dto.ReservationDto
 import com.app.travelsync.domain.model.Reservation
 
 @Dao
 interface ReservationDao {
-    @Insert
-    suspend fun insertReservation(reservation: ReservationEntity)
 
-    @Query("SELECT * FROM reservation")
-    suspend fun getAllReservations(): List<ReservationEntity>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertReservation(reservation: ReservationEntity): Long
 
-    @Query("SELECT * FROM reservation WHERE tripId = :resId")
-    suspend fun getReservationById(resId: Int): ReservationEntity?
-
-    /*@Query("DELETE FROM reservation WHERE reservationId = :resId")
-    suspend fun deleteReservation(resId: String)*/
+    @Query("DELETE FROM trip WHERE id = :reservationId")
+    suspend fun deleteReservation(reservationId: Int)
 }

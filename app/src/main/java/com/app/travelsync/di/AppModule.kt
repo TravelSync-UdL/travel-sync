@@ -11,11 +11,17 @@ import com.app.travelsync.domain.repository.TripRepository
 import com.app.travelsync.data.repository.TripRepositorylmpl
 import com.app.travelsync.data.local.AppDatabase
 import com.app.travelsync.data.local.dao.ItineraryDao
+import com.app.travelsync.data.local.dao.ReservationDao
 import com.app.travelsync.data.local.dao.TripDao
 import com.app.travelsync.domain.repository.AuthRepository
 import com.app.travelsync.data.repository.AuthRepositoryImpl
 import com.app.travelsync.data.local.dao.SessionLogDao
 import com.app.travelsync.data.local.dao.UserDao
+import com.app.travelsync.data.remote.api.HotelApiService
+import com.app.travelsync.data.repository.HotelRepositoryImpl
+import com.app.travelsync.data.repository.ReservationRepositoryImpl
+import com.app.travelsync.domain.repository.HotelRepository
+import com.app.travelsync.domain.repository.ReservationRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -28,7 +34,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    val MIGRATION_8_9 = object : Migration(8, 9) {
+    val MIGRATION_9_10 = object : Migration(9, 10) {
         override fun migrate(database: SupportSQLiteDatabase) {
             // Aquí afegeixes la nova columna a la taula
             /*
@@ -69,13 +75,18 @@ object AppModule {
 
             //database.execSQL("ALTER TABLE reservation ADD COLUMN tripId INTEGER NOT NULL DEFAULT 'undefined'")
 
-            database.execSQL("ALTER TABLE trip ADD COLUMN images TEXT NOT NULL DEFAULT 'undefined'")
+            //database.execSQL("ALTER TABLE trip ADD COLUMN images TEXT NOT NULL DEFAULT 'undefined'")
 
             database.execSQL("""
-            CREATE TABLE IF NOT EXISTS `image` (
+            CREATE TABLE IF NOT EXISTS `reservations` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `hotelId` TEXT NOT NULL,
+                `hotelName` TEXT NOT NULL,
+                `roomId` TEXT NOT NULL,
+                `roomType` TEXT NOT NULL,
+                `pricePerNight` REAL NOT NULL,
+                `totalPrice` REAL NOT NULL,
                 `tripId` INTEGER NOT NULL,
-                `uri` TEXT NOT NULL,
                 FOREIGN KEY(`tripId`) REFERENCES `trip`(`id`) ON DELETE CASCADE
             )
         """)
@@ -114,7 +125,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "my_database_name"
-        ).addMigrations(MIGRATION_8_9).fallbackToDestructiveMigration().build()
+        ).addMigrations(MIGRATION_9_10).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -141,5 +152,16 @@ object AppModule {
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideHotelRepository(api: HotelApiService): HotelRepository {
+        return HotelRepositoryImpl(api)
+    }
+
+    @Provides
+    fun provideReservationRepository(reservationDao: ReservationDao): ReservationRepository {
+        return ReservationRepositoryImpl(reservationDao)
     }
 }

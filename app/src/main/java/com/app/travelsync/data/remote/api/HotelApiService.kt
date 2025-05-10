@@ -1,45 +1,84 @@
 package com.app.travelsync.data.remote.api
 
-import com.app.travelsync.data.remote.dto.HotelAvailabilityResponseDto
-import retrofit2.http.Query
+
+import com.app.travelsync.data.remote.dto.AvailabilityResponseDto
 import com.app.travelsync.data.remote.dto.HotelDto
 import com.app.travelsync.data.remote.dto.ReservationDto
-import com.app.travelsync.data.remote.dto.ReservationFullDto
-import com.app.travelsync.domain.model.Reservation
-import retrofit2.http.Body
+import com.app.travelsync.data.remote.dto.ReservationResponseDto
+import com.app.travelsync.data.remote.dto.ReserveRequestDto
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 
-interface HotelApiService{
+interface HotelApiService {
 
-    @GET("/hotels/{group_id}/hotels")
-    suspend fun getHotels(@Path("group_id") groupId: String): List<HotelDto>
+    /* ------------ Hotels & Availability ------------ */
+
+    @GET("hotels/{group_id}/hotels")
+    suspend fun getHotels(
+        @Path("group_id") groupId: String
+    ): List<HotelDto>
 
     @GET("hotels/{group_id}/availability")
     suspend fun getAvailability(
         @Path("group_id") groupId: String,
         @Query("start_date") startDate: String,
-        @Query("end_date") endDate: String,
-        @Query("city") city: String
-    ): HotelAvailabilityResponseDto
+        @Query("end_date")   endDate: String,
+        @Query("hotel_id")   hotelId: String? = null,
+        @Query("city")   city: String? = null
+    ): AvailabilityResponseDto
+
+    /* ------------ Reservations by group ------------ */
 
     @POST("hotels/{group_id}/reserve")
     suspend fun reserveRoom(
         @Path("group_id") groupId: String,
-        @Body request: Reservation
-    ): ReservationDto
+        @Body             request: ReserveRequestDto
+    ): ReservationResponseDto
+
+    @POST("hotels/{group_id}/cancel")
+    suspend fun cancelReservation(
+        @Path("group_id") groupId: String,
+        @Body             request: CancelRequestDto            // same fields as Reserve
+    ): ApiMessageDto                                           // e.g. { "message": "Reserva cancelada" }
+
+    @GET("hotels/{group_id}/reservations")
+    suspend fun getGroupReservations(
+        @Path("group_id") groupId: String,
+        @Query("guest_email") guestEmail: String? = null
+    ): ReservationsWrapperDto                                  // { reservations:[...] }
+
+    /* ------------ Admin-level (all groups) ------------ */
+
+    @GET("reservations")
+    suspend fun getAllReservations(): AllReservationsDto       // { groups:{ G01:[...], G02:[...] } }
 
     @GET("reservations/{res_id}")
-    suspend fun getReservationFull(@Path("res_id") reservationId: String): ReservationFullDto
+    suspend fun getReservationById(
+        @Path("res_id") resId: String
+    ): ReservationDto
 
+    @DELETE("reservations/{res_id}")
+    suspend fun deleteReservationById(
+        @Path("res_id") resId: String
+    ): ReservationDto                                          // returns the deleted object
 }
 
+/* Cancel uses the same body as Reserve */
+typealias CancelRequestDto = ReserveRequestDto
 
+/* Generic message wrapper */
+data class ApiMessageDto(val message: String)
 
+/* Wrapper used by  GET /hotels/{group}/reservations */
+data class ReservationsWrapperDto(
+    val reservations: List<ReservationDto>
+)
 
-data class ResponseBodyDto(
-    val ok: Boolean,
-    val message: String,
-    val hotel: HotelDto?
+/* Wrapper used by  GET /reservations */
+data class AllReservationsDto(
+    val groups: Map<String, List<ReservationDto>>
 )

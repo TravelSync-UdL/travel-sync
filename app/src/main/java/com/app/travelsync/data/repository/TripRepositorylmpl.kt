@@ -49,15 +49,17 @@ class TripRepositorylmpl @Inject constructor(
         }
     }
 
-    override suspend fun addTrip(trip: Trip) {
+    override suspend fun addTrip(trip: Trip): Int {
         Log.d("Database", "Trying to add trip: ${trip.title}")
         val existingTrip = tripDao.checkTripName(trip.title)
         if (existingTrip != null) {
             Log.e("Database", "Trip name already exists: ${trip.title}")
             throw IllegalArgumentException("El nom del viatge ja existeix!")
         }
-        tripDao.addTrip(trip.toEntity())
-        Log.d("Database", "Trip added successfully: ${trip.title}")
+
+        val generatedId = tripDao.addTrip(trip.toEntity())
+        Log.d("Database", "Trip added successfully with id: $generatedId")
+        return generatedId.toInt()
     }
 
     override suspend fun deleteTrip(trip_Id: Int) {
