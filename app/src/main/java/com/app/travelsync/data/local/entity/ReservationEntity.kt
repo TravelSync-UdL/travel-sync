@@ -17,10 +17,9 @@ data class ReservationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val tripId: Int,
-    val hotelId: String,
-    val hotelName: String,
-    val roomId: String,
+    val reservationId: String,
     val roomType: String,
-    val pricePerNight: Float,
-    val totalPrice: Float
+    val totalPrice: Float,
+    val startDate: String,
+    val endDate: String
 )

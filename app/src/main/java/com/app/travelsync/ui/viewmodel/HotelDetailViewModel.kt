@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.data.local.entity.ReservationEntity
 import com.app.travelsync.domain.model.Hotel
+import com.app.travelsync.domain.model.Reservation
 import com.app.travelsync.domain.model.ReserveRequest
 import com.app.travelsync.domain.model.Room
 import com.app.travelsync.domain.model.Trip
@@ -17,6 +18,7 @@ import com.app.travelsync.domain.repository.ReservationRepository
 import com.app.travelsync.domain.repository.TripRepository
 import com.app.travelsync.utils.ErrorUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -89,25 +91,24 @@ class HotelDetailViewModel @Inject constructor(
             val tripId = tripRepo.addTrip(trip) // <-- ara retorna Int
 
 
+            val res: Reservation = repo.reserve(groupId, req)
+
 
             if (hotel != null && room != null) {
                 Log.d("ReservationError", "Creant la reserva...")
                 val reservation = ReservationEntity(
-                    hotelId = hotel.id,
-                    hotelName = hotel.name,
-                    roomId = room.id,
                     roomType = room.roomType,
-                    pricePerNight = room.price,
-                    totalPrice = 0.0f,
-                    tripId = tripId
+                    totalPrice = room.price,
+                    tripId = tripId,
+                    startDate = start,
+                    endDate = end,
+                    reservationId = res.id
                 )
                 Log.d("ReservationError", "Reserva creada: $reservation")
                 reservationRepository.insertReservation(reservation)
             }else{
                 Log.d("ReservationError", "NO FUNCIONA")
             }
-
-            repo.reserve(groupId, req)
 
         } catch (e: HttpException) {
             val decodedError = ErrorUtils.extractErrorMessage(e)

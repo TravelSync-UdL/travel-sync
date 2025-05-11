@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
+import android.util.Log
 import com.app.travelsync.ui.view.GalleryScreen
 import com.app.travelsync.ui.view.LoginScreen
 import com.app.travelsync.ui.view.RecoverPasswordScreen

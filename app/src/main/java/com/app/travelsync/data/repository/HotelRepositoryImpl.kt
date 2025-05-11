@@ -64,4 +64,12 @@ class HotelRepositoryImpl @Inject constructor(
 
     override suspend fun cancelById(resId: String): Reservation =
         api.deleteReservationById(resId).toDomain()
+
+    override suspend fun getRoomImageUrl(resId: String): String {
+        // Cridem a l'API per obtenir la reserva per ID
+        val reservationResponse = api.getReservationById(resId)
+
+        // Si la reserva existeix i té una habitació amb imatges, retornem la primera imatge
+        return reservationResponse.room.images?.firstOrNull() ?: ""
+    }
 }

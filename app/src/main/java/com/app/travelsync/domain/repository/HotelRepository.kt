@@ -32,4 +32,6 @@ interface HotelRepository {
     /* ---------- Operations by reservation-id ---------- */
     suspend fun getReservationById(resId: String): Reservation
     suspend fun cancelById(resId: String): Reservation
+
+    suspend fun getRoomImageUrl(resId: String): String
 }

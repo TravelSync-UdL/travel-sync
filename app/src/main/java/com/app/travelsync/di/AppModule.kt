@@ -34,7 +34,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    val MIGRATION_9_10 = object : Migration(9, 10) {
+    val MIGRATION_10_11 = object : Migration(10, 11) {
         override fun migrate(database: SupportSQLiteDatabase) {
             // Aquí afegeixes la nova columna a la taula
             /*
@@ -76,20 +76,22 @@ object AppModule {
             //database.execSQL("ALTER TABLE reservation ADD COLUMN tripId INTEGER NOT NULL DEFAULT 'undefined'")
 
             //database.execSQL("ALTER TABLE trip ADD COLUMN images TEXT NOT NULL DEFAULT 'undefined'")
-
             database.execSQL("""
-            CREATE TABLE IF NOT EXISTS `reservations` (
+            CREATE TABLE IF NOT EXISTS `reservations_new` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                `hotelId` TEXT NOT NULL,
-                `hotelName` TEXT NOT NULL,
-                `roomId` TEXT NOT NULL,
-                `roomType` TEXT NOT NULL,
-                `pricePerNight` REAL NOT NULL,
-                `totalPrice` REAL NOT NULL,
                 `tripId` INTEGER NOT NULL,
+                `reservationId` TEXT NOT NULL,
+                `roomType` TEXT NOT NULL,
+                `totalPrice` REAL NOT NULL,
+                `startDate` TEXT NOT NULL,
+                `endDate` TEXT NOT NULL,
                 FOREIGN KEY(`tripId`) REFERENCES `trip`(`id`) ON DELETE CASCADE
             )
         """)
+
+            database.execSQL("DROP TABLE reservations")
+
+            database.execSQL("ALTER TABLE reservations_new RENAME TO reservations")
 
 
 
@@ -125,7 +127,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "my_database_name"
-        ).addMigrations(MIGRATION_9_10).fallbackToDestructiveMigration().build()
+        ).addMigrations(MIGRATION_10_11).fallbackToDestructiveMigration().build()
     }
 
     @Provides

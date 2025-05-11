@@ -70,7 +70,6 @@ fun SearchScreen(navController: NavController, vm: SearchViewModel = hiltViewMod
                     .fillMaxWidth()
             )
 
-            /* ⬇⬇  ¡todos los TODO() eliminados! ⬇⬇ */
             ExposedDropdownMenu(
                 expanded = ui.cityMenu,
                 onDismissRequest = { vm.toggleCityMenu() }

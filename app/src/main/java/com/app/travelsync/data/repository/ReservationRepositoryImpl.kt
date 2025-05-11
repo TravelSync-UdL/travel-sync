@@ -25,4 +25,14 @@ class ReservationRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getReservation(tripId: Int): ReservationEntity?{
+        return reservationDao.getReservation(tripId)
+    }
+
+    override suspend fun deleteReservation(reservationId: String) {
+        Log.d("Database - Reservation", "Abans d'eliminar: ${reservationId}")
+        reservationDao.deleteReservation(reservationId)
+        Log.d("Database - Reservation", "Després d'eliminar")
+    }
+
 }

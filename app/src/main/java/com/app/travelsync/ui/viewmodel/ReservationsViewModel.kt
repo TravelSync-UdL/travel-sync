@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.travelsync.data.SharedPrefsManager
 import com.app.travelsync.domain.model.Reservation
 import com.app.travelsync.domain.repository.HotelRepository
+import com.app.travelsync.domain.repository.ReservationRepository
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ReservationsViewModel @Inject constructor(
     private val repo: HotelRepository,
+    private val reservation: ReservationRepository,
     sharedPrefsManager: SharedPrefsManager
 ) : ViewModel() {
 
@@ -28,8 +30,6 @@ class ReservationsViewModel @Inject constructor(
     fun load() = viewModelScope.launch {
         _uiState.update { it.copy(loading = true) }
 
-        //IMPORTANTE USANDO EL GROUP ID!!!
-        //AQUI tambien buscar el correo del usuario authenticado!!
 
         val res = repo.getGroupReservations("G12", guestEmail)
         _uiState.value = ReservationsUiState(false, res)
@@ -38,7 +38,8 @@ class ReservationsViewModel @Inject constructor(
     fun cancel(r: Reservation) = viewModelScope.launch {
         Log.d("viewmodel", "canceling: ${r.id}")
         repo.cancelById(r.id)
-        _uiState.update { it.copy(reservations = it.reservations - r) } // quita de la lista
+        _uiState.update { it.copy(reservations = it.reservations - r) }
+        reservation.deleteReservation(r.id)
         load()
     }
 }

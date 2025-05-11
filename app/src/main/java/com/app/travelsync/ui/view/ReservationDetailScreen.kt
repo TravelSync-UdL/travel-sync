@@ -28,7 +28,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.android.tools.build.jetifier.core.utils.Log
+import android.util.Log
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.app.travelsync.ui.viewmodel.ReservationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,13 +50,19 @@ fun ReservationDetailScreen(
     val errorMessage by viewModel.error.collectAsState()
     val roomImageUrl by viewModel.roomImageUrl.collectAsState()
 
+    var selectedImageUrl by remember { mutableStateOf<String?>(null) }  // Estat per la imatge seleccionada
+    var isDialogOpen by remember { mutableStateOf(false) }
+
+    Log.d("ReseravtionDetails 1", reservationId.toString())
+
     LaunchedEffect(reservationId) {
-       // viewModel.loadReservation(reservationId)
+       viewModel.loadReservation(reservationId)
     }
 
     reservation?.let { res ->
-        LaunchedEffect(res.id) {
-            //viewModel.loadRoomImageUrl(res.id)
+        Log.d("ReseravtionDetails 2", res.reservationId)
+        LaunchedEffect(res.reservationId) {
+            viewModel.loadRoomImageUrl(res.reservationId)
         }
     }
 
@@ -92,20 +106,35 @@ fun ReservationDetailScreen(
 
                 return@Column
             }
-
+            Log.d("ReseravtionDetails", reservation.toString())
             reservation?.let { res ->
                 // Imatge de l'habitació
-                roomImageUrl?.let { url ->
-                    Image(
-                        painter = rememberAsyncImagePainter("http://13.39.162.212$url"),
-                        contentDescription = "Imatge habitació",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(180.dp)
-                            .padding(bottom = 16.dp)
-                            .clip(MaterialTheme.shapes.medium),
-                        contentScale = ContentScale.Crop
-                    )
+                roomImageUrl?.let { urls ->
+                    if (urls.isNotEmpty()) {
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp)
+                        ) {
+                            items(urls) { url ->
+                                Image(
+                                    painter = rememberAsyncImagePainter("http://13.39.162.212$url"),
+                                    contentDescription = "Imatge habitació",
+                                    modifier = Modifier
+                                        .size(120.dp)
+                                        .clip(MaterialTheme.shapes.medium)
+                                        .padding(4.dp)
+                                        .clickable {
+                                            selectedImageUrl = url
+                                            isDialogOpen = true
+                                        },
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                        }
+                    } else {
+                        Text("No hi ha imatges disponibles per aquesta habitació.")
+                    }
                 }
 
 
@@ -114,23 +143,45 @@ fun ReservationDetailScreen(
                 Divider()
 
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("🏨 Tipus d'habitació: ${res.room}", style = MaterialTheme.typography.bodyLarge)
-                Text("💰 Preu: ${res.room} €", style = MaterialTheme.typography.bodyLarge)
-                Text("📅 Inici: ${res.startDate}", style = MaterialTheme.typography.bodyLarge)
-                Text("📅 Final: ${res.endDate}", style = MaterialTheme.typography.bodyLarge)
+                Text("🏨 Tipus d'habitació: ${reservation!!.roomType}", style = MaterialTheme.typography.bodyLarge)
+                Text("💰 Preu per nit:${reservation!!.totalPrice}€ ", style = MaterialTheme.typography.bodyLarge)
+                Text("📅 Inici: ${reservation!!.startDate}", style = MaterialTheme.typography.bodyLarge)
+                Text("📅 Final: ${reservation!!.endDate}", style = MaterialTheme.typography.bodyLarge)
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 // Botó d'acció futur (placeholder)
                 Button(
                     onClick = {
-                        navController.navigate("gallery/${res.id}") // Assegura’t de tenir el tripId disponible
+                        navController.navigate("gallery/${res.tripId}") // Assegura’t de tenir el tripId disponible
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Galeria")
                 }
-            } ?: Text("Carregant...", style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+
+        selectedImageUrl?.let { imageUrl ->
+            if (isDialogOpen) {
+                AlertDialog(
+                    onDismissRequest = { isDialogOpen = false },
+                    title = null,
+                    text = {
+                        Image(
+                            painter = rememberAsyncImagePainter("http://13.39.162.212$imageUrl"),
+                            contentDescription = "Imatge ampliada",
+                            modifier = Modifier.fillMaxWidth(),
+                            contentScale = ContentScale.FillWidth
+                        )
+                    },
+                    confirmButton = {
+                        Button(onClick = { isDialogOpen = false }) {
+                            Text("Tancar")
+                        }
+                    }
+                )
+            }
         }
     }
 }

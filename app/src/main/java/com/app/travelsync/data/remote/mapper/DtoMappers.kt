@@ -35,9 +35,22 @@ fun ReservationDto.toDomain(): Reservation = Reservation(
     endDate    = end_date,
     guestName  = guest_name,
     guestEmail = guest_email,
-    hotel = hotel.toDomain(),   // HotelDto → Hotel
-    room  = room.toDomain()     // RoomDto  → Room
+    hotel = hotel?.toDomain() ?: Hotel(
+        id = "",
+        name = "Unknown",
+        address = "Unknown",
+        rating = 0,
+        imageUrl = "",
+        rooms = emptyList()
+    ),
+    room = room?.toDomain() ?: Room(
+        id = "",
+        roomType = "Unknown",
+        price = 0.0f,
+        images = emptyList()
+    )
 )
+
 
 fun ReserveRequest.toDto(): ReserveRequestDto = ReserveRequestDto(
     hotel_id = hotelId,
