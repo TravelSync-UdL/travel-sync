@@ -50,9 +50,9 @@ class HotelDetailViewModel @Inject constructor(
     private lateinit var start: String
     private lateinit var end: String
 
-    /* -------- load hotel & free rooms -------- */
+
     fun load(hotelId: String, gid: String, s: String, e: String) {
-        if (uiState.value.hotel != null) return   // already loaded
+        if (uiState.value.hotel != null) return
         groupId = gid; start = s; end = e
         viewModelScope.launch {
             val hotel = repo.getHotels(gid).first { it.id == hotelId }
@@ -88,7 +88,7 @@ class HotelDetailViewModel @Inject constructor(
             val hotel = uiState.value.hotel
             val room = uiState.value.selectedRoom
 
-            val tripId = tripRepo.addTrip(trip) // <-- ara retorna Int
+            val tripId = tripRepo.addTrip(trip)
 
 
             val res: Reservation = repo.reserve(groupId, req)

@@ -13,15 +13,15 @@ class ReservationRepositoryImpl @Inject constructor(
     private val reservationDao: ReservationDao
 ): ReservationRepository{
 
-    override suspend fun insertReservation(reservation: ReservationEntity): Long {  // Cambiat a Long per retornar l'ID
+    override suspend fun insertReservation(reservation: ReservationEntity): Long {
         return try {
             Log.d("Database - Reservation", "Abans d'inserir: ${reservation.roomType}")
-            val id = reservationDao.insertReservation(reservation)  // El valor retornat de la inserció
+            val id = reservationDao.insertReservation(reservation)
             Log.d("Database - Reservation", "Després d'inserir reserva amb ID: $id")
-            id  // Retorna l'ID generat
+            id
         } catch (e: Exception) {
             Log.e("Database - Reservation", "Error en insertar reserva: ${e.localizedMessage}", e)
-            0L  // Retorna 0L en cas d'error
+            0L
         }
     }
 

@@ -66,7 +66,7 @@ fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hi
 
     // Definim quines pantalles no han de mostrar la barra de navegació
     val hideBottomBar = currentDestination?.let {
-        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login", "recover", "signup")
+        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login", "recover", "signup") || it.startsWith("reservation_detail/") || it.startsWith("gallery/") || it.startsWith("hotel/")
     } == true
 
     Scaffold(

@@ -40,7 +40,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideReservationDao(database: AppDatabase): ReservationDao {
-        return database.reservationDao() // Ens assegurem que el dao està disponible
+        return database.reservationDao()
     }
 
     @Provides

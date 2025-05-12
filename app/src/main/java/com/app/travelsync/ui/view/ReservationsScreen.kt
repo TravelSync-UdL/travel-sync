@@ -1,6 +1,5 @@
 package com.app.travelsync.ui.view
 
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,14 +19,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.app.travelsync.R
 import com.app.travelsync.ui.components.ReservationRow
 import com.app.travelsync.ui.viewmodel.ReservationsViewModel
 
-// ---------------------------- Reservations Screen ---------------------------
+
 @Composable
 fun ReservationsScreen(navController: NavController, vm: ReservationsViewModel = hiltViewModel()) {
     val ui = vm.uiState.collectAsState()
@@ -37,12 +38,12 @@ fun ReservationsScreen(navController: NavController, vm: ReservationsViewModel =
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()   // respeta notch y barra de navegación
+            .systemBarsPadding()
             .padding(16.dp)
 
     ) {
 
-        /* ---------- título global ---------- */
+
         item {
 
             Row(
@@ -55,14 +56,14 @@ fun ReservationsScreen(navController: NavController, vm: ReservationsViewModel =
 
 
                 Text(
-                    text = "My Reservations",
+                    text = stringResource(R.string.my_reservations),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.statusBarsPadding().padding(start = 16.dp, bottom = 12.dp)
                 )
 
-                /*  refresh icon  */
-                IconButton(onClick = { vm.load() }) {       // ← recarga la lista
+
+                IconButton(onClick = { vm.load() }) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
                         contentDescription = "Reload"

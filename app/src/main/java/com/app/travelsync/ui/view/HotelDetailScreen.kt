@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,12 +35,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.app.travelsync.R
 import com.app.travelsync.ui.components.RoomImageCarouselWithControls
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -92,7 +97,7 @@ fun HotelDetailScreen(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "Stay: $start → $end ($nights nights)",
+                        text = stringResource(R.string.stay, start, end, nights),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -115,7 +120,7 @@ fun HotelDetailScreen(
                 Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                     Column(Modifier.padding(16.dp)) {
                         Text(room.roomType + " (${room.id})", fontWeight = FontWeight.Bold)
-                        Text("${room.price} € / night")
+                        Text(stringResource(R.string.price_per_night_hotel, room.price))
 
 
                         Spacer(Modifier.height(8.dp))
@@ -144,7 +149,7 @@ fun HotelDetailScreen(
                         ) {
                             Column {
                                 Text(
-                                    "Total: €$total",
+                                    stringResource(R.string.total_price, total),
                                     fontWeight = FontWeight.ExtraBold,
                                     style = MaterialTheme.typography.labelLarge
                                 )
@@ -157,8 +162,12 @@ fun HotelDetailScreen(
                             Button(onClick = {
                                 vm.selectRoom(room)
                                 showConfirmation = true
-                            }) {
-                                Text("Reserve")
+                            },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = colorResource(id = R.color.backgroundIcon),
+                                    contentColor = Color.White
+                                )) {
+                                Text(stringResource(R.string.reserve))
                             }
                         }
                     }
@@ -184,21 +193,21 @@ fun HotelDetailScreen(
                     vm.reserveRoom(selectedRoom)
                     navController.popBackStack()
                 }) {
-                    Text("Confirm")
+                    Text(stringResource(R.string.confirm))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showConfirmation = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             },
-            title = { Text("Confirm Reservation") },
+            title = { Text(stringResource(R.string.confirm_reservation)) },
             text = {
                 Column {
-                    Text("Hotel: ${ui.value.hotel?.name} (${ui.value.hotel?.id})")
-                    Text("Room: ${selectedRoom.roomType} (${selectedRoom.id})")
-                    Text("Price: €${selectedRoom.price} x $nights nights")
-                    Text("Total: €$total")
+                    Text(stringResource(R.string.reservation_hotel, ui.value.hotel?.name ?: "N/A", ui.value.hotel?.id ?: "N/A"))
+                    Text(stringResource(R.string.reservation_room, selectedRoom.roomType, selectedRoom.id))
+                    Text(stringResource(R.string.reservation_price, selectedRoom.price, nights))
+                    Text(stringResource(R.string.reservation_total, total))
                 }
             }
         )

@@ -15,7 +15,7 @@ class GalleryRepository @Inject constructor(
     private val dao: TripDao
 ) {
 
-    /** Expone los datos ya convertidos a modelo de UI */
+
     val trips: Flow<List<Trip>> = dao.getTripsWithImages()
         .map { list -> list.map { it.toTrip() } }
 
@@ -24,7 +24,7 @@ class GalleryRepository @Inject constructor(
         dao.insertImage(ImageEntity(tripId = tripId, uri = uri.toString()))
     }
 
-    /* ---------- mapping helpers ---------- */
+
 
     private fun TripWithImages.toTrip() = Trip(
         tripId = trip.id,
@@ -37,7 +37,7 @@ class GalleryRepository @Inject constructor(
     )
 
     suspend fun deleteImageByUri(uri: Uri) {
-        dao.deleteImageByUri(uri.toString())      // Room
-        File(uri.path!!).delete()                 // physical file
+        dao.deleteImageByUri(uri.toString())
+        File(uri.path!!).delete()
     }
 }

@@ -30,15 +30,12 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(BookUiState())
     val uiState: StateFlow<BookUiState> = _uiState
 
-    /* ---------- city picker ---------- */
     fun toggleCityMenu() = _uiState.update { it.copy(cityMenu = !it.cityMenu) }
     fun selectCity(c: String) = _uiState.update { it.copy(city = c, cityMenu = false) }
 
-    /* ---------- date pickers ---------- */
     fun pickStart(d: java.time.LocalDate) = _uiState.update { it.copy(startDate = d) }
     fun pickEnd(d: java.time.LocalDate)   = _uiState.update { it.copy(endDate = d) }
 
-    /* ---------- search ---------- */
     @RequiresApi(Build.VERSION_CODES.O)
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun search() = viewModelScope.launch {
@@ -69,7 +66,6 @@ class SearchViewModel @Inject constructor(
 
         } catch (e: Exception) {
             Log.e("BookViewModel", "Error: ${e.localizedMessage}")
-//            _uiState.update { it.copy(loading = false, hotels = emptyList()) }
             _uiState.update {
                 it.copy(
                     loading = false,

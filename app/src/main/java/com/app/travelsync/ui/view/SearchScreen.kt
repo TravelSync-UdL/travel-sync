@@ -24,15 +24,20 @@ import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberAsyncImagePainter
+import com.app.travelsync.R
 import com.app.travelsync.domain.model.Hotel
 import com.app.travelsync.domain.model.Room
 import com.app.travelsync.ui.viewmodel.SearchViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -54,7 +59,6 @@ fun SearchScreen(navController: NavController, vm: SearchViewModel = hiltViewMod
 
     Column(Modifier.padding(16.dp)) {
 
-        /* ───── Selector de ciudad ───── */
         ExposedDropdownMenuBox(
             expanded = ui.cityMenu,
             onExpandedChange = { vm.toggleCityMenu() }
@@ -63,7 +67,7 @@ fun SearchScreen(navController: NavController, vm: SearchViewModel = hiltViewMod
                 value = ui.city,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("City") },
+                label = { Text(stringResource(R.string.city_label)) },
                 leadingIcon = { Icon(Icons.Default.Place, null) },
                 modifier = Modifier
                     .menuAnchor()
@@ -74,7 +78,11 @@ fun SearchScreen(navController: NavController, vm: SearchViewModel = hiltViewMod
                 expanded = ui.cityMenu,
                 onDismissRequest = { vm.toggleCityMenu() }
             ) {
-                listOf("Barcelona", "Paris", "Londres").forEach { c ->
+                listOf(
+                    stringResource(R.string.city_barcelona),
+                    stringResource(R.string.city_paris),
+                    stringResource(R.string.city_london)
+                ).forEach { c ->
                     DropdownMenuItem(
                         text = { Text(c) },
                         onClick = { vm.selectCity(c) }
@@ -84,15 +92,30 @@ fun SearchScreen(navController: NavController, vm: SearchViewModel = hiltViewMod
         }
 
         Spacer(Modifier.height(8.dp))
-        DateField("Start", ui.startDate) { vm.pickStart(it) }
+        DateField(
+            label = stringResource(R.string.start_label),
+            date = ui.startDate,
+            onPick = { vm.pickStart(it) }
+        )
         Spacer(Modifier.height(8.dp))
-        DateField("End", ui.endDate) { vm.pickEnd(it) }
+        DateField(
+            label = stringResource(R.string.end_label),
+            date = ui.endDate,
+            onPick = { vm.pickEnd(it) },
+            minDateMillis = ui.startDate?.plusDays(1)?.let {
+                GregorianCalendar.from(it.atStartOfDay(ZoneId.systemDefault())).timeInMillis
+            }
+        )
 
         Spacer(Modifier.height(16.dp))
         Button(
             onClick = { vm.search() },
-            modifier = Modifier.fillMaxWidth()
-        ) { Text("Search") }
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.backgroundIcon),
+                contentColor = Color.White
+            )
+        ) { Text(stringResource(R.string.search_button)) }
 
         Spacer(Modifier.height(16.dp))
 
@@ -126,7 +149,8 @@ fun SearchScreen(navController: NavController, vm: SearchViewModel = hiltViewMod
 fun DateField(
     label: String,
     date: LocalDate?,
-    onPick: (LocalDate) -> Unit
+    onPick: (LocalDate) -> Unit,
+    minDateMillis: Long? = null
 ) {
     val context = LocalContext.current
     val formatter = DateTimeFormatter.ISO_DATE
@@ -135,19 +159,21 @@ fun DateField(
         value = date?.format(formatter) ?: "",
         onValueChange = {},
         readOnly = true,
-        enabled = false,                     // ← evita que consuma el click
+        enabled = false,
         label = { Text(label) },
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 val now = date ?: LocalDate.now()
-                DatePickerDialog(
+                val datePicker = DatePickerDialog(
                     context,
                     { _, y, m, d ->
-                        onPick(LocalDate.of(y, m + 1, d))   // meses 0-based
+                        onPick(LocalDate.of(y, m + 1, d))
                     },
                     now.year, now.monthValue - 1, now.dayOfMonth
-                ).show()
+                )
+                datePicker.datePicker.minDate = minDateMillis ?: Calendar.getInstance().timeInMillis
+                datePicker.show()
             }
     )
 }
@@ -172,7 +198,10 @@ fun HotelList(hotels: List<Hotel>, onClick: (Hotel) -> Unit) {
                         Text(h.name + " ($id)", fontWeight = FontWeight.Bold)
                         Text(h.address)
                         Spacer(Modifier.weight(1f))
-                        Text("From ${h.rooms?.minOfOrNull { it.price } ?: "-"}€", fontWeight = FontWeight.SemiBold)
+                        Text(
+                            stringResource(R.string.from_price_format, h.rooms?.minOfOrNull { it.price } ?: "-"),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
             }

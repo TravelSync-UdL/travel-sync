@@ -34,9 +34,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import com.app.travelsync.R
 import com.app.travelsync.ui.viewmodel.ReservationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,7 +74,7 @@ fun ReservationDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detalls de la reserva") },
+                title = { Text(stringResource(R.string.reservation_title)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Enrere")
@@ -84,11 +89,11 @@ fun ReservationDetailScreen(
                 .padding(16.dp)
         ) {
 
-            // Missatge d'error si n'hi ha
+
             errorMessage?.let {
                 Log.e("Error:Database", errorMessage!!)
                 Text(
-                    text = "Aquest viatge no té cap reserva creada",
+                    text = stringResource(R.string.reservation_error_message),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -101,14 +106,14 @@ fun ReservationDetailScreen(
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Galeria")
+                    Text(stringResource(R.string.gallery_button_text))
                 }
 
                 return@Column
             }
             Log.d("ReseravtionDetails", reservation.toString())
             reservation?.let { res ->
-                // Imatge de l'habitació
+
                 roomImageUrl?.let { urls ->
                     if (urls.isNotEmpty()) {
                         LazyRow(
@@ -133,7 +138,7 @@ fun ReservationDetailScreen(
                             }
                         }
                     } else {
-                        Text("No hi ha imatges disponibles per aquesta habitació.")
+                        Text(stringResource(R.string.reservation_error_message))
                     }
                 }
 
@@ -143,21 +148,37 @@ fun ReservationDetailScreen(
                 Divider()
 
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("🏨 Tipus d'habitació: ${reservation!!.roomType}", style = MaterialTheme.typography.bodyLarge)
-                Text("💰 Preu per nit:${reservation!!.totalPrice}€ ", style = MaterialTheme.typography.bodyLarge)
-                Text("📅 Inici: ${reservation!!.startDate}", style = MaterialTheme.typography.bodyLarge)
-                Text("📅 Final: ${reservation!!.endDate}", style = MaterialTheme.typography.bodyLarge)
 
+                Text(
+                    text = stringResource(R.string.room_type, res.roomType),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = stringResource(R.string.price_per_night, res.totalPrice),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = stringResource(R.string.start_date, res.startDate),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = stringResource(R.string.end_date, res.endDate),
+                    style = MaterialTheme.typography.bodyLarge
+                )
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Botó d'acció futur (placeholder)
+
                 Button(
                     onClick = {
-                        navController.navigate("gallery/${res.tripId}") // Assegura’t de tenir el tripId disponible
+                        navController.navigate("gallery/${res.tripId}")
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.backgroundIcon),
+                        contentColor = Color.White
+                    )
                 ) {
-                    Text("Galeria")
+                    Text(stringResource(R.string.gallery_button_text))
                 }
             }
         }
@@ -176,8 +197,14 @@ fun ReservationDetailScreen(
                         )
                     },
                     confirmButton = {
-                        Button(onClick = { isDialogOpen = false }) {
-                            Text("Tancar")
+                        Button(
+                            onClick = { isDialogOpen = false },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.backgroundIcon),
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Text(stringResource(R.string.close_button_text))
                         }
                     }
                 )

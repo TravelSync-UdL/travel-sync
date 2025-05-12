@@ -9,5 +9,5 @@ data class SessionLogEntity(
     val id: Int = 0,
     val userId: String,
     val timestamp: Long,
-    val action: String // "login" o "logout"
+    val action: String
 )

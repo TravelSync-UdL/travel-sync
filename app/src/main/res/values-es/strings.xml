@@ -134,4 +134,51 @@ Por cualquier duda o consulta, puedes contactar con nosotros a support@travelsyn
 
     <string name="info_ok">Datos editados correctamente</string>
 
+    <string name="delete_image">¿Borrar imagen?</string>
+    <string name="info_image">Esta acción no se puede deshacer.</string>
+    <string name="cancel_gallery">Cancelar</string>
+    <string name="take_photo">Hacer foto</string>
+    <string name="choose_photo">Elegir de la galería</string>
+    <string name="close_image">Cerrar</string>
+
+    <string name="stay">Estancia: %1$s → %2$s (%3$d noches)</string>
+    <string name="price_per_night_hotel">%1$.2f € / noche</string>
+    <string name="total_price">Total: €%1$. 2f</string>
+    <string name="reserve">Reserve</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_reservation">Confirmar reserva</string>
+    <string name="reservation_hotel">Hotel: %1$s (%2$s)</string>
+    <string name="reservation_room">Habitación: %1$s (%2$s)</string>
+    <string name="reservation_price">Precio: %1$.2f € x %2$d noches</string>
+    <string name="reservation_total">Total: %1$.2f €</string>
+
+    <string name="reservation_title">Detalles de la reserva</string>
+    <string name="reservation_error_message">Este viaje no tiene ninguna reserva creada</string>
+    <string name="gallery_button_text">Galería</string>
+    <string name="room_type">Tipo de habitación: %1$s</string>
+    <string name="price_per_night">Precio por noche: %1$s:</string>
+    <string name="start_date">Inicio: %1$s</string>
+    <string name="end_date">Fin: %1$s</string>
+    <string name="close_button_text">Cerrar</string>
+
+    <string name="my_reservations">Mis reservas</string>
+
+    <string name="city_label">Ciudad</string>
+    <string name="start_label">Inicio</string>
+    <string name="end_label">Fin</string>
+    <string name="search_button">Buscar</string>
+    <string name="from_price_format">Desde %1$s€</string>
+
+    <string name="city_barcelona">Barcelona</string>
+    <string name="city_paris">Paris</string>
+    <string name="city_london">Londres</string>
+
+    <string name="room_images">Imágenes de la habitación</string>
+    <string name="cancel_reservation_title">¿Cancelar la reserva?</string>
+    <string name="cancel_reservation_text">Esta acción no se puede deshacer.</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+    <string name="price_prefix">Precio: </string>
+
+
 </resources>

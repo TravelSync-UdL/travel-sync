@@ -16,8 +16,8 @@ fun HotelDto.toDomain(): Hotel = Hotel(
     rating    = rating,
     imageUrl  = image_url,
     rooms     = rooms
-        ?.map { it.toDomain() }      // si no es null lo mapea
-        ?: emptyList()               // si es null lista vacía
+        ?.map { it.toDomain() }
+        ?: emptyList()
 )
 
 fun RoomDto.toDomain(): Room = Room(

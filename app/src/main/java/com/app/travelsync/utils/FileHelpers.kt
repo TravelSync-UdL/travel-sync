@@ -9,11 +9,11 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.UUID
 
-/** location:  /data/data/<package>/files/images/ */
+
 private fun imageDir(context: Context): File =
     File(context.filesDir, "images").apply { mkdirs() }
 
-/* -------- save a Bitmap -------- */
+
 fun saveBitmapInternal(
     context: Context,
     bitmap: Bitmap,
@@ -25,7 +25,7 @@ fun saveBitmapInternal(
     return file.toUri()
 }
 
-/* -------- copy from an existing Uri -------- */
+
 fun copyUriInternal(
     context: Context,
     source: Uri

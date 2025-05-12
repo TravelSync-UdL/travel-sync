@@ -21,7 +21,7 @@ fun RoomImageCarousel(
     images: List<String>,
     modifier: Modifier = Modifier
 ) {
-    if (images.isEmpty()) return                       // nada que mostrar
+    if (images.isEmpty()) return
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -33,7 +33,7 @@ fun RoomImageCarousel(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(1.6f)                    // 16:10 aprox
+                .aspectRatio(1.6f)
         ) { page ->
             Image(
                 painter = rememberAsyncImagePainter(images[page]),
@@ -43,7 +43,7 @@ fun RoomImageCarousel(
             )
         }
 
-        /* mini indicador de páginas */
+
         Spacer(Modifier.height(6.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             repeat(images.size) { index ->

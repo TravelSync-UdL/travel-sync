@@ -30,9 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.app.travelsync.R
 import com.app.travelsync.domain.model.Reservation
 
 
@@ -42,7 +44,7 @@ fun ReservationRow(
     onCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    /* ─── estados de diálogo ─── */
+
     var showHotelDialog by remember { mutableStateOf(false) }
     var showRoomCarousel by remember { mutableStateOf(false) }
     var askDelete by remember { mutableStateOf(false) }
@@ -65,7 +67,7 @@ fun ReservationRow(
                 .padding(12.dp)
         ) {
 
-            /* ───── MINIATURA HOTEL ───── */
+
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
                     painter = rememberAsyncImagePainter(hotelImg),
@@ -76,7 +78,7 @@ fun ReservationRow(
                         .clickable { showHotelDialog = true }
                 )
 
-                /* icono para ver fotos de la habitación */
+
                 if (roomImages.isNotEmpty()) {
                     IconButton(
                         onClick = { showRoomCarousel = true },
@@ -90,7 +92,7 @@ fun ReservationRow(
                 }
             }
 
-            /* ───── INFORMACIÓN ───── */
+
             Column(
                 modifier = Modifier
                     .padding(start = 12.dp)
@@ -102,7 +104,7 @@ fun ReservationRow(
                     fontWeight = FontWeight.Bold
                 )
                 Text("${res.startDate} → ${res.endDate}")
-                Text("Price: €${res.room?.price ?: 0}")
+                Text("${stringResource(R.string.price_prefix)}${res.room?.price ?: 0} €")
                 Spacer(Modifier.height(8.dp))
                 Text(res.guestName)
             }
@@ -113,7 +115,7 @@ fun ReservationRow(
         }
     }
 
-    /* ─── DIALOG: hotel image full ─── */
+
     if (showHotelDialog) {
         AlertDialog(
             onDismissRequest = { showHotelDialog = false },
@@ -131,7 +133,7 @@ fun ReservationRow(
         )
     }
 
-    /* ─── DIALOG: carrusel de fotos habitación ─── */
+
     if (showRoomCarousel) {
         AlertDialog(
             onDismissRequest = { showRoomCarousel = false },
@@ -151,14 +153,14 @@ fun ReservationRow(
             confirmButton = {
                 TextButton(onClick = {
                     askDelete = false
-                    onCancel()               // ⇠ llama al callback que borra
-                }) { Text("Yes") }
+                    onCancel()
+                }) { Text(stringResource(R.string.yes)) }
             },
             dismissButton = {
-                TextButton(onClick = { askDelete = false }) { Text("No") }
+                TextButton(onClick = { askDelete = false }) { Text(stringResource(R.string.no)) }
             },
-            title = { Text("Cancel reservation?") },
-            text  = { Text("This action cannot be undone.") }
+            title = { Text(stringResource(R.string.cancel_reservation_title)) },
+            text  = { Text(stringResource(R.string.cancel_reservation_text)) }
         )
     }
 }

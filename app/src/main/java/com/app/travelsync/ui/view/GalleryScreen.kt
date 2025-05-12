@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -44,12 +45,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.app.travelsync.R
 import com.app.travelsync.domain.model.Trip
 import com.app.travelsync.ui.viewmodel.GalleryViewModel
 import com.app.travelsync.utils.copyUriInternal
@@ -91,7 +96,7 @@ fun GalleryScreen(
         }
         return
     }
-    /* Scaffold */
+
     Scaffold(
         topBar = {
             SmallTopAppBar(
@@ -103,14 +108,19 @@ fun GalleryScreen(
             )
         },
         floatingActionButton = {
-            LargeFloatingActionButton(onClick = { showSheet = true }) {
+            LargeFloatingActionButton(
+                onClick = { showSheet = true },
+                shape = CircleShape,
+                containerColor = colorResource(id = R.color.backgroundIcon),
+                contentColor = Color.White
+            ) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
     ) { padding ->
         if (trip.images.isEmpty()) {
             Box(Modifier.padding(padding).fillMaxSize(), Alignment.Center) {
-                Text("No images yet")
+                Text("No images yet") //no_images
             }
         } else {
             LazyVerticalGrid(
@@ -121,14 +131,14 @@ fun GalleryScreen(
             ) {
                 items(trip.images) { uri ->
                     Box {
-                        /* Thumbnail */
+
                         AsyncImage(
                             model = uri, contentDescription = null,
                             modifier = Modifier.aspectRatio(1f).fillMaxWidth()
                                 .clickable { zoomUri = uri },
                             contentScale = ContentScale.Crop
                         )
-                        /* Overlay buttons */
+
                         Row(
                             Modifier.align(Alignment.TopEnd)
                                 .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(.4f))
@@ -143,12 +153,8 @@ fun GalleryScreen(
                                     Icons.Default.Info, contentDescription = "Info",
                                     tint = MaterialTheme.colorScheme.surface)
                             }
-//                            IconButton(onClick = { onDeleteImage(uri) }, modifier = Modifier.size(28.dp)) {
-//                                Icon(Icons.Default.Delete, contentDescription = "Delete",
-//                                    tint = MaterialTheme.colorScheme.surface)
-//                            }
                             IconButton(
-                                onClick = { pendingDelete = uri },          // ⬅️ ask first
+                                onClick = { pendingDelete = uri },
                                 modifier = Modifier.size(28.dp)
                             ) {
                                 Icon(
@@ -162,39 +168,39 @@ fun GalleryScreen(
         }
     }
 
-    /* ---------- Delete confirmation dialog ---------- */
+
     pendingDelete?.let { uri ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
-            title  = { Text("Delete image?") },
-            text   = { Text("This action cannot be undone.") },
+            title  = { Text(stringResource(id = R.string.delete_image)) },
+            text   = { Text(stringResource(id = R.string.info_image)) },
             confirmButton = {
                 TextButton(onClick = {
-                    viewModel.deleteImage(uri) // <- real delete
-                    pendingDelete = null   // close dialog
+                    viewModel.deleteImage(uri)
+                    pendingDelete = null
                 }) { Text("Delete") }
             },
             dismissButton = {
-                TextButton(onClick = { pendingDelete = null }) { Text("Cancel") }
+                TextButton(onClick = { pendingDelete = null }) { Text(stringResource(id = R.string.cancel_gallery)) }
             }
         )
     }
 
-    /* Bottom-sheet */
+
     if (showSheet) {
         ModalBottomSheet(onDismissRequest = { showSheet = false }) {
-            ListItem(headlineContent = { Text("Take photo") },
+            ListItem(headlineContent = { Text(stringResource(id = R.string.take_photo)) },
                 modifier = Modifier.clickable {
                     takePicture.launch(null); showSheet = false
                 })
-            ListItem(headlineContent = { Text("Choose from gallery") },
+            ListItem(headlineContent = { Text(stringResource(id = R.string.choose_photo)) },
                 modifier = Modifier.clickable {
                     pickImage.launch("image/*"); showSheet = false
                 })
         }
     }
 
-    /* Zoom dialog */
+
     zoomUri?.let { uri ->
         AlertDialog(onDismissRequest = { zoomUri = null },
             confirmButton = {},
@@ -208,21 +214,21 @@ fun GalleryScreen(
             })
     }
 
-    /* Info dialog */
+
     infoUri?.let { uri ->
         val meta by produceState(initialValue = "Loading…", uri) {
             value = getMeta(context, uri)
         }
         AlertDialog(
             onDismissRequest = { infoUri = null },
-            confirmButton = { TextButton(onClick = { infoUri = null }) { Text("Close") } },
+            confirmButton = { TextButton(onClick = { infoUri = null }) { Text(stringResource(id = R.string.close_image)) } },
             title = { Text("Image info") },
             text  = { Text(meta) }
         )
     }
 }
 
-/* -- metadata helper -- */
+
 private suspend fun getMeta(context: Context, uri: Uri): String =
     withContext(Dispatchers.IO) {
         runCatching {
