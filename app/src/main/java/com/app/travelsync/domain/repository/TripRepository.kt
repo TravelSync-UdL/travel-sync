@@ -5,7 +5,7 @@ import com.app.travelsync.domain.model.Trip
 
 interface TripRepository {
     suspend fun getTrip(): List<Trip>
-    suspend fun addTrip(trip: Trip)
+    suspend fun addTrip(trip: Trip): Int
     suspend fun deleteTrip(trip_Id: Int)
     suspend fun editTrip(trip: Trip)
 
@@ -16,4 +16,5 @@ interface TripRepository {
 
     suspend fun getTripsForUser(login: String): List<Trip>
     suspend fun getTripId(trip_Id: Int): Trip
+
 }

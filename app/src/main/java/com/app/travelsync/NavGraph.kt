@@ -1,5 +1,8 @@
 package com.app.travelsync
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresExtension
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -8,7 +11,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.app.travelsync.ui.view.AboutScreen
 import com.app.travelsync.ui.view.ConfigAccount
-import com.app.travelsync.ui.view.GuideScreen
 import com.app.travelsync.ui.view.HomeScreen
 import com.app.travelsync.ui.view.ItineraryScreen
 import com.app.travelsync.ui.view.LegalScreen
@@ -18,7 +20,10 @@ import com.app.travelsync.ui.view.TripScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CardTravel
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.ListAlt
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -34,13 +39,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
+import android.util.Log
+import com.app.travelsync.ui.view.GalleryScreen
 import com.app.travelsync.ui.view.LoginScreen
 import com.app.travelsync.ui.view.RecoverPasswordScreen
+import com.app.travelsync.ui.view.ReservationDetailScreen
+import com.app.travelsync.ui.view.ReservationsScreen
 import com.app.travelsync.ui.view.SignupScreen
 import com.app.travelsync.ui.viewmodel.AuthState
 import com.app.travelsync.ui.viewmodel.AuthViewModel
+import com.app.travelsync.ui.viewmodel.HotelDetailScreen
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hiltViewModel()) {
 
@@ -53,7 +65,7 @@ fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hi
     val currentDestination = currentBackStackEntry?.destination?.route
 
     val hideBottomBar = currentDestination?.let {
-        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login", "recover", "signup")
+        it.startsWith("itinerarys/") || it in listOf("about", "legal", "settings", "login", "recover", "signup") || it.startsWith("reservation_detail/") || it.startsWith("gallery/") || it.startsWith("hotel/")
     } == true
 
     Scaffold(
@@ -61,17 +73,17 @@ fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hi
             if (!hideBottomBar) { // Només es mostra si no estem a ItineraryScreen
                 NavigationBar {
                     NavigationBarItem(
-                        icon = { Icon(Icons.Default.Star, contentDescription = "Trip") },
+                        icon = { Icon(Icons.Default.CardTravel, contentDescription = "Trip") },
                         selected = currentDestination == "trip",
                         onClick = { navController.navigate("trip") },
                         label = { Text(stringResource(id = R.string.trip_nav)) }
                     )
 
                     NavigationBarItem(
-                        icon = { Icon(Icons.Default.LocationOn, contentDescription = "Guide") },
+                        icon = { Icon(Icons.Default.ListAlt, contentDescription = "Reservations") },
                         selected = currentDestination == "guide",
                         onClick = { navController.navigate("guide") },
-                        label = { Text(stringResource(id = R.string.guide_nav)) }
+                        label = { Text(stringResource(id = R.string.reservation_nav)) }
                     )
 
                     NavigationBarItem(
@@ -102,7 +114,7 @@ fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hi
             NavHost(navController = navController, startDestination = "home") {
                 composable("home") { HomeScreen(navController) }
                 composable("trip") { TripScreen(navController, authViewModel = authViewModel) }
-                composable("guide") { GuideScreen(navController) }
+                composable("guide") { ReservationsScreen(navController) }
                 composable("search") { SearchScreen(navController) }
                 composable("you") { ConfigAccount(navController) }
                 composable("about") { AboutScreen(navController) }
@@ -119,6 +131,38 @@ fun NavGraph(navController: NavHostController, authViewModel: AuthViewModel = hi
                 ) {
                     ItineraryScreen(navController = navController)
                 }
+
+                composable("reservation_detail/{resId}") { backStackEntry ->
+                    val resId = backStackEntry.arguments?.getString("resId")?.toIntOrNull()
+                    resId?.let {
+                        ReservationDetailScreen(reservationId = it, navController = navController)
+                    }
+                }
+
+                composable("gallery/{tripId}") { backStackEntry ->
+                    val tripId = backStackEntry.arguments?.getString("tripId")?.toIntOrNull() ?: return@composable
+                    GalleryScreen(tripId = tripId, onBack = { navController.popBackStack() })
+                }
+
+                composable(
+                    route = "hotel/{hotelId}/{groupId}/{start}/{end}",
+                    arguments = listOf(
+                        navArgument("hotelId") { type = NavType.StringType },
+                        navArgument("groupId") { type = NavType.StringType },
+                        navArgument("start")   { type = NavType.StringType },
+                        navArgument("end")     { type = NavType.StringType }
+                    )
+                ) { back ->
+                    HotelDetailScreen(
+                        hotelId       = back.arguments!!.getString("hotelId")!!,
+                        groupId       = back.arguments!!.getString("groupId")!!,
+                        start         = back.arguments!!.getString("start")!!,
+                        end           = back.arguments!!.getString("end")!!,
+                        navController = navController
+                    )
+                }
+
+
             }
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Settings
@@ -95,7 +96,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel = hilt
                             DropdownMenuItem(
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Filled.Close,
+                                        imageVector = Icons.Filled.Logout,
                                         contentDescription = "Logout Icon"
                                     )
                                 },

@@ -5,7 +5,7 @@ package com.app.travelsync
  *
 import com.app.travelsync.domain.model.Itinerary
 import com.app.travelsync.domain.model.Trip
-import com.app.travelsync.data.TripRepositorylmpl
+import com.app.travelsync.data.repository.TripRepositorylmpl
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test

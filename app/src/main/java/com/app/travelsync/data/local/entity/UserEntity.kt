@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "users")
 data class UserEntity(
-    @PrimaryKey var login: String, // correu electrònic
+    @PrimaryKey var login: String,
     val username: String,
     val country: String = "undefined",
     val birthdate: String = "undefined",

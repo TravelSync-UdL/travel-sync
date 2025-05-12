@@ -7,15 +7,21 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.app.travelsync.BuildConfig
 import com.app.travelsync.data.SharedPrefsManager
-import com.app.travelsync.data.TripRepositorylmpl
 import com.app.travelsync.domain.repository.TripRepository
+import com.app.travelsync.data.repository.TripRepositorylmpl
 import com.app.travelsync.data.local.AppDatabase
 import com.app.travelsync.data.local.dao.ItineraryDao
+import com.app.travelsync.data.local.dao.ReservationDao
 import com.app.travelsync.data.local.dao.TripDao
 import com.app.travelsync.domain.repository.AuthRepository
-import com.app.travelsync.data.AuthRepositoryImpl
+import com.app.travelsync.data.repository.AuthRepositoryImpl
 import com.app.travelsync.data.local.dao.SessionLogDao
 import com.app.travelsync.data.local.dao.UserDao
+import com.app.travelsync.data.remote.api.HotelApiService
+import com.app.travelsync.data.repository.HotelRepositoryImpl
+import com.app.travelsync.data.repository.ReservationRepositoryImpl
+import com.app.travelsync.domain.repository.HotelRepository
+import com.app.travelsync.domain.repository.ReservationRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -28,9 +34,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    val MIGRATION_1_2 = object : Migration(1, 2) {
+    val MIGRATION_10_11 = object : Migration(10, 11) {
         override fun migrate(database: SupportSQLiteDatabase) {
             // Aquí afegeixes la nova columna a la taula
+            /*
             database.execSQL("ALTER TABLE trip ADD COLUMN ownerLogin TEXT NOT NULL DEFAULT ''")
             database.execSQL("""
             CREATE TABLE IF NOT EXISTS `users` (
@@ -52,6 +59,42 @@ object AppModule {
                 `timestamp` INTEGER NOT NULL DEFAULT 0
             )
         """)
+
+            database.execSQL("""
+            CREATE TABLE IF NOT EXISTS `reservation` (
+                `id` TEXT NOT NULL,
+                `hotelName` TEXT NOT NULL,
+                `roomType` TEXT NOT NULL,
+                `price` INTEGER NOT NULL,
+                `startDate` TEXT NOT NULL,
+                `endDate` TEXT NOT NULL,
+                `userEmail` TEXT NOT NULL,
+                PRIMARY KEY(`id`)
+            )
+        """)*/
+
+            //database.execSQL("ALTER TABLE reservation ADD COLUMN tripId INTEGER NOT NULL DEFAULT 'undefined'")
+
+            //database.execSQL("ALTER TABLE trip ADD COLUMN images TEXT NOT NULL DEFAULT 'undefined'")
+            database.execSQL("""
+            CREATE TABLE IF NOT EXISTS `reservations_new` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `tripId` INTEGER NOT NULL,
+                `reservationId` TEXT NOT NULL,
+                `roomType` TEXT NOT NULL,
+                `totalPrice` REAL NOT NULL,
+                `startDate` TEXT NOT NULL,
+                `endDate` TEXT NOT NULL,
+                FOREIGN KEY(`tripId`) REFERENCES `trip`(`id`) ON DELETE CASCADE
+            )
+        """)
+
+            database.execSQL("DROP TABLE reservations")
+
+            database.execSQL("ALTER TABLE reservations_new RENAME TO reservations")
+
+
+
         }
     }
 
@@ -63,6 +106,7 @@ object AppModule {
     ): SharedPreferences =
         context.getSharedPreferences("${BuildConfig.APPLICATION_ID}_preferences", Context.MODE_PRIVATE)
 
+    // context.getSharedPreferences("my_preferences", Context.MODE_PRIVATE) //bad implementation
 
     @Provides
     @Singleton
@@ -83,7 +127,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "my_database_name"
-        ).addMigrations(MIGRATION_1_2).fallbackToDestructiveMigration().build()
+        ).addMigrations(MIGRATION_10_11).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -112,4 +156,14 @@ object AppModule {
         return FirebaseAuth.getInstance()
     }
 
+    @Provides
+    @Singleton
+    fun provideHotelRepository(api: HotelApiService): HotelRepository {
+        return HotelRepositoryImpl(api)
+    }
+
+    @Provides
+    fun provideReservationRepository(reservationDao: ReservationDao): ReservationRepository {
+        return ReservationRepositoryImpl(reservationDao)
+    }
 }

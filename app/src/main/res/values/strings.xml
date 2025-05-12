@@ -10,7 +10,7 @@
     <string name="back_button_description">Back</string>
 
     <string name="trip_nav">Trip</string>
-    <string name="guide_nav">Guide</string>
+    <string name="reservation_nav">Reservations</string>
     <string name="home_nav">Home</string>
     <string name="search_nav">Search</string>
     <string name="configUser_nav">You</string>
@@ -134,23 +134,50 @@
 
     <string name="info_ok">Successfully edited data</string>
 
-    <string name="login_page">Login Page</string>
-    <string name="login">Login</string>
-    <string name="signup">Don’t have an account, Signup</string>
-    <string name="forgot_pass">Forgot password?</string>
+    <string name="delete_image">Delete image?</string>
+    <string name="info_image">This action cannot be undone.</string>
+    <string name="cancel_gallery">Cancel</string>
+    <string name="take_photo">Take photo</string>
+    <string name="choose_photo">Choose from gallery</string>
+    <string name="close_image">Close</string>
 
-    <string name="recov_pass">Recover Password</string>
-    <string name="email_exist">Email sent if account exists</string>
-    <string name="send_email">Send Reset Email</string>
+    <string name="stay">Stay: %1$s → %2$s (%3$d nights)</string>
+    <string name="price_per_night_hotel">%1$.2f € / night</string>
+    <string name="total_price">Total: €%1$.2f</string>
+    <string name="reserve">Reserve</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_reservation">Confirm Reservation</string>
+    <string name="reservation_hotel">Hotel: %1$s (%2$s)</string>
+    <string name="reservation_room">Room: %1$s (%2$s)</string>
+    <string name="reservation_price">Price: €%1$.2f x %2$d nights</string>
+    <string name="reservation_total">Total: €%1$.2f</string>
 
-    <string name="account_ok">Account successfully created</string>
-    <string name="creat_account">Create an account</string>
-    <string name="bithdate">Birthdate:</string>
-    <string name="no_birthdate">Select Birthdate</string>
-    <string name="country">Country</string>
-    <string name="phone">Phone</string>
-    <string name="accept_email">I accept to receive promotional emails</string>
-    <string name="fill_fields">Fill in all fields</string>
-    <string name="register">Register</string>
-    <string name="login_log">Already have an account? Login</string>
+    <string name="reservation_title">Booking details</string>
+    <string name="reservation_error_message">This trip has no reservation created</string>
+    <string name="gallery_button_text">Gallery</string>
+    <string name="room_type">Room type: %1$s</string>
+    <string name="price_per_night">Price per night: %1$s:</string>
+    <string name="start_date">Start: %1$s</string>
+    <string name="end_date">End: %1$s</string>
+    <string name="close_button_text">Close</string>
+
+    <string name="my_reservations">My Reservations</string>
+
+    <string name="city_label">City</string>
+    <string name="start_label">Start</string>
+    <string name="end_label">End</string>
+    <string name="search_button">Search</string>
+    <string name="from_price_format">From %1$s€</string>
+
+    <string name="city_barcelona">Barcelona</string>
+    <string name="city_paris">Paris</string>
+    <string name="city_london">Londres</string>
+
+    <string name="room_images">Room images</string>
+    <string name="cancel_reservation_title">Cancel reservation?</string>
+    <string name="cancel_reservation_text">This action cannot be undone.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="price_prefix">Price: </string>
+
 </resources>

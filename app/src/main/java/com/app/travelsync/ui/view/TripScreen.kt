@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -153,7 +154,8 @@ fun TripScreen(
                                 onOpen = {
                                     navController.navigate("itinerarys/${trip.tripId}")
                                 },
-                                onDelete = { viewModel.deleteTrip(trip.tripId, login) }
+                                onDelete = { viewModel.deleteTrip(trip.tripId, login) },
+                                onInfo = {navController.navigate("reservation_detail/${trip.tripId}")}
                             )
                         }
                     }
@@ -325,7 +327,8 @@ fun TripItem(
     trip: Trip,
     onEdit: () -> Unit,
     onOpen: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onInfo: () -> Unit
 ) {
     // Contenedor principal
     Column(
@@ -403,6 +406,16 @@ fun TripItem(
                     tint = colorResource(id = R.color.backgroundIcon)
                 )
             }
+
+            IconButton(onClick = onInfo) {
+                Icon(
+                    imageVector = Icons.Filled.Info, // potser necessites afegir aquesta icona
+                    contentDescription = "Informació del viatge",
+                    tint = colorResource(id = R.color.backgroundIcon)
+                )
+            }
+
+
         }
     }
 }
