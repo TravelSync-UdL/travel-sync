@@ -180,5 +180,25 @@ Por cualquier duda o consulta, puedes contactar con nosotros a support@travelsyn
     <string name="no">No</string>
     <string name="price_prefix">Precio: </string>
 
+    <string name="login_page">Página de inicio de sesión</string>Add commentMore actions
+    <string name="login">Iniciar sesión</string>
+    <string name="signup">No tienes cuenta, Regístrate</string>
+    <string name="forgot_pass">¿Has olvidado la contraseña? </string>
+
+    <string name="recov_pass">Recuperar contraseña</string>
+    <string name="email_exist">Enviar correo electrónico si la cuenta existe</string>
+    <string name="send_email">Enviar correo electrónico de restablecimiento</string>
+
+    <string name="account_ok">Cuenta creada correctamente</string>
+    <string name="creat_account">Crear una cuenta</string>
+    <string name="bithdate">Fecha de nacimiento: </string>
+    <string name="no_birthdate">Seleccionar fecha de nacimiento</string>
+    <string name="country">País</string>
+    <string name="phone">Teléfono</string>
+    <string name="accept_email">Acepto recibir recibir correos electrónicos promocionales</string>
+    <string name="fill_fields">Rellena todos los campos</string>
+    <string name="register">Regístrate</string>
+    <string name="login_log">¿Ya tienes una cuenta? Iniciar sesión</string>
+
 
 </resources>
